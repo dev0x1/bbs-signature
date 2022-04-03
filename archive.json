@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-03-31T00:07:54.478725+00:00",
+  "timestamp": "2022-04-03T00:08:39.445791+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -2392,7 +2392,7 @@
       "id": "I_kwDOF8lax85FEO4w",
       "title": "BBS spk security against an untrusted/compromised issuer",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/75",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -2403,8 +2403,8 @@
       ],
       "body": "Let\u2019s say that the issuer gets compromised, i.e., both their secret key `x` and the records with the signatures they signed will become known. Let\u2019s assume a holder has a bbs+ signature `(A, e, s)` from that issuer with `A = B * (1/(e+x))` where `B = P1 + H0*s + H_1*msg_1 + \u2026 + H_L*msg_L`. Any spk will be of the form, `spk = (A', Abar, D, ...)` where \r\n```\r\nA' = A * r1 =  B * r1 * (1/(e+x))\r\n```\r\n and \r\n```\r\nAbar = A' * x =  B * r1 * (x/(e+x))\r\n```\r\nThe values `(B, B*x, A', Abar)` essentially form a DDH tuple, which is easy to solve using pairings. Specifically, it will hold, \r\n```\r\ne(B*x, A\u2019) = e(B*x, B*r1*(1/(e+x))) = e(B, B) ^(r1*(x/(e+x))) = e(B, B*r1*(x/(e+x)))\r\n```\r\nmeaning that,\r\n```\r\ne(B*x, A') = e(B, Abar)\r\n```\r\nSo, if an adversary who knows `x` and `s`, sees (or has already seen) a proof with `A\u2019` and `Abar`, they can just try different messages, construct `B` and check the above equality between the pairings. Since the messages will not be many this is not hard to do and will result in the secret messages of the holder been revealed. \r\n\r\nIf the Issuer is untrusted, they can use the above equation to track the holder by correlating the spk's with specific signatures.\r\n\r\nThis is mitigated a little by using blind or bound signatures. If the commitment is not revealed an adversary will not be able to construct `B` by trying possible hidden messages. However, it is reasonable to assume here that if the issuers secret key and the signatures they signed are revealed so will the commitments (they will be known -and possibly recorded- by the issuer). Furthermore, if the issuer is untrusted. they can still correlate the holder.\r\n\r\nAs a result, the bbs+ proofs are not secure against an untrusted or compromised issuer. This is not that much of an issue and is like what happens in most PKIs but it might be worth documenting it in the security considerations in the spec so we will have an accurate security model.",
       "createdAt": "2022-03-03T18:07:34Z",
-      "updatedAt": "2022-03-23T21:29:34Z",
-      "closedAt": null,
+      "updatedAt": "2022-04-01T08:46:37Z",
+      "closedAt": "2022-04-01T08:46:37Z",
       "comments": [
         {
           "author": "tplooker",
@@ -2461,6 +2461,13 @@
           "body": "Just re-opening this issue so we can be sure to capture any updated text required in the security considerations merged in #86 ",
           "createdAt": "2022-03-23T21:29:34Z",
           "updatedAt": "2022-03-23T21:29:34Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Addressed in #91. Closing",
+          "createdAt": "2022-04-01T08:46:37Z",
+          "updatedAt": "2022-04-01T08:46:37Z"
         }
       ]
     },
@@ -2496,7 +2503,7 @@
       ],
       "body": "At the moment within the scope of this specification there are several points of extension, such as\r\n\r\n- How messages are mapped to their appropriate scalar values\r\n- How the generators used to commit each message are created (e.g from a global, issuer specific or signature specific seed)\r\n\r\nMany of these above decisions will be limited or at least formally defined in a concrete [ciphersuite](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-bls12-381-ciphersuite) to promote interoperability. However with multiple possible cipher suites overtime that make different choices, how do we ensure that a signature generated under one cipher suite is not confused with one generated under another cipher suite. \r\n\r\nOne proposal to limit the possibility of this occurring is to define that the first message in a BBS signature MUST always be revealed further more this message could contain a range of information OR something more limited like a cipher suite identifier. As raised by @BasileiosKal on the call, putting too much information in this revealed message is likely to create a correlation risk that would erode some of the benefit that BBS signatures provide, so perhaps a better middle ground would be to instead encode the cipher suite identifier (e.g for the current BLS12381 cipher suite in the spec this could be the hash scalar produced from the string `BBS_BLS12381G1_XOF:SHAKE-256`)",
       "createdAt": "2022-03-07T20:29:15Z",
-      "updatedAt": "2022-03-30T19:09:37Z",
+      "updatedAt": "2022-03-31T08:25:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -2659,6 +2666,13 @@
           "body": "Agreed. IMO we should make the generators only depend on a seed (which could also be the signers pk). Ciphersuites could define their own seeds if they want to. I don't really see a requirement to allow ciphersuites to define their own generators all together, which is also less secure. That said we should also define the security requirements of the generators, even if we only allow ciphersuit specific seeds.",
           "createdAt": "2022-03-30T19:09:37Z",
           "updatedAt": "2022-03-30T19:09:37Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes it should be part of the common reference string (CRS). That way if they do define their own generators (like just picking them at random) we allow for it. The seed should be the safest and most compatible approach ",
+          "createdAt": "2022-03-31T08:25:54Z",
+          "updatedAt": "2022-03-31T08:25:54Z"
         }
       ]
     },
@@ -8600,25 +8614,35 @@
       "id": "PR_kwDOF8lax841VRk1",
       "title": "Updating the spk security consideration",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/91",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Updating and re-closing issue #75 \r\n\r\nBased on the discussion in the above issue, the method originally proposed was wrong and any other method does not work on type 3 pairings. Updating the section accordingly.\r\n",
       "createdAt": "2022-03-30T18:32:28Z",
-      "updatedAt": "2022-03-30T18:39:38Z",
+      "updatedAt": "2022-03-31T20:01:47Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "bef218f8eab3d0ff830bda5238cc1d85f2bed077",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "issue-75",
       "headRefOid": "2e27cc2b576f6b6e197ecd59e3e3bcf4b92b126a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2022-03-31T20:01:47Z",
+      "mergedAt": "2022-03-31T20:01:47Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "cf614ee5157c4e72bfd80f639e110e45261a6299"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, informational, merging ",
+          "createdAt": "2022-03-31T20:01:42Z",
+          "updatedAt": "2022-03-31T20:01:42Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax843OjOx",
@@ -8631,6 +8655,32 @@
           "body": "",
           "createdAt": "2022-03-30T18:39:38Z",
           "updatedAt": "2022-03-30T18:39:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843Prz3",
+          "commit": {
+            "abbreviatedOid": "2e27cc2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-31T00:27:41Z",
+          "updatedAt": "2022-03-31T00:27:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843Q8-W",
+          "commit": {
+            "abbreviatedOid": "2e27cc2"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-31T08:27:20Z",
+          "updatedAt": "2022-03-31T08:27:20Z",
           "comments": []
         }
       ]
@@ -8647,7 +8697,7 @@
       "labels": [],
       "body": "A suggestion to group together some of the random element generation, to make the displayed algorithms a little smaller. This is just for readability and displaying purposes.",
       "createdAt": "2022-03-30T18:57:34Z",
-      "updatedAt": "2022-03-30T18:57:34Z",
+      "updatedAt": "2022-03-31T08:26:41Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "bef218f8eab3d0ff830bda5238cc1d85f2bed077",
@@ -8659,7 +8709,124 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax843Q8wu",
+          "commit": {
+            "abbreviatedOid": "6111fbd"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-31T08:26:41Z",
+          "updatedAt": "2022-03-31T08:26:41Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOF8lax841XYXa",
+      "title": "Rework of the introduction",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/93",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Adds a rework of the introduction to describe the two key properties enabled by the core scheme, includes a simple asci art diagram to describe how the key operations are used and by who",
+      "createdAt": "2022-03-31T03:24:19Z",
+      "updatedAt": "2022-04-01T05:06:30Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "bef218f8eab3d0ff830bda5238cc1d85f2bed077",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/rework-intro",
+      "headRefOid": "cddb0864a779a0c857df9fad9efac5bd53e68026",
+      "closedAt": "2022-04-01T05:06:19Z",
+      "mergedAt": "2022-04-01T05:06:19Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "f4067e5f05578d8a6a82f234d1cf63f917e604b1"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, purely editorial, merging",
+          "createdAt": "2022-04-01T05:06:30Z",
+          "updatedAt": "2022-04-01T05:06:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax843SZCg",
+          "commit": {
+            "abbreviatedOid": "22409da"
+          },
+          "author": "tmarkovski",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-31T13:24:22Z",
+          "updatedAt": "2022-03-31T13:24:22Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843SZ2M",
+          "commit": {
+            "abbreviatedOid": "22409da"
+          },
+          "author": "tmarkovski",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-31T13:26:29Z",
+          "updatedAt": "2022-03-31T13:26:29Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Can be one word `Unlinkable`",
+              "createdAt": "2022-03-31T13:26:29Z",
+              "updatedAt": "2022-03-31T13:26:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax843Ud1n",
+          "commit": {
+            "abbreviatedOid": "22409da"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-31T20:01:18Z",
+          "updatedAt": "2022-03-31T20:01:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843UeP_",
+          "commit": {
+            "abbreviatedOid": "22409da"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-31T20:02:55Z",
+          "updatedAt": "2022-03-31T20:02:56Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\n**Unlinkable Presentations** - The proofs generated by the scheme are known as a signature proof of knowledge meaning a verifying party in receipt of a proof is unable to determine which signature was used to generate the proof.\r\n```",
+              "createdAt": "2022-03-31T20:02:55Z",
+              "updatedAt": "2022-03-31T20:02:56Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
