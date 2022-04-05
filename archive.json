@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-03T00:08:39.445791+00:00",
+  "timestamp": "2022-04-05T00:07:58.442704+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -1228,7 +1228,7 @@
       "labels": [],
       "body": "This may be defined as a property of the profile along with details of the pairing-friendly curve in use. For BLS curves it probably makes sense to reference the BLS Signatures IETF draft (hopefully that is getting an update?).",
       "createdAt": "2022-01-25T22:23:33Z",
-      "updatedAt": "2022-03-21T02:29:16Z",
+      "updatedAt": "2022-04-04T21:28:48Z",
       "closedAt": null,
       "comments": [
         {
@@ -1251,6 +1251,27 @@
           "body": "Depending on the outcome of #87 if this is merged then we can close this as the definition for key gen in the spec has diverged from BLS signatures",
           "createdAt": "2022-03-21T02:29:15Z",
           "updatedAt": "2022-03-21T02:29:15Z"
+        },
+        {
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Following the discussion in the 4/4/2022 call, I agree the spec should allow implementers to use random keys; the currently proposed implementation could be move to an appendix or a profile.",
+          "createdAt": "2022-04-04T19:03:02Z",
+          "updatedAt": "2022-04-04T19:03:02Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Agree with @christianpaquin, to provide further context the spec is currently not clear that the exact KeyGen operation defined is not required by implementations and instead they are free to generate keys in other ways if they wish.",
+          "createdAt": "2022-04-04T21:28:03Z",
+          "updatedAt": "2022-04-04T21:28:03Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Either a note at the top of this operations definition or shifting it to an appendix is likely the way we will resolve this",
+          "createdAt": "2022-04-04T21:28:48Z",
+          "updatedAt": "2022-04-04T21:28:48Z"
         }
       ]
     },
@@ -2982,6 +3003,32 @@
       "updatedAt": "2022-03-28T21:32:13Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 94,
+      "id": "I_kwDOF8lax85HEYLC",
+      "title": "Parameterise the bytes drawn from the XOF so they are defined by the cipher suite",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/94",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr"
+      ],
+      "body": "Throughout the operations defined by the spec there are numerous calls to the XOF where a certain number of bytes are read, via the .read() function. How many bytes are read is dependent on several decisions at the cipher suite level (e.g the curve used) hence the current \"magic numbers\" like 64 being used in these operations needs to be parameterised in the cipher suite definition.",
+      "createdAt": "2022-04-04T21:23:27Z",
+      "updatedAt": "2022-04-04T21:34:31Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This could be added as a simple ciphersuite parameter (a constant), or it could be defined generically.\r\n\r\nThe BLS signature draft uses `ceil((3 * ceil(log2(r))) / 16)` bytes (48 bytes for BLS12-381), while the draft currently uses 64 bytes. We could use the formula from the BLS signature draft or simply read `2n` bytes where `n` is the width of an encoded field element.",
+          "createdAt": "2022-04-04T21:34:30Z",
+          "updatedAt": "2022-04-04T21:34:30Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -8690,25 +8737,35 @@
       "id": "PR_kwDOF8lax841VX2u",
       "title": "Collapsing random element generation",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/92",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "A suggestion to group together some of the random element generation, to make the displayed algorithms a little smaller. This is just for readability and displaying purposes.",
       "createdAt": "2022-03-30T18:57:34Z",
-      "updatedAt": "2022-03-31T08:26:41Z",
+      "updatedAt": "2022-04-04T21:15:31Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "bef218f8eab3d0ff830bda5238cc1d85f2bed077",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "notation-update",
-      "headRefOid": "6111fbd813775998b00b65a3c0cbd6b3846114fb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "8f9d712803cd597ce2f361b4bc59cf08937349d0",
+      "closedAt": "2022-04-04T21:15:31Z",
+      "mergedAt": "2022-04-04T21:15:31Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "52db5c7a02f5b8ab82816c923617ed16f95641a9"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed on WG call 04/04/2022, multiple approvals, purely editorial change to improve readability, merging",
+          "createdAt": "2022-04-04T21:15:27Z",
+          "updatedAt": "2022-04-04T21:15:27Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax843Q8wu",
@@ -8722,6 +8779,59 @@
           "createdAt": "2022-03-31T08:26:41Z",
           "updatedAt": "2022-03-31T08:26:41Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843ep_d",
+          "commit": {
+            "abbreviatedOid": "6111fbd"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-04T18:20:59Z",
+          "updatedAt": "2022-04-04T18:20:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax843erPf",
+          "commit": {
+            "abbreviatedOid": "6111fbd"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-04T18:25:35Z",
+          "updatedAt": "2022-04-04T18:25:35Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "Can you please add a check for rand_el = 0 like above",
+              "createdAt": "2022-04-04T18:25:35Z",
+              "updatedAt": "2022-04-04T18:25:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax843e7P_",
+          "commit": {
+            "abbreviatedOid": "6111fbd"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-04T19:26:58Z",
+          "updatedAt": "2022-04-04T19:26:58Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "Done! Thank you!",
+              "createdAt": "2022-04-04T19:26:58Z",
+              "updatedAt": "2022-04-04T19:26:58Z"
+            }
+          ]
         }
       ]
     },
