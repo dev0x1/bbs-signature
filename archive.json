@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-05T00:07:58.442704+00:00",
+  "timestamp": "2022-04-07T00:08:33.536781+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3018,7 +3018,7 @@
       ],
       "body": "Throughout the operations defined by the spec there are numerous calls to the XOF where a certain number of bytes are read, via the .read() function. How many bytes are read is dependent on several decisions at the cipher suite level (e.g the curve used) hence the current \"magic numbers\" like 64 being used in these operations needs to be parameterised in the cipher suite definition.",
       "createdAt": "2022-04-04T21:23:27Z",
-      "updatedAt": "2022-04-04T21:34:31Z",
+      "updatedAt": "2022-04-05T20:05:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -3027,6 +3027,27 @@
           "body": "This could be added as a simple ciphersuite parameter (a constant), or it could be defined generically.\r\n\r\nThe BLS signature draft uses `ceil((3 * ceil(log2(r))) / 16)` bytes (48 bytes for BLS12-381), while the draft currently uses 64 bytes. We could use the formula from the BLS signature draft or simply read `2n` bytes where `n` is the width of an encoded field element.",
           "createdAt": "2022-04-04T21:34:30Z",
           "updatedAt": "2022-04-04T21:34:30Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Another option could be `ceil((r+k)/8)` where `k` the security level of the ciphersuite. So for bls it would be the same (48 bytes) but for bn462 would be 74 bytes instead of 87 (that it would if we used the `ceil((3 * ceil(log2(r))) / 16)` formula). `2n` will definitely be secure, but it may be too inefficient. It would be 64 bytes for bls and 116 for bn462 if I'm not mistaken.",
+          "createdAt": "2022-04-05T19:40:37Z",
+          "updatedAt": "2022-04-05T19:40:56Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "How about we leave it to the cipher suite to pick the exact value but have the above as a recommended way of calculating it?",
+          "createdAt": "2022-04-05T19:42:27Z",
+          "updatedAt": "2022-04-05T19:42:27Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1. Just instead of a recommendation i think we should have `ceil((r+k)/8)` (or `2n` etc) as the minimum value that a ciphersuite must choose though.",
+          "createdAt": "2022-04-05T20:05:08Z",
+          "updatedAt": "2022-04-05T20:05:08Z"
         }
       ]
     }
@@ -6278,7 +6299,7 @@
       "labels": [],
       "body": "Adds a section describing how to map messages to a scalar that can be cryptographically signed. ",
       "createdAt": "2022-02-14T16:36:19Z",
-      "updatedAt": "2022-03-21T21:11:17Z",
+      "updatedAt": "2022-04-05T01:21:58Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "68f56263eac415e2dc3e022e60bd1544c0d352eb",
