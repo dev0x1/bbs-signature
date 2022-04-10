@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-07T00:08:33.536781+00:00",
+  "timestamp": "2022-04-10T00:08:34.356524+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -8958,6 +8958,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 95,
+      "id": "PR_kwDOF8lax8418hBU",
+      "title": "Add signature dst",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/95",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes Issues #78 and #85 \r\n\r\n### Changes:\r\n1. Adds the number of the revealed messages, the generators, the public key and some ciphersuite specific information to a signature domain separation tag (a signed -always revealed- message).\r\n2. Switches notation from H0 to H_s, as discussed in the WG call\r\n\r\n### Note:\r\nThis PR leaves the cipher suite specific info as optional for the `sig_dst`. The reason is that when it comes to the generators, the total number of messages etc., there are real risks for not adding them to the `sig_dst`.\r\n\r\nThe last one (total number of messages) is not documented in an issue to my knowledge, but I think it is well understood that it is dangerous to not include it. For example, the prover could reveal an additional \u201chidden\u201d attribute by calculating `C1_new = C1 + H_j(U+1) * m~_j(U+1)` and `m^_j(U+1) = m~_j(U+1)` and have the proof be validated ([reproduction](https://github.com/BasileiosKal/dif-bbs-signature-dst-pr/blob/main/src/main.rs)). \r\n\r\n(Including the generators also solves this issue, so we could potentially only include the generators and not the total number of messages. That said, IMO it would be better to be more careful since it does not hurt performance or complexity)\r\n\r\nIn the case of the ciphersuite info though, IMO its good security practice to include it but not necessary?? I\u2019m more than happy to update the pr and make the ciphersuite info mandatory, but to me it seems that the separation between ciphersuites could also happen elsewhere more naturally (in hash-2-curve for example, similarly to what the bls draft does)",
+      "createdAt": "2022-04-09T21:42:47Z",
+      "updatedAt": "2022-04-09T21:42:47Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "signature-dst",
+      "headRefOid": "30dcb4d4cf99b0ebd7f7bd9df1bcfe67d7e3d236",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
