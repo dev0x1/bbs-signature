@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-10T00:08:34.356524+00:00",
+  "timestamp": "2022-04-12T00:08:28.798919+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3050,6 +3050,22 @@
           "updatedAt": "2022-04-05T20:05:08Z"
         }
       ]
+    },
+    {
+      "number": 96,
+      "id": "I_kwDOF8lax85HhGDd",
+      "title": "Element encoding when passed to HASH or XOF.",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/96",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See discussion in PR #95\r\n\r\nIn the spec, we need a way to pass elements of different types (EC points, integers, scalars etc) to a hash function. In that case, the encoding of those elements becomes important. IMO there are two options:\r\n1. Explicitly making the transformation to octets for each hashed element. That would look something like\r\n```\r\nHASH(point_to_octets(PK), I2OSP(L), point_to_octets(H_1),..., point_to_octets(H_L),...)\r\n```\r\n2. Implicitly make the conversion (in the definition of the HASH for example or in a separate section etc.). This would look something like,\r\n```\r\nHASH(PK, L, H_1,..., H_L,... )\r\n``` \r\nPersonally I prefer 2. This would mean that we can also specify rules like the one Tobias pointed out [here ](https://github.com/decentralized-identity/bbs-signature/pull/95#discussion_r847082901)i.e., that each element should also be appended with its length, which i agree with. A consideration here is if we need to specify this rule for every element (even the point_to_octets outputs) or it is sufficient to specify it for general octet strings and non-negative integers (lengths of lists)??. IMO the latter will suffice, since there is not really any ubiquities that come to mind regarding the output of point_to_octets (which is also an octet string but with well defined length), but i could be mistaken.",
+      "createdAt": "2022-04-11T11:49:30Z",
+      "updatedAt": "2022-04-11T11:49:30Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -8971,13 +8987,400 @@
       "labels": [],
       "body": "Closes Issues #78 and #85 \r\n\r\n### Changes:\r\n1. Adds the number of the revealed messages, the generators, the public key and some ciphersuite specific information to a signature domain separation tag (a signed -always revealed- message).\r\n2. Switches notation from H0 to H_s, as discussed in the WG call\r\n\r\n### Note:\r\nThis PR leaves the cipher suite specific info as optional for the `sig_dst`. The reason is that when it comes to the generators, the total number of messages etc., there are real risks for not adding them to the `sig_dst`.\r\n\r\nThe last one (total number of messages) is not documented in an issue to my knowledge, but I think it is well understood that it is dangerous to not include it. For example, the prover could reveal an additional \u201chidden\u201d attribute by calculating `C1_new = C1 + H_j(U+1) * m~_j(U+1)` and `m^_j(U+1) = m~_j(U+1)` and have the proof be validated ([reproduction](https://github.com/BasileiosKal/dif-bbs-signature-dst-pr/blob/main/src/main.rs)). \r\n\r\n(Including the generators also solves this issue, so we could potentially only include the generators and not the total number of messages. That said, IMO it would be better to be more careful since it does not hurt performance or complexity)\r\n\r\nIn the case of the ciphersuite info though, IMO its good security practice to include it but not necessary?? I\u2019m more than happy to update the pr and make the ciphersuite info mandatory, but to me it seems that the separation between ciphersuites could also happen elsewhere more naturally (in hash-2-curve for example, similarly to what the bls draft does)",
       "createdAt": "2022-04-09T21:42:47Z",
-      "updatedAt": "2022-04-09T21:42:47Z",
+      "updatedAt": "2022-04-11T20:52:03Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "signature-dst",
-      "headRefOid": "30dcb4d4cf99b0ebd7f7bd9df1bcfe67d7e3d236",
+      "headRefOid": "ed5d101a1e526d7196382a31366444e1b5f19cdc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax8433G4m",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T02:40:21Z",
+          "updatedAt": "2022-04-10T02:40:21Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Im still pondering whether we make H_s and H_d cipher suite defined values rather than picking two generators and setting these as global fixed generators for all cipher suites, this would reduce this API's complexity by not having to supply them.",
+              "createdAt": "2022-04-10T02:40:21Z",
+              "updatedAt": "2022-04-10T02:40:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433G5C",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T02:41:02Z",
+          "updatedAt": "2022-04-10T02:41:02Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "What makes cipherinfo a parameter and not an input here?",
+              "createdAt": "2022-04-10T02:41:02Z",
+              "updatedAt": "2022-04-10T02:41:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433Pq3",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T08:23:12Z",
+          "updatedAt": "2022-04-10T08:23:13Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Need to specify the form of `PK` and other parameters e.g octets_to_point",
+              "createdAt": "2022-04-10T08:23:13Z",
+              "updatedAt": "2022-04-10T08:23:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433PtH",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T08:24:35Z",
+          "updatedAt": "2022-04-10T08:24:35Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Apologies, ignore, saw the definition above r.e PK is the existing definition for L etc?",
+              "createdAt": "2022-04-10T08:24:35Z",
+              "updatedAt": "2022-04-10T08:28:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433VZf",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T11:30:11Z",
+          "updatedAt": "2022-04-10T11:30:11Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Agreed. To that end, I updated the PR to define two more generator seeds for `H_s` and `H_d`. I also prefer this way. Since those generators are no longer calculated exactly the same as the message generators we may not need to pass them as input, as it was raised to the WG call.",
+              "createdAt": "2022-04-10T11:30:11Z",
+              "updatedAt": "2022-04-10T11:35:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433Vbw",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T11:31:25Z",
+          "updatedAt": "2022-04-10T11:31:26Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "My thinking was that if cipherinfo is optional (which i think it should), that can be cached for different calls of the operations using the same ciphersuite, IMO it is suited for a parameter. This way, the inputs are only the values necessary for the core \"mathematical\" operations (in contrast, cipherinfo is only used for the sig_dst). This is similar to what `keyGen` does with `key_info`.",
+              "createdAt": "2022-04-10T11:31:26Z",
+              "updatedAt": "2022-04-10T11:31:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433Vhe",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T11:34:33Z",
+          "updatedAt": "2022-04-10T11:34:33Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "That's a good point. L is implicitly defined as the total number of signed messages (based on that the input to sign is (msg_1, ..., msg_L)). I did notice though that the definition of L in terminology is different. Updated the definition of L to \"the total number of signed messages\" (there are still some inconsistencies with the definition of L even beyond this PR. I will submit a different PR to fix them).",
+              "createdAt": "2022-04-10T11:34:33Z",
+              "updatedAt": "2022-04-10T11:34:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433ug-",
+          "commit": {
+            "abbreviatedOid": "be0a8ee"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T23:17:48Z",
+          "updatedAt": "2022-04-10T23:17:49Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Do h_s and h_d now have to listed as parameters here?",
+              "createdAt": "2022-04-10T23:17:48Z",
+              "updatedAt": "2022-04-10T23:17:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433ujX",
+          "commit": {
+            "abbreviatedOid": "be0a8ee"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T23:19:06Z",
+          "updatedAt": "2022-04-10T23:19:07Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Ok understood and is consistent as you said with keyGen",
+              "createdAt": "2022-04-10T23:19:07Z",
+              "updatedAt": "2022-04-10T23:19:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433unU",
+          "commit": {
+            "abbreviatedOid": "be0a8ee"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-10T23:21:12Z",
+          "updatedAt": "2022-04-10T23:21:12Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Ok but do we need to convert L to bytes here? using I2OSP? Same for the other parameters too we need to make sure we fully define the form they are in to compute this hash",
+              "createdAt": "2022-04-10T23:21:12Z",
+              "updatedAt": "2022-04-10T23:21:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433x3A",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T00:32:04Z",
+          "updatedAt": "2022-04-11T00:32:05Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "That's true. Note that the same consideration holds for the challenge hash in spkGen/verify. Also, the current approach is consistent with what the [Schnorr NIZK proofs RFC](https://datatracker.ietf.org/doc/html/rfc8235#section-2.3) does. That said, i would like to be more specific but i don't really like adding `point_to_octets` for every argument (for aesthetic reasons only). Another option could be a note that specifies the correct transformations for each element to be hashed (`point_to_octets` for points, `I2OSP` for numbers). This is similar (to a lesser extent) with what UProve does if im not mistaken without the `<>` notation that we could also add (i'm thinking of section 2.2 [here](https://github.com/microsoft/uprove-csharp-sdk/blob/master/docs/U-Prove%20Cryptographic%20Specification%20V1.1%20Revision%203.pdf)). I added such note in the definition to the HASH function in the Parameters section for review. \r\n\r\nIf this approach is preferred we can also add the use of the `<>` notation (`<>` representing values to be hashed after they are properly encoded i.e., `<H_1>` would represent the result of `octets_to_points(H_1)` etc.). We could also move the descriptions of the encodings for each element type to a different section if we decide on this direction, but this may be better suited for a different PR?? (I'm more than happy to include it in this PR as well).",
+              "createdAt": "2022-04-11T00:32:05Z",
+              "updatedAt": "2022-04-11T00:56:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8433x5n",
+          "commit": {
+            "abbreviatedOid": "be0a8ee"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T00:33:00Z",
+          "updatedAt": "2022-04-11T00:33:00Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "IMO not technically since they are defined in the terminology and are not optional. We could add them for clarity in the parameters also though.",
+              "createdAt": "2022-04-11T00:33:00Z",
+              "updatedAt": "2022-04-11T00:33:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax84342YA",
+          "commit": {
+            "abbreviatedOid": "9df0d2c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T08:34:31Z",
+          "updatedAt": "2022-04-11T08:34:31Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Ok so we are saying that parameters differ from inputs in that they are optional? IMO I think it is clearer to have them defined here also.",
+              "createdAt": "2022-04-11T08:34:31Z",
+              "updatedAt": "2022-04-11T08:34:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax84344X4",
+          "commit": {
+            "abbreviatedOid": "9df0d2c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T08:41:07Z",
+          "updatedAt": "2022-04-11T08:41:07Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "I like your current approach which is to make the conversion implicit in the definition of the HASH function.",
+              "createdAt": "2022-04-11T08:41:07Z",
+              "updatedAt": "2022-04-11T08:41:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax84344m8",
+          "commit": {
+            "abbreviatedOid": "9df0d2c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T08:41:52Z",
+          "updatedAt": "2022-04-11T08:41:52Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "I also noted this recommendation in the RFC you referenced is this something we should consider?\r\n\r\n```\r\nWithin the hash function, there must be a clear boundary between any\r\n   two concatenated items.  It is RECOMMENDED that one should always\r\n   prepend each item with a 4-byte integer that represents the byte\r\n   length of that item.  OtherInfo may contain multiple subitems.  In\r\n   that case, the same rule shall apply to ensure a clear boundary\r\n   between adjacent subitems.\r\n```",
+              "createdAt": "2022-04-11T08:41:52Z",
+              "updatedAt": "2022-04-11T08:41:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8435uEf",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T11:50:00Z",
+          "updatedAt": "2022-04-11T11:50:01Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Thank you! Yes I think we should. I opened up an [issue](https://github.com/decentralized-identity/bbs-signature/issues/96) to discuss some of the options. I will make another PR to move the spec to this direction.",
+              "createdAt": "2022-04-11T11:50:00Z",
+              "updatedAt": "2022-04-11T11:50:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8435uNW",
+          "commit": {
+            "abbreviatedOid": "be0a8ee"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T11:50:29Z",
+          "updatedAt": "2022-04-11T11:50:29Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Done.",
+              "createdAt": "2022-04-11T11:50:29Z",
+              "updatedAt": "2022-04-11T11:50:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8438YsD",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-11T20:52:03Z",
+          "updatedAt": "2022-04-11T20:52:03Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "See PR #97 for a proposal moving towards this direction. The addition to the definition of HASH is removed from this PR and re-introduced extended to #97.",
+              "createdAt": "2022-04-11T20:52:03Z",
+              "updatedAt": "2022-04-11T20:52:03Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 97,
+      "id": "PR_kwDOF8lax842B47S",
+      "title": "Encodings for elements to be hashed",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/97",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "First approach to close issue #96\r\n\r\nEncodings suggestion of elements to be hashed (similar to the ones used by [U-Prove](https://github.com/microsoft/uprove-csharp-sdk/blob/master/docs/U-Prove%20Cryptographic%20Specification%20V1.1%20Revision%203.pdf)). \r\n\r\nThis PR follows option 2 from the above issue, i.e., the encoding of elements to be hashed is described in a separate section and used implicitly throughout the document. See PR #95  for more context.\r\n\r\nI also suggest that scalars, non-negative integers, and generic octet strings must always be prepended with their length while it is only recommended for EC points.",
+      "createdAt": "2022-04-11T20:48:28Z",
+      "updatedAt": "2022-04-11T20:51:39Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "hash-input-encoding",
+      "headRefOid": "ba2ea60846e04a2d3f9db23739e6b2fc2b257451",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
