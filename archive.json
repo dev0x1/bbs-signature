@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-14T00:09:56.318099+00:00",
+  "timestamp": "2022-04-17T00:09:12.980424+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -2831,10 +2831,12 @@
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr"
+      ],
       "body": "In general, I was under the impression that a signature can be used to derive proofs that would be validated with only 1 specific key (the issuers PK).\r\n\r\nThat does not seem to be the case. The holder can present proofs for credentials signed from an issuer with public key `PK`, that will be validated with `PK * y = P2 * (x*y)`, where `y` a scalar chosen by the holder. My question is: Is this dangerous?? It is not really a forgery. It may compromise the issuer's and/or holder's accountability though, i.e., an issuer may falsely claim that they never signed a specific credential or a holder that they never possessed (and used to create an spk) a credential signed from that issuer.\r\n\r\nYou can find the detailed mathematics here: https://hackmd.io/@Vasileios/HyuXt_kf9\r\n  and a reproduction here: https://github.com/BasileiosKal/dif-bbs-issue\r\n\r\nIn general the method is the following; Let the holder having the signature `(A, s, e)` on some messages. Let also the holder wanting to create a proof that would be validated with `PK * y` instead of `PK`, for some scalar `y`. During spkGen they will calculate `Abar_f = A\u2019 * y * e + B * r1 * y` and `D_f = B * r1 * y + H0 * r2`. Note that `e(Abar_f, P2) = e(A', PK * y)`. Changing some additional values in the proof, the holder can present the spk; `(A\u2019, Abar_f, D_f, \u2026)` that will be validated with `PK * y`. \r\n\r\nA similar method works with a signature. The holder can present `(A*(y^-1), s, e*y)` which is a valid signature for the key `PK * y` (which is why the above method doesn't go against the security proofs given in the literature, i.e., a bbs proof, proves knowledge of a signature not only from the secret key `x` but also for a signature from the \"secret key\" `y * x`).\r\n\r\nIf a mitigation is needed, maybe including the issuer's PK as one of the signed messages will be an efficient solution, that solves the issuer\u2019s and/or holder\u2019s accountability issue.",
       "createdAt": "2022-03-16T18:20:35Z",
-      "updatedAt": "2022-03-16T22:46:11Z",
+      "updatedAt": "2022-04-14T07:26:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -2981,10 +2983,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr"
+      ],
       "body": "Currently in the in spkgen and spkverify operations, the challenge is not appropriately being converted to its scalar representation, this needs to be rectified, issue originally raised during review of #84 [see here](https://github.com/decentralized-identity/bbs-signature/pull/84#pullrequestreview-911423521)",
       "createdAt": "2022-03-22T01:16:33Z",
-      "updatedAt": "2022-03-22T01:16:33Z",
+      "updatedAt": "2022-04-14T07:26:20Z",
       "closedAt": null,
       "comments": []
     },
@@ -3060,10 +3064,12 @@
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr"
+      ],
       "body": "See discussion in PR #95\r\n\r\nIn the spec, we need a way to pass elements of different types (EC points, integers, scalars etc) to a hash function. In that case, the encoding of those elements becomes important. IMO there are two options:\r\n1. Explicitly making the transformation to octets for each hashed element. That would look something like\r\n```\r\nHASH(point_to_octets(PK), I2OSP(L), point_to_octets(H_1),..., point_to_octets(H_L),...)\r\n```\r\n2. Implicitly make the conversion (in the definition of the HASH for example or in a separate section etc.). This would look something like,\r\n```\r\nHASH(PK, L, H_1,..., H_L,... )\r\n``` \r\nPersonally I prefer 2. This would mean that we can also specify rules like the one Tobias pointed out [here ](https://github.com/decentralized-identity/bbs-signature/pull/95#discussion_r847082901)i.e., that each element should also be appended with its length, which i agree with. A consideration here is if we need to specify this rule for every element (even the point_to_octets outputs) or it is sufficient to specify it for general octet strings and non-negative integers (lengths of lists)??. IMO the latter will suffice, since there is not really any ubiquities that come to mind regarding the output of point_to_octets (which is also an octet string but with well defined length), but i could be mistaken.",
       "createdAt": "2022-04-11T11:49:30Z",
-      "updatedAt": "2022-04-12T17:39:44Z",
+      "updatedAt": "2022-04-14T07:25:58Z",
       "closedAt": null,
       "comments": [
         {
@@ -3084,10 +3090,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr"
+      ],
       "body": "Currently the specification offers a definition for [key generation](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-keygen) however implementations do not have to follow this procedure to be interoperable and instead can design their own, the spec should clarify this.",
       "createdAt": "2022-04-12T02:52:22Z",
-      "updatedAt": "2022-04-12T02:52:49Z",
+      "updatedAt": "2022-04-14T07:25:44Z",
       "closedAt": null,
       "comments": []
     },
@@ -3138,10 +3146,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr"
+      ],
       "body": "If a mapped message value outputted by the MapMessageToScalarAsHash evaluates to zero then effectively this message wont be signed, therefore we should add a security consideration to the spec to handle this case.",
       "createdAt": "2022-04-12T19:26:51Z",
-      "updatedAt": "2022-04-12T19:26:51Z",
+      "updatedAt": "2022-04-14T07:25:30Z",
       "closedAt": null,
       "comments": []
     }
@@ -9079,13 +9089,13 @@
       "labels": [],
       "body": "Closes Issues #78 and #85 \r\n\r\n### Changes:\r\n1. Adds the number of the revealed messages, the generators, the public key and some ciphersuite specific information to a signature domain separation tag (a signed -always revealed- message).\r\n2. Switches notation from H0 to H_s, as discussed in the WG call\r\n\r\n### Note:\r\nThis PR leaves the cipher suite specific info as optional for the `sig_dst`. The reason is that when it comes to the generators, the total number of messages etc., there are real risks for not adding them to the `sig_dst`.\r\n\r\nThe last one (total number of messages) is not documented in an issue to my knowledge, but I think it is well understood that it is dangerous to not include it. For example, the prover could reveal an additional \u201chidden\u201d attribute by calculating `C1_new = C1 + H_j(U+1) * m~_j(U+1)` and `m^_j(U+1) = m~_j(U+1)` and have the proof be validated ([reproduction](https://github.com/BasileiosKal/dif-bbs-signature-dst-pr/blob/main/src/main.rs)). \r\n\r\n(Including the generators also solves this issue, so we could potentially only include the generators and not the total number of messages. That said, IMO it would be better to be more careful since it does not hurt performance or complexity)\r\n\r\nIn the case of the ciphersuite info though, IMO its good security practice to include it but not necessary?? I\u2019m more than happy to update the pr and make the ciphersuite info mandatory, but to me it seems that the separation between ciphersuites could also happen elsewhere more naturally (in hash-2-curve for example, similarly to what the bls draft does)",
       "createdAt": "2022-04-09T21:42:47Z",
-      "updatedAt": "2022-04-13T23:05:40Z",
+      "updatedAt": "2022-04-15T20:06:32Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "signature-dst",
-      "headRefOid": "9c471fcf2218988515b0982151d77f0bf13fc334",
+      "headRefOid": "92d986323c044b02a09eac66fdefc1436f9f0ce2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9143,9 +9153,44 @@
         {
           "author": "tplooker",
           "authorAssociation": "MEMBER",
-          "body": "> I disagree. We're adding more work for both sides. How is that saving anything?!? I think we should arrange a time to discuss it. Github isn't the best place for this.\r\n\r\nJust adding my perspective here as I wont be able to attend the special call on this topic. The proposal is to include these public parameters (generators, total number of signed messages etc) in the signature DST instead of in the challenge computed for the proof. This is slightly more efficient as @andrewwhitehead said because the signature DST value could be cached across multiple proofs where the challenge value cannot. Also these public parameters are set by the issuer so the safest way to prevent these from being manipulated by the holder or any other party, is to just protected them in the original signature produced by the issuer via the signature DST.",
+          "body": "> I disagree. We're adding more work for both sides. How is that saving anything?!? I think we should arrange a time to discuss it. Github isn't the best place for this.\r\n\r\nJust adding my perspective here as I wont be able to attend the special call on this topic. The proposal is to include these public parameters (generators, total number of signed messages etc) in the signature DST instead of in the challenge computed for the proof. This is slightly more efficient as @andrewwhitehead said because the signature DST value could be cached across multiple proofs where the challenge value cannot. Also these public parameters are set by the issuer so the safest way to prevent these from being manipulated by the holder or any other party, is to just protect them in the original signature produced by the issuer via the signature DST.",
           "createdAt": "2022-04-12T20:39:19Z",
-          "updatedAt": "2022-04-13T01:57:18Z"
+          "updatedAt": "2022-04-14T02:23:33Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Some more updates,\r\n-\tAll suggestions made by @tplooker have been integrated.\r\n-\tAlso proposed by @tplooker, `sig_dst` is passed to the XOF used to calculate `e` and `s`. This has the advantage that signatures on the same messages but under different cipher suites (using the same generators) or application domains, will also be different, which is nice.\r\n-\t`CipherInfo` is changed to `ApplicationInfo`. I like this better since it captures separation between blind and non-blind signatures. Chiphersuite separation will most probably happen with `Ciphersuite_ID` either way. Currently I don\u2019t see any requirement to pass `CipherInfo` in the `sig_dst` but if anyone has a relative use case where both `Ciphersuite_ID` and `CipherInfo` will be useful I will be happy to update the PR.\r\n-\tIf `ApplicationInfo` gets adopted, some guidance will be needed on what this value should be.\r\n",
+          "createdAt": "2022-04-15T17:28:38Z",
+          "updatedAt": "2022-04-15T17:28:38Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I was imagining different use cases for CipherInfo and ApplicationInfo. CipherInfo would represent standard revealed parameters as required by the cipher suite, while ApplicationInfo would be more of a private extension method for use cases that build on an existing cipher suite.\r\n\r\nWith [ldp-bbs2020](https://w3c-ccg.github.io/ldp-bbs2020/#required-reveal-statements) as an example, the CipherInfo would include at least the `verificationMethod` and `proofPurpose` attributes, no longer encoded as separate messages. Each cipher suite would need to define the procedure for generating an octet string from its parameters, if any, for example it might use `bytes(canonical_json({\"verificationMethod\": ..., \"proofPurpose\": ...}))` in this case. Revocation registry details might be another example of cipher suite-defined parameters that would need to be encoded in this way so that the holder cannot choose not to reveal them.\r\n\r\nApplicationInfo might correspond to the token information field in U-Prove, allowing a way to formalize additional contextual parameters about how the signature can be applied and interpreted:\r\n\r\n> The token information field is used to encode token-specific information that is always disclosed to Verifiers, such as token usage restrictions, a validity period (see Section 3.3), or token metadata.\r\n\r\nAs an example, an issuer might use ApplicationInfo to restrict the presentation of a signature to a specific IP address to which it was issued (this wouldn't be very privacy-preserving). However, since there is no application identifier to restrict the interpretation of ApplicationInfo, it might be better to forget about that concept and require the cipher suite to define these parameters if they are to be supported. If we are only encoding one such parameter then ApplicationInfo seems like a better name.",
+          "createdAt": "2022-04-15T18:25:46Z",
+          "updatedAt": "2022-04-15T18:25:46Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That's very interesting. I'm kinda conflicted because from the one hand it would be nice for ciphersuites to have the ability to define \"always revealed messages\" but on the other hand i feel it breaks a little the separation between ciphersuite and application layer. For example, a representation layer specification like ldp-pps2020 would have to define a (cryptographic layer) ciphersuite and i don't think its wise (and fair) to ask from the developers of those specifications to have to define a cryptographic suite.\r\n\r\nI wonder if for a spec like ldp-bbs2020 would be enough to use `ApplicationInfo` to force certain messages to be revealed. That said, since it seems that there may exist cases that something like that would be useful, i think it would be better to add it.\r\n\r\nAlso regarding `ApplicationInfo`, i think it would not be hard to give some requirements regarding its contains and meaning, at least to avoid privacy issues. Perhaps `DomainInfo` would be a better name?",
+          "createdAt": "2022-04-15T19:22:46Z",
+          "updatedAt": "2022-04-15T19:22:46Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> I was imagining different use cases for CipherInfo and ApplicationInfo. CipherInfo would represent standard revealed parameters as required by the cipher suite, while ApplicationInfo would be more of a private extension method for use cases that build on an existing cipher suite.\r\n\r\nThis raises a good point for me and I tend to resonate with this POV, essentially could we have both one is a parameter \"CipherInfo\" set by the ciphersuite, the other is a parameter that is supplied to the sign, verify, spkGen and spkVerify operations? I can see two different possible applications for ApplicationInfo\r\n\r\n1. Usecases where the signer wants to include information that must always be revealed in the resulting proof\r\n2. Usecases where no selective disclosure is even required, instead all the signed information must always be revealed and instead the scheme is really just been used more for just its group signature properties.\r\n\r\nIf two resonates with folks then I wonder if the messages and generator parameters become optional in this setting?",
+          "createdAt": "2022-04-15T20:00:42Z",
+          "updatedAt": "2022-04-15T20:02:29Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "The only thing that doesn't quite fit for me is whether ApplicationInfo should form part of a domain separation tag? All other info that goes into the computation of sig_dst seems to fit this model nicely however ApplicationInfo does not? Perhaps thats just a mental model thing however as the only alternative I see is to commit the application info into the signature using a seperate generator which would be in-efficient?",
+          "createdAt": "2022-04-15T20:06:32Z",
+          "updatedAt": "2022-04-15T20:06:32Z"
         }
       ],
       "reviews": [
@@ -9888,6 +9933,126 @@
               "updatedAt": "2022-04-13T23:05:40Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZVy",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:24:45Z",
+          "updatedAt": "2022-04-14T02:24:46Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n: A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.\r\n```",
+              "createdAt": "2022-04-14T02:24:46Z",
+              "updatedAt": "2022-04-14T02:24:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZYb",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:25:14Z",
+          "updatedAt": "2022-04-14T02:25:15Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\n: A generator for the signature domain separation tag (sig_dst), which binds both signature and proof to a specific domain. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.\r\n```",
+              "createdAt": "2022-04-14T02:25:15Z",
+              "updatedAt": "2022-04-14T02:25:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZiz",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:26:56Z",
+          "updatedAt": "2022-04-14T02:26:56Z",
+          "comments": [
+            {
+              "originalPosition": 76,
+              "body": "How about `element` or `item` instead?",
+              "createdAt": "2022-04-14T02:26:56Z",
+              "updatedAt": "2022-04-14T02:26:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZlk",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:27:24Z",
+          "updatedAt": "2022-04-14T02:27:24Z",
+          "comments": [
+            {
+              "originalPosition": 103,
+              "body": "```suggestion\r\n- CipherInfo, an optional octet string containing ciphersuite specific information.\r\n```",
+              "createdAt": "2022-04-14T02:27:24Z",
+              "updatedAt": "2022-04-14T02:27:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZmm",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:27:34Z",
+          "updatedAt": "2022-04-14T02:27:34Z",
+          "comments": [
+            {
+              "originalPosition": 138,
+              "body": "```suggestion\r\n- CipherInfo, an optional octet string containing ciphersuite specific information.\r\n```",
+              "createdAt": "2022-04-14T02:27:34Z",
+              "updatedAt": "2022-04-14T02:27:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZnt",
+          "commit": {
+            "abbreviatedOid": "9c471fc"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:27:45Z",
+          "updatedAt": "2022-04-14T02:27:46Z",
+          "comments": [
+            {
+              "originalPosition": 218,
+              "body": "```suggestion\r\n- CipherInfo, an optional octet string containing ciphersuite specific information.\r\n```",
+              "createdAt": "2022-04-14T02:27:45Z",
+              "updatedAt": "2022-04-14T02:27:46Z"
+            }
+          ]
         }
       ]
     },
@@ -9903,13 +10068,13 @@
       "labels": [],
       "body": "First approach to close issue #96\r\n\r\nEncodings suggestion of elements to be hashed (similar to the ones used by [U-Prove](https://github.com/microsoft/uprove-csharp-sdk/blob/master/docs/U-Prove%20Cryptographic%20Specification%20V1.1%20Revision%203.pdf)). \r\n\r\nThis PR follows option 2 from the above issue, i.e., the encoding of elements to be hashed is described in a separate section and used implicitly throughout the document. See PR #95  for more context.\r\n\r\nI also suggest that scalars, non-negative integers, and generic octet strings must always be prepended with their length while it is only recommended for EC points.",
       "createdAt": "2022-04-11T20:48:28Z",
-      "updatedAt": "2022-04-12T20:15:42Z",
+      "updatedAt": "2022-04-14T20:18:41Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-input-encoding",
-      "headRefOid": "3fc039582ff6250a1b1ca83116b6b650548b540b",
+      "headRefOid": "2e2fac447b59ad84654e1240ec46ffecdb22651a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9950,9 +10115,9 @@
           "comments": [
             {
               "originalPosition": 23,
-              "body": "Where would be normatively define whether this recommendation is in use to promote interoperability, would it be defined in the cipher suite whether G1 or G2 points are using this length prefix?",
+              "body": "Where would this be normatively define whether this recommendation is in use to promote interoperability, would it be defined in the cipher suite whether G1 or G2 points are using this length prefix?",
               "createdAt": "2022-04-12T02:46:49Z",
-              "updatedAt": "2022-04-12T02:46:49Z"
+              "updatedAt": "2022-04-14T02:29:04Z"
             }
           ]
         },
@@ -9995,6 +10160,166 @@
               "updatedAt": "2022-04-12T17:37:37Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IZ4i",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:30:17Z",
+          "updatedAt": "2022-04-14T02:30:18Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\r\nTo avoid ambiguity, each element passed to the HASH or the XOF function, either by itself or concatenated with other elements, must first be encoded to an appropriate format, depending on its type. Specifically, \r\n```",
+              "createdAt": "2022-04-14T02:30:17Z",
+              "updatedAt": "2022-04-14T02:30:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IaCo",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:31:45Z",
+          "updatedAt": "2022-04-14T02:31:45Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\n- Points in G1 or G2 must be encoded using the `point_to_octets` implementation for a particular ciphersuite.\r\n```",
+              "createdAt": "2022-04-14T02:31:45Z",
+              "updatedAt": "2022-04-14T02:31:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844Iarn",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:37:53Z",
+          "updatedAt": "2022-04-14T02:37:54Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\nAfter encoding, scalars and octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. This length's binary value must be zero-extended to 32 bits. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string `0x14d` will be encoded as `0x00000002014d`. Similarly, the number `236195248387` will be encoded as `0x0000000536fe557903`. Values larger than 2^32 - 1, MUST be rejected.\r\n```",
+              "createdAt": "2022-04-14T02:37:54Z",
+              "updatedAt": "2022-04-14T02:37:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844IavL",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:38:29Z",
+          "updatedAt": "2022-04-14T02:38:29Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Wonder to make this 100% clear whether we should give an example of this transform?\r\n",
+              "createdAt": "2022-04-14T02:38:29Z",
+              "updatedAt": "2022-04-14T02:38:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844MQ6X",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T19:58:21Z",
+          "updatedAt": "2022-04-14T19:58:21Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Done.",
+              "createdAt": "2022-04-14T19:58:21Z",
+              "updatedAt": "2022-04-14T19:58:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844MQ7L",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T19:58:24Z",
+          "updatedAt": "2022-04-14T19:58:25Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Done.",
+              "createdAt": "2022-04-14T19:58:25Z",
+              "updatedAt": "2022-04-14T19:58:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844MRA8",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T19:58:49Z",
+          "updatedAt": "2022-04-14T19:58:49Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Thanks! Updated this section following your suggestions.",
+              "createdAt": "2022-04-14T19:58:49Z",
+              "updatedAt": "2022-04-14T19:58:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844MRVi",
+          "commit": {
+            "abbreviatedOid": "3fc0395"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T20:00:14Z",
+          "updatedAt": "2022-04-14T20:00:14Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Added an example dealing with a \"octet string\" (an ascii message) and a number. There are other options to include (points etc.) but then we may want to move the example to an appendix since it will likely be more extensive.",
+              "createdAt": "2022-04-14T20:00:14Z",
+              "updatedAt": "2022-04-14T20:00:15Z"
+            }
+          ]
         }
       ]
     },
@@ -10010,13 +10335,13 @@
       "labels": [],
       "body": "This PR introduces a `hash_to_scalar` function as discussed in the WG call. The goal is for the function to replace some of the hashing to scalars happening internally in the operations, i.e., for the `e`, `s` calculation in `sign`, in the random elements in `spkGen` and potentially for the challenge value and the `sig_dst` if we decide to use that (see PR #95). The function is not inserted yet in those operations to not block #95. If that is resolved first i will update this PR.\r\n\r\n### Note:\r\n`hash_to_field` is removed with this PR (from `MapMessageToScalarAsHash`) and is replaced with `hash_to_scalar`. Note that this will also close issue #100 since `hash_to_scalar` checks if an element is 0. My reasoning is that `hash-to-scalar` serves the same functionality while been able to be used for the cases detailed above, without needing to worry about dst's etc. Note that aside from the use of dst, `hash-to-scalar` is almost exactly `hash-to-field` using `expand-message-xof` and with `m` (the fields extension degree) = 1. \r\n\r\nAlso the dst is not removed from `MapMessageToScalarAsHash` (where it is useful). A note is also added stating that people can use `hash-to-field` if they want. However, i feel that the current construction is more flexible to serve the needs of the spec, but really keen to discuss alternatives and other proposals.",
       "createdAt": "2022-04-13T22:19:20Z",
-      "updatedAt": "2022-04-13T22:31:45Z",
+      "updatedAt": "2022-04-14T20:29:19Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-to-scalar",
-      "headRefOid": "2bcc06453cd494a567bced4e6d7f0e01a1e888ec",
+      "headRefOid": "b1f268e7ab9f27126b20b52e9867faa9fe6b09e6",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10028,9 +10353,78 @@
           "body": "I'd prefer to see the lengths prepended in MapMessageToScalarAsHash, maybe like this?\r\n\r\n    1. If len(dst) > 2^8-1 or len(msg) > 2^32-1, abort\r\n    2. dst_prime = I2OSP(len(dst), 1) || dst\r\n    3. msg_prime = I2OSP(len(msg), 4) || msg\r\n    4. result = hash_to_scalar(dst_prime || msg_prime, 1)\r\n    5. return result\r\n",
           "createdAt": "2022-04-13T22:31:45Z",
           "updatedAt": "2022-04-13T22:31:45Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I'd prefer to see the lengths prepended in MapMessageToScalarAsHash, maybe like this?\r\n\r\nThank you! I updated the PR based on your suggestion.\r\n\r\nIMO this brings also an interesting point for PR #97, i.e., it makes little sense to have a dst be appended with a 4 bytes length (as #97 suggests). Maybe an \"unless otherwise stated\" is needed.",
+          "createdAt": "2022-04-14T16:24:02Z",
+          "updatedAt": "2022-04-14T16:24:02Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes adding the DST length seems to just add an unnecessary restriction in this case.",
+          "createdAt": "2022-04-14T16:49:45Z",
+          "updatedAt": "2022-04-14T16:49:45Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That's true. Just to make sure i understand. Is your preference to remove the addition of the DST length from this PR or remove/update the descriptions of PR #97.\r\n\r\nIf it is the first case, maybe a better option would be to remove the lengths of both the message and the dst from `MapMessageToScalarAsHash` and just point to the recommendation in PR #97.",
+          "createdAt": "2022-04-14T17:44:01Z",
+          "updatedAt": "2022-04-14T17:44:01Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Update: I added the dst handling in PR #97, so now the two PRs are consistent. If we decide to go that route, the only thing that will neet to be updated IMO is noting that the transformation descried in #97 ...\"-**may**- happen implicitly, but they MUST precede every call to the HASH or XOF function.\"",
+          "createdAt": "2022-04-14T20:29:19Z",
+          "updatedAt": "2022-04-14T20:29:19Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax844Ia7R",
+          "commit": {
+            "abbreviatedOid": "2bcc064"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T02:40:03Z",
+          "updatedAt": "2022-04-14T02:40:04Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nThis operation describes how to hash an arbitrary octet string to `n` scalar values in the multiplicative group of integers mod q. This procedure acts as a helper function, and it used internally in various places within the operation described in the spec. To map a message to a scalar that would be passed as input to the [Sign](#sign), [Verify](#verify), [spkGen](#spkgen) and [spkVerify](#spkverify) functions, one must use [MapMessageToScalarAsHash](#mapmessagetoscalar) instead.\r\n```",
+              "createdAt": "2022-04-14T02:40:03Z",
+              "updatedAt": "2022-04-14T02:40:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844Lanv",
+          "commit": {
+            "abbreviatedOid": "2bcc064"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-14T16:22:39Z",
+          "updatedAt": "2022-04-14T16:22:39Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Thanks! Done.",
+              "createdAt": "2022-04-14T16:22:39Z",
+              "updatedAt": "2022-04-14T16:22:39Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
