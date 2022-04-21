@@ -5,9 +5,12 @@
 none                                                           M. Lodder
                                                                  CryptID
                                                                T. Looker
-                                                                   Mattr
+                                                                   MATTR
                                                             A. Whitehead
-                                                            4 April 2022
+                                                                        
+                                                                V. Kalos
+                                                                   MATTR
+                                                           21 April 2022
 
 
                         The BBS Signature Scheme
@@ -1427,9 +1430,14 @@ Authors' Addresses
 
 
    Tobias Looker
-   Mattr
+   MATTR
    Email: tobias.looker@mattr.global
 
 
    Andrew Whitehead
    Email: cywolf@gmail.com
+
+
+   Vasileios Kalos
+   MATTR
+   Email: vasilis.kalos@mattr.global
