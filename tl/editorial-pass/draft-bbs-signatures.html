@@ -2058,7 +2058,7 @@ Procedure:
         <h3 id="name-choice-of-underlying-curve">
 <a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-choice-of-underlying-curve" class="section-name selfRef">Choice of underlying curve</a>
         </h3>
-<p id="section-4.8-1">BBS signatures can be implemented on any pairing-friendly curve. However care MUST be taken when selecting one that is appropriate, this specification defines a ciphersuite for using the BLS12-381 curve in <a href="#ciphersuites" class="xref">Section 5</a> which as a curve currently achieves close to 128-bit security.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
+<p id="section-4.8-1">BBS signatures can be implemented on any pairing-friendly curve. However care MUST be taken when selecting one that is appropriate, this specification defines a ciphersuite for using the BLS12-381 curve in <a href="#ciphersuites" class="xref">Section 5</a> which as a curve achieves around 117 bits of security according to a recent NCC ZCash cryptography review <span>[<a href="#ZCASH-REVIEW" class="xref">ZCASH-REVIEW</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-of-spkgen">
@@ -2335,8 +2335,12 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 <span class="refAuthor">Camenisch, J.</span>, <span class="refAuthor">Drijvers, M.</span>, and <span class="refAuthor">A. Lehmann</span>, <span class="refTitle">"Anonymous Attestation Using the Strong Diffie Hellman Assumption Revisited"</span>, <span class="seriesInfo">Springer, Cham</span>, <time datetime="2016" class="refDate">2016</time>, <span>&lt;<a href="https://eprint.iacr.org/2016/663.pdf">https://eprint.iacr.org/2016/663.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-cfrg-bls-signature">[I-D.irtf-cfrg-bls-signature]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Boneh, D.</span>, <span class="refAuthor">Gorbunov, S.</span>, <span class="refAuthor">Wahby, R. S.</span>, <span class="refAuthor">Wee, H.</span>, and <span class="refAuthor">Z. Zhang</span>, <span class="refTitle">"BLS Signatures"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-bls-signature-04</span>, <time datetime="2020-09-10" class="refDate">10 September 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ZCASH-REVIEW">[ZCASH-REVIEW]</dt>
+    <dd>
+<span class="refAuthor">NCC Group</span>, <span class="refTitle">"Zcash Overwinter Consensus and Sapling Cryptography Review"</span>, <span>&lt;<a href="https://research.nccgroup.com/wp-content/uploads/2020/07/NCC_Group_Zcash2018_Public_Report_2019-01-30_v1.3.pdf">https://research.nccgroup.com/wp-content/uploads/2020/07/NCC_Group_Zcash2018_Public_Report_2019-01-30_v1.3.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

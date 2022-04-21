@@ -875,8 +875,9 @@ Procedure:
    BBS signatures can be implemented on any pairing-friendly curve.
    However care MUST be taken when selecting one that is appropriate,
    this specification defines a ciphersuite for using the BLS12-381
-   curve in Section 5 which as a curve currently achieves close to
-   128-bit security.
+   curve in Section 5 which as a curve achieves around 117 bits of
+   security according to a recent NCC ZCash cryptography review
+   [ZCASH-REVIEW].
 
 4.9.  Security of spkGen
 
@@ -1116,6 +1117,12 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
               draft-irtf-cfrg-bls-signature-04, 10 September 2020,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
               bls-signature-04>.
+
+   [ZCASH-REVIEW]
+              NCC Group, "Zcash Overwinter Consensus and Sapling
+              Cryptography Review", <https://research.nccgroup.com/wp-
+              content/uploads/2020/07/
+              NCC_Group_Zcash2018_Public_Report_2019-01-30_v1.3.pdf>.
 
 Appendix A.  Appendix
 
