@@ -268,7 +268,7 @@ Table of Contents
 3.  Scheme Definition
 
    This section defines the BBS signature scheme, including the
-   parameters required to define a concrete cipher-suite.
+   parameters required to define a concrete ciphersuite.
 
 3.1.  Parameters
 
@@ -874,9 +874,9 @@ Procedure:
 
    BBS signatures can be implemented on any pairing-friendly curve.
    However care MUST be taken when selecting one that is appropriate,
-   this specification defines a profile for using the BLS12-381 curve in
-   Section 5 which as a curve currently achieves close to 128-bit
-   security.
+   this specification defines a ciphersuite for using the BLS12-381
+   curve in Section 5 which as a curve currently achieves close to
+   128-bit security.
 
 4.9.  Security of spkGen
 
@@ -889,7 +889,7 @@ Procedure:
 
 5.  Ciphersuites
 
-   This section defines the format for a BLS ciphersuite.  It also gives
+   This section defines the format for a BBS ciphersuite.  It also gives
    concrete ciphersuites based on the BLS12-381 pairing-friendly
    elliptic curve [I-D.irtf-cfrg-pairing-friendly-curves].
 
