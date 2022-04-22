@@ -31,37 +31,32 @@ Discussion Venues
 Table of Contents
 
    1.  Introduction
-     1.1.  Notational Conventions
-     1.2.  Terminology
-   2.  Overview
-   3.  Example Flow
-   4.  Operations
-     4.1.  PreBlindSign
-     4.2.  BlindSign
-     4.3.  UnblindSign
-     4.4.  BlindMessagesProofGen
-     4.5.  BlindMessagesProofVerify
-   5.  Security Considerations
-   6.  IANA Considerations
-   7.  Appendix
-     7.1.  Test Vectors
+     1.1.  Terminology
+     1.2.  Notation
+   2.  Conventions
+   3.  Overview
+   4.  Example Flow
+   5.  Operations
+     5.1.  PreBlindSign
+     5.2.  BlindSign
+     5.3.  UnblindSign
+     5.4.  BlindMessagesProofGen
+     5.5.  BlindMessagesProofVerify
+   6.  Security Considerations
+   7.  IANA Considerations
    8.  Normative References
+   9.  Informative References
+   Appendix A.  Appendix
+     A.1.  Test Vectors
    Authors' Addresses
 
 1.  Introduction
 
    // TODO
 
-1.1.  Notational Conventions
+1.1.  Terminology
 
-   The keywords MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD,
-   SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL, when they appear in this
-   document, are to be interpreted as described in [RFC2119].
-
-1.2.  Terminology
-
-   All terminology defined by BBS Signature Scheme [TODO add reference]
-   is applicable to this draft
+   All terminology defined by [BBS-DRAFT] is applicable to this draft
 
    The following futher terminology is defined by this document:
 
@@ -75,11 +70,23 @@ Table of Contents
 
    blind_signature  The blind digital signature output.
 
-2.  Overview
+1.2.  Notation
+
+   Terms specific to pairing-friendly elliptic curves that are relevant
+   to this document are restated in [BBS-DRAFT], originally defined in
+   [I-D.irtf-cfrg-pairing-friendly-curves]
+
+2.  Conventions
+
+   The keywords MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD,
+   SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL, when they appear in this
+   document, are to be interpreted as described in [RFC2119].
+
+3.  Overview
 
    //TODO
 
-3.  Example Flow
+4.  Example Flow
 
    The example below illustrates the creation of a blind signature.  Let
    the Signer have a public key PK = (w, h0, h[1],...,h[L]) where
@@ -127,9 +134,9 @@ Table of Contents
        UnblindSign function to unblinded it, getting a valid BBS
        signature on the messages (m[1],...,m[K]).
 
-4.  Operations
+5.  Operations
 
-4.1.  PreBlindSign
+5.1.  PreBlindSign
 
    The PreBlindSign algorithm allows a holder of a signature to blind
    messages that when signed, are unknown to the signer.
@@ -138,37 +145,33 @@ Table of Contents
    blind the signature from the signer, and a pedersen commitment from a
    vector of messages and the domain parameters h and h0.
 
-   (s', commitment) = PreBlindSign((msg[1],...,msg[U]), CGIdxs)
+(s', commitment) = PreBlindSign((msg[1],...,msg[U]), CGIdxs)
 
-   Inputs:
+Inputs:
 
-   *  msg[1],...,msg[U], octet strings of the messages to be blinded.
+- msg\[1\],...,msg\[U\], octet strings of the messages to be blinded.
+- CGIdxs, vector of unsigned integers. Indices of the generators from the domain parameter h, used for the messages to be blinded.
 
-   *  CGIdxs, vector of unsigned integers.  Indices of the generators
-      from the domain parameter h, used for the messages to be blinded.
+Outputs:
 
-   Outputs:
+- s', octet string.
+- commitment, octet string
 
-   *  s', octet string.
+Procedure:
 
-   *  commitment, octet string
+1. (i1,...,iU) = CGIdxs
 
-   Procedure:
+2. s' = H(PRF(8 \* ceil(log2(r)))) mod r
 
-   1.  (i1,...,iU) = CGIdxs
+3. if subgroup\_check(h0) is INVALID abort
 
-   2.  s' = H(PRF(8 * ceil(log2(r)))) mod r
+4. if (subgroup\_check(h\[i1\]) && ... && subgroup\_check(h\[iU\])) is INVALID abort
 
-   3.  if subgroup_check(h0) is INVALID abort
+5. commitment = h0 \* s' + h\[i1\] \* msg\[1\] + ... + Ch\[iU\] \* msg\[U\]
 
-   4.  if (subgroup_check(h[i1]) && ... && subgroup_check(h[iU])) is
-       INVALID abort
+6. return s', commitment
 
-   5.  commitment = h0 * s' + h[i1] * msg[1] + ... + Ch[iU] * msg[U]
-
-   6.  return s', commitment
-
-4.2.  BlindSign
+5.2.  BlindSign
 
    BlindSign generates a blind signature from a commitment received from
    a holder, known messages, a secret key, the domain parameter h0 and
@@ -179,53 +182,41 @@ Table of Contents
 
 blind_signature = BlindSign(commitment, (msg[1],...msg[K]), SK, GIdxs, CGIdxs, nizk, nonce)
 
-   Inputs:
+Inputs:
 
-   *  commitment, octet string receive from the holder in output form
-      PreBlindSign.
+- commitment, octet string receive from the holder in output form PreBlindSign.
+- nizk, octet string received from the holder in output from BlindMessagesProofGen.
+- msg\[1\],...,msg\[K\], octet strings.
+- SK, a secret key output from KeyGen.
+- GIdxs, vector of unsigned integers. Indices of the generators from the domain parameter h, used for the known messages.
+- CGIdxs, vector of unsigned integers. Indices of the generators from the domain parameter h, used for the commited messages.
+- nonce, octet string, suplied to the holder by the signer to be used with BlindMessagesProofGen.
 
-   *  nizk, octet string received from the holder in output from
-      BlindMessagesProofGen.
+Outputs:
 
-   *  msg[1],...,msg[K], octet strings.
+- blind\_signature, octet string
 
-   *  SK, a secret key output from KeyGen.
+Procedure:
 
-   *  GIdxs, vector of unsigned integers.  Indices of the generators
-      from the domain parameter h, used for the known messages.
+1. (j1, ..., jK) = GIdxs
 
-   *  CGIdxs, vector of unsigned integers.  Indices of the generators
-      from the domain parameter h, used for the commited messages.
+2. e = H(PRF(8 \* ceil(log2(r)))) mod r
 
-   *  nonce, octet string, suplied to the holder by the signer to be
-      used with BlindMessagesProofGen.
+3. s'' = H(PRF(8 \* ceil(log2(r)))) mod r
 
-   Outputs:
+4. if BlindMessagesProofVerify(commitment, nizk, CGIdxs, nonce) is INVALID abort
 
-   *  blind_signature, octet string
+5. if GIdxs intersection with CGIdxs is not empty abort
 
-   Procedure:
+6. b = commitment + P1 + h0 \* s'' + h\[j1\] \* msg\[1\] + ... + h\[jK\] \* msg\[K\]
 
-   1.  (j1, ..., jK) = GIdxs
+7. A = b \* (1 / (SK + e))
 
-   2.  e = H(PRF(8 * ceil(log2(r)))) mod r
+8. blind\_signature = (A, e, s'')
 
-   3.  s'' = H(PRF(8 * ceil(log2(r)))) mod r
+9. return blind\_signature
 
-   4.  if BlindMessagesProofVerify(commitment, nizk, CGIdxs, nonce) is
-       INVALID abort
-
-   5.  if GIdxs intersection with CGIdxs is not empty abort
-
-   6.  b = commitment + h0 * s'' + h[j1] * msg[1] + ... + h[jK] * msg[K]
-
-   7.  A = b * (1 / (SK + e))
-
-   8.  blind_signature = (A, e, s'')
-
-   9.  return blind_signature
-
-4.3.  UnblindSign
+5.3.  UnblindSign
 
    UnblindSign computes the unblinded signature given a blind signature
    and the holder's blinding factor.  It is advised to verify the
@@ -235,29 +226,28 @@ blind_signature = BlindSign(commitment, (msg[1],...msg[K]), SK, GIdxs, CGIdxs, n
 
    Inputs:
 
-   *  s', octet string in output form from PreBlindSign
-
-   *  blind_signature, octet string in output form from BlindSign
+   - s', octet string in output form from PreBlindSign
+   - blind\_signature, octet string in output form from BlindSign
 
    Outputs:
 
-   *  signature, octet string
+   - signature, octet string
 
    Procedure:
 
-   1.  (A, e, s'') = blind_signature
+   1. (A, e, s'') = blind\_signature
 
-   2.  if subgroup_check(A) is INVALID abort
+   2. if subgroup\_check(A) is INVALID abort
 
-   3.  if (subgroup_check(blind_signature)) is INVALID abort
+   3. if (subgroup\_check(blind\_signature)) is INVALID abort
 
-   4.  s = s' + s''
+   4. s = s' + s''
 
-   5.  signature = (A, e, s)
+   5. signature = (A, e, s)
 
-   6.  return signature
+   6. return signature
 
-4.4.  BlindMessagesProofGen
+5.4.  BlindMessagesProofGen
 
    BlindMessagesProofGen creates a proof of committed messages zero-
    knowledge proof.  The proof should be verified before a signer
@@ -268,99 +258,103 @@ blind_signature = BlindSign(commitment, (msg[1],...msg[K]), SK, GIdxs, CGIdxs, n
 
 nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
 
-   Inputs:
+Inputs:
 
-   *  commitment, octet string as output from PreBlindSign
+- commitment, octet string as output from PreBlindSign
+- s', octet string as output from PreBlindSign
+- msg\[1\],...,msg\[U\], octet strings of the blinded messages.
+- CGIdxs, vector of unsigned integers. Indices of the generators from the domain parameter h, used for the commited messages.
+- nonce, octet string.
 
-   *  s', octet string as output from PreBlindSign
+Outputs:
 
-   *  msg[1],...,msg[U], octet strings of the blinded messages.
+- nizk, octet string
 
-   *  CGIdxs, vector of unsigned integers.  Indices of the generators
-      from the domain parameter h, used for the commited messages.
+Procedure:
 
-   *  nonce, octet string.
+1. (i1,...,iU) = CGIdxs
 
-   Outputs:
+2. r\~ = \[U\]
 
-   *  nizk, octet string
+3. s\~ = H(PRF(8 \* ceil(log2(r)))) mod r
 
-   Procedure:
+4. for i in 1 to U: r\~\[i\] = H(PRF(8 \* ceil(log2(r)))) mod r
 
-   1.  (i1,...,iU) = CGIdxs
+5. U~ = h0 \* s\~ + h\[i1\] \* r\~\[1\] + ... + h\[iU\] \* r\~\[U\]
 
-   2.  r~ = [U]
+6. c = H(commitment || U\~ || nonce)
 
-   3.  s~ = H(PRF(8 * ceil(log2(r)))) mod r
+7. s^ = s\~ + c \* s'
 
-   4.  for i in 1 to U: r~[i] = H(PRF(8 * ceil(log2(r)))) mod r
+8. for i in 1 to U: r^\[i\] = r\~\[i\] + c \* msg\[i\]
 
-   5.  U~ = h0 * s~ + h[i1] * r~[1] + ... + h[iU] * r~[U]
+9. nizk = (c, s^, r^)
 
-   6.  c = H(commitment || U~ || nonce)
-
-   7.  s^ = s~ + c * s'
-
-   8.  for i in 1 to U: r^[i] = r~[i] + c * msg[i]
-
-   9.  nizk = ( c, s^, r^())
-
-4.5.  BlindMessagesProofVerify
+5.5.  BlindMessagesProofVerify
 
    BlindMessagesProofVerify checks whether a proof of committed messages
    zero-knowledge proof is valid.
 
-     result = BlindMessagesProofVerify(commitment, nizk, CGIdxs, nonce)
+result = BlindMessagesProofVerify(commitment, nizk, CGIdxs, nonce)
 
-   Inputs:
+Inputs:
 
-   *  commitment, octet string in output form from PreBlindSign
+- commitment, octet string in output form from PreBlindSign
+- nizk, octet string in output form from BlindMessagesProofGen
+- CGIdxs, vector of unsigned integers. Indices of the generators from the domain parameter h, used for the commited messages.
+- nonce, octet string
 
-   *  nizk, octet string in output form from BlindMessagesProofGen
+Outputs:
 
-   *  CGIdxs, vector of unsigned integers.  Indices of the generators
-      from the domain parameter h, used for the commited messages.
+- result, either VALID or INVALID.
 
-   *  nonce, octet string
+Procedure:
 
-   Outputs:
+1. (i1,...,iU) = CGIdxs
 
-   *  result, either VALID or INVALID.
+2. ( c, s^, r^ ) = nizk
 
-   Procedure:
+3. U^ = commitment \* -c + h0 \* s^ + h\[i1\] \* r^\[1\] + ... + h\[iU\] \* r^\[U\]
 
-   1.  (i1,...,iU) = CGIdxs
+4. c\_v = H(U || U^ || nonce)
 
-   2.  ( c, s^, r^ ) = nizk
+5. return c == c\_v
 
-   3.  U^ = commitment * -c + h0 * s^ + h[i1] * r^[1] + ... + h[iU] *
-       r^([U\])
+6.  Security Considerations
 
-   4.  c_v = H(U || U^ || nonce)
+   Implementers should consider the security considerations of
+   [BBS-DRAFT] when implementing this work.
 
-   5.  return c == c_v
-
-5.  Security Considerations
-
-   Implementers should consider the security considerations of [TODO
-   reference BBS Signature Scheme Draft] when implementing this work.
-
-6.  IANA Considerations
+7.  IANA Considerations
 
    This document does not make any requests of IANA.
 
-7.  Appendix
-
-7.1.  Test Vectors
-
-   //TODO
-
 8.  Normative References
+
+   [I-D.irtf-cfrg-pairing-friendly-curves]
+              Sakemi, Y., Kobayashi, T., Saito, T., and R. S. Wahby,
+              "Pairing-Friendly Curves", Work in Progress, Internet-
+              Draft, draft-irtf-cfrg-pairing-friendly-curves-10, 30 July
+              2021, <https://datatracker.ietf.org/doc/html/draft-irtf-
+              cfrg-pairing-friendly-curves-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+9.  Informative References
+
+   [BBS-DRAFT]
+              Lodder, M., Looker, T., Whitehead, A., and V. Kalos, "The
+              BBS Signature Scheme", <https://identity.foundation/bbs-
+              signature/draft-bbs-signatures.html>.
+
+Appendix A.  Appendix
+
+A.1.  Test Vectors
+
+   //TODO
 
 Authors' Addresses
 
