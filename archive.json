@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-17T00:09:12.980424+00:00",
+  "timestamp": "2022-04-24T00:09:25.200018+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -67,6 +67,16 @@
       "name": "pending-close",
       "description": "",
       "color": "829ED9"
+    },
+    {
+      "name": "core",
+      "description": "Associated to the core spec",
+      "color": "c5def5"
+    },
+    {
+      "name": "blind-sign-extension",
+      "description": "",
+      "color": "A46C77"
     }
   ],
   "issues": [
@@ -112,10 +122,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "Within the draft there are several new cryptographic structures that are encoded in binary, their format should be documented to support interoperable implementations, these include\r\n\r\n- ProofOfKnowledge (signature proof)\r\n- Commitment\r\n- Commitment ProofOfKnowledge\r\n- BBS Signature",
       "createdAt": "2021-09-13T18:24:25Z",
-      "updatedAt": "2022-03-21T02:37:48Z",
+      "updatedAt": "2022-04-21T23:36:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -394,10 +406,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "pending-close"
+      ],
       "body": "Related to #2 \r\n\r\nCurrently the implementations of a BBS proof of knowledge signature includes the encoding of a binary structure at the start of the proof which captures which of the messages being verified and how they correspond to the original ordering of the message set signed. Currently this structure takes the form of a bit array.\r\n\r\nFor example assume the following set of messages were originally signed\r\n\r\n```\r\n[\r\n  \"message1\"\r\n  \"message2\",\r\n  \"message3\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nAnd a proof revealing only the 1st 4th and 5th message was generated, meaning the revealed messages supplied during the verify proof operation would appear in the following order\r\n\r\n```\r\n[\r\n  \"message1\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nThe resulting bit array in the proof would take the following form\r\n\r\n```\r\n+-----------------------------+-----------------------------+---------------------------------+\r\n| Total messages length (16bit)| Revealed messages bit array |..... remaining proof structure |\r\n+-----------------------------+-----------------------------+---------------------------------+\r\n\r\n+-----------+--------------+-----------------------------------+\r\n| 5 (integer) | 1 | 0 | 0 | 1 | 1  | ..... remaining proof structure |\r\n+-----------+--------------+-----------------------------------+\r\n```\r\n\r\nHowever, this mechanism of expression does limit options around the data canonicalisation algorithm that is used on top of the cryptographic scheme. Namely it does not support a re-ordering of the revealed messages away from the order in which they were originally signed. To accomodate this we could instead elect to change the expression of this aspect of the proof from a bit array to a byte/multi-byte array, where instead the array contents is a set of un-signer integers (16bit each) where each integer corresponds to the index the message occupied in the original ordering of the signed message set\r\n\r\nFor example assume the following set of messages were originally signed\r\n\r\n```\r\n[\r\n  \"message1\",\r\n  \"message2\",\r\n  \"message3\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nAnd a proof revealing only the 1st 4th and 5th message was generated, **BUT** the messages in the resulting proof are re-ordered so that they present as 4, 5, 1 \r\n\r\n```\r\n[\r\n  \"message4\",\r\n  \"message5\",\r\n  \"message1\"\r\n]\r\n```\r\n\r\nThe resulting bit array in the proof would take the following form\r\n\r\n```\r\n+-----------------------------+----------------------------------------+-------------------------------+----------------+\r\n| Total messages length (16bit)| Revealed messages array length (16bit) | Revealed messages byte array | remaining proof |\r\n+-----------------------------+----------------------------------------+-------------------------------+----------------+\r\n\r\n+--+--+--------+------------------------------+\r\n| 5  | 3 | 4 | 5 | 1 | ..... remaining proof structure |\r\n+--+--+--------+------------------------------+\r\n```\r\n\r\nThe tradeoff here is that the overhead of this structure is more than in the simpler case with the bit array.\r\n\r\n**NOTE** It is probably also worth considering a more standard structured binary format like CBOR rather than a custom structure ",
       "createdAt": "2021-10-07T21:15:45Z",
-      "updatedAt": "2022-01-23T19:45:57Z",
+      "updatedAt": "2022-04-21T23:35:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -581,6 +595,13 @@
           "body": "> That been said, IMO the bbs+ spec should remain agnostic to the way the indexes of the revealed messages are encoded. This could lead to the proofValue having different formats between implementations; however, IMO this is not a problem. Higher level specs like JWP and LD-proofs will most likely want to use different formats for the revealed message indexes either way, because of the way they work\r\n\r\n+1 I think much of the different at these representation layers is really due to different approaches to problems like data canonicalization which should remain entirely opaque to the crypto layer (the concern of this draft)",
           "createdAt": "2022-01-23T19:45:57Z",
           "updatedAt": "2022-01-23T19:45:57Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I think the opinion of the group has evolved sufficiently on this issue to conclude that any higher level serialization rules that accounts for the ordering of the messages required for operations like spkVerify and verify should be left to the application layer, therefore im marking this issue pending close, if others in the WG dis-agree please feel free to comment otherwise it will be closed during the next WG call.",
+          "createdAt": "2022-04-21T23:35:25Z",
+          "updatedAt": "2022-04-21T23:35:25Z"
         }
       ]
     },
@@ -973,10 +994,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "Clarify terminology for \r\n\r\nDomain Parameters\r\nGenerators (and their relationship to domain parameters)\r\nGenerators with specific purposes (e.g message generators and blinding factor generators)",
       "createdAt": "2022-01-10T19:20:10Z",
-      "updatedAt": "2022-01-10T19:20:10Z",
+      "updatedAt": "2022-04-21T23:32:44Z",
       "closedAt": null,
       "comments": []
     },
@@ -991,10 +1014,12 @@
       "assignees": [
         "andrewwhitehead"
       ],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "The current draft uses the caret and tilde characters in variable naming, as they are in some of the source research. This causes issues with the markdown format of the specification in that it is burdensome and/or impossible to properly escape these characters.\r\n\r\nI don't see any clear standards on variable or function naming in other IETF drafts. Variables may be upper-, lower-, camel-, or snake-cased. Functions can be camel-cased, snake-cased, or kebab-case (ie. `HKDF-Extract`).\r\n\r\nSome suggestions for discussion:\r\n\r\n- name spec-internal variables and functions in snake case unless they represent an initialism (like `DST`) or are commonly capitalized (such as a field `F` or the set of integers `Z`). I think there is a tendency to use capitalized variables for elliptic curve points like `A` in the signature\r\n- name external functions according to their respective standards when possible, for example `hash_to_curve`\r\n- a trailing apostrophe is allowed in variable names, such as `s'` - precedent in hash-to-curve draft for example\r\n- for variables currently using `~` as a suffix use `_b` short for blinding factor\r\n- for variables currently using `^` as a suffix use `_c` short for commitment",
       "createdAt": "2022-01-10T21:53:34Z",
-      "updatedAt": "2022-02-16T04:42:59Z",
+      "updatedAt": "2022-04-21T23:32:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -1149,15 +1174,17 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "blind-sign-extension"
+      ],
       "body": "Currently the spec documents a procedure for constructing BBS signatures where by some / all of the messages signed by the signer are unknown to them. This issue is to discuss the usecases for this feature and whether it should remain in scope for the core spec of whether it could be added in the form of a seperate extension specification. The tradeoff being that electing to keep blind signing in scope significantly increases deliverables for the spec in the form of multiple cryptographic operations and data structures.\r\n\r\nNote - related to this is a discussion on how we should handle \"bound\" bbs signatures captured in issue #28",
       "createdAt": "2022-01-24T03:25:08Z",
-      "updatedAt": "2022-01-28T14:37:58Z",
+      "updatedAt": "2022-04-21T23:31:56Z",
       "closedAt": null,
       "comments": [
         {
           "author": "christianpaquin",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "When BBS+ is used to create an anonymous credentials (messages are user attributes), then there are some interesting use cases. For example, the duty of the issuer (BBS+ signer) could be performed by two entities in a federation: an attribute provider (knows the user attribute) and an issuer (secure machine holding the crypto keys), and perhaps you don't want to leak the attribute values to the issuer, but it trusts the attribute provider to set the values. Another example is to carry-over attributes from one credential to another: say the credential contains a user-ID, never disclosed but used for non-revocation proofs. A new credential could be issued or linked to another one by copying the attribute value over; a revocation would then invalidate both credentials.\r\n\r\nSimplifying the spec is an important goal; the various signing algs are confusing to a new reader. It would be great to achieve this functionality through an extension. FWIW, that's what with did for U-Prove using the [collaborative issuance extension](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/U-Prove20Collaborative20Issuance20Extension.pdf). See also this [white paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/U-Prove20extensions20paper.pdf) for more background on the feature, including more details of the scenarios described above.",
           "createdAt": "2022-01-28T03:24:32Z",
           "updatedAt": "2022-01-28T03:24:32Z"
@@ -1178,7 +1205,7 @@
         },
         {
           "author": "christianpaquin",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": " \r\n> Is the idea here for the holder to send a commitment with the user-ID to a new issuer? If so, how the second issuer can be sure that the holder committed to the correct user-ID (also contained in the first credential)?\r\n\r\nYes. Conceptually, the holder creates a presentation proof with a commitment, showing that the undisclosed attribute is the same as in its credential; after validation by the issuer, the commitment can be integrated in the new credential. The U-Prove extension above shows how to do that for Brands' credentials; the details would be slightly different for a BBS+ based credential. An analysis is required to answer the questions you raised. Bottom line, it's not a trivial thing and perhaps this justifies specifying this functionality outside of the core spec (making sure however it has the right hooks for extensions).",
           "createdAt": "2022-01-28T14:37:15Z",
           "updatedAt": "2022-01-28T14:37:58Z"
@@ -1225,10 +1252,12 @@
       "author": "andrewwhitehead",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "This may be defined as a property of the profile along with details of the pairing-friendly curve in use. For BLS curves it probably makes sense to reference the BLS Signatures IETF draft (hopefully that is getting an update?).",
       "createdAt": "2022-01-25T22:23:33Z",
-      "updatedAt": "2022-04-04T21:28:48Z",
+      "updatedAt": "2022-04-22T16:52:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -1272,6 +1301,27 @@
           "body": "Either a note at the top of this operations definition or shifting it to an appendix is likely the way we will resolve this",
           "createdAt": "2022-04-04T21:28:48Z",
           "updatedAt": "2022-04-04T21:28:48Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I think given there are a couple of deviations from the BLS signature spec such as the salt keeping this definition in this spec feels like the most accomodating solution? If we agree can this issue be closed?",
+          "createdAt": "2022-04-21T19:58:47Z",
+          "updatedAt": "2022-04-21T19:58:47Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@andrewwhitehead",
+          "createdAt": "2022-04-21T19:59:03Z",
+          "updatedAt": "2022-04-21T19:59:03Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, I think that's fine. We probably ought to reference the BLS signature draft since it's a straight copy.",
+          "createdAt": "2022-04-22T16:52:28Z",
+          "updatedAt": "2022-04-22T16:52:28Z"
         }
       ]
     },
@@ -1599,11 +1649,12 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "Data can be encoded multiple ways depending on how it will be used with other ZKPs. For example, it will not be useful to hash an integer to a 32 byte value using SHA256 and expect it to work properly with Range Proofs. The following is a list of encodings and the use cases they can be used:\r\n\r\n1. **Hashed**: for aribitrary length data fields that will not fit in the base field e.g. images, strings, biometrics, blockchain transaction info. Use hash2field or some other method to hash the data into a 32 byte base field value.\r\n2. **Bytes**: a value that is already in the base field\r\n3. **Numbers**: for range proofs. The value is zero-centered by take computing the base field modulus `z`=`q` / 3 integer division as the zero center and adding the positive number or substracting the negative number. To support complex numbers like decimal, the number is converted to fixed point arithmetic. The [Q format](https://en.wikipedia.org/wiki/Q_(number_format)) is used for these numbers as Q64.160. This leaves two bytes to avoid numbers greater than `q`. While it does not represent the full breadth of IEEE754 numbers, it does give a considerable resolution -2<sup>63</sup> to 2<sup>63</sup>-2<sup>-160</sup> signed and 0 to 2<sup>64</sup>-2<sup>-160</sup> unsigned or about 48 decimal places of precision. If decimals are rounded to the nearest integer, then Q format is not necessary.\r\n4. **Null**: Hard coded as 5. Means the value is not included or not used.\r\n5. **Empty**: Hard coded as 11. Means the value is included but is an empty string or zero bytes. For example, a person does not have a middle name but a value is required to be entered.\r\n6. **Ignored**: Hard coded as 23. For data fields that were ignored or not answered by the person. This is different than empty where the person's answer is literally nothing vs they chose not to answer it at all.\r\n\r\nSmall safe primes were used for the last three but can really be any value that is not `0` or `1`.\r\n\r\n### Comparing numbers to Null, Empty, Ignored\r\n\r\nNo DLEQ proof is needed to check for this since the verifier gets to pick the bounds and in theory this could be done but isn't meaningful",
       "createdAt": "2022-01-28T19:57:31Z",
-      "updatedAt": "2022-03-06T23:17:21Z",
+      "updatedAt": "2022-04-21T23:31:27Z",
       "closedAt": null,
       "comments": [
         {
@@ -1842,10 +1893,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "The BBS Signature scheme is based on a wealth of prior academic work that should be appropriately referenced. Any deviations from these works should also be documented in an informative appendix while the scheme continues to develop. Lets use this issue to collate these sources",
       "createdAt": "2022-02-03T20:50:48Z",
-      "updatedAt": "2022-03-06T23:16:27Z",
+      "updatedAt": "2022-04-21T23:30:59Z",
       "closedAt": null,
       "comments": [
         {
@@ -1931,10 +1984,12 @@
       "author": "andrewwhitehead",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "I'm finding that it would be beneficial to define generators more generally, instead of just having `H_0` for blind signatures and `H_1 ... H_n` for indexed messages. Extensions to the BBS signature scheme may want to reserve one or more message indexes for particular purposes (wallet binding, revocation, etc), but this leads to conflict when multiple extensions are used at once. You would likely need to define a new signature scheme for every supported combination in order to specify what message indexes are used for what purpose.\r\n\r\nInstead, I believe we can define special-purpose message generators which have unique identifiers rather than indexes. You can also think of these as 'unordered' generators, with standard usage that is consistently defined across various credential schemas. A few potential uses that I've identified:\r\n\r\n- a 'linked secret'/'wallet binding' generator for preventing use of credentials without the secret (Indy's use case)\r\n- a 'device binding' generator (for a secret value that can be authenticated as generated by a trusted module)\r\n- revocation entry and revocation group generators for linking to an accumulator or other revocation mechanism\r\n- a schema identifier generator\r\n- a credential ID generator\r\n- a credential set ID generator (for a collection of credentials that can be presented in combination)\r\n- a credential creation time generator\r\n- a credential expiration time generator\r\n\r\nWe could also reformulate a couple things in these terms:\r\n\r\n- `H_0` becomes the 'blinded signature' or 'commitment' generator\r\n- `P1` could be replaced by a 'base point' generator - freeing it up to be used as a holder binding generator as in #37 (NB. in this case the associated message would always be `1`)\r\n\r\nThese generators might be defined either specific to an issuer key or globally by adding a unique identifier to the hash-to-curve input. Some thought would be needed here to define the process exactly. For debugging purposes, messages tied to these generators might also be represented as a dictionary while numbered messages are represented as a list, for example:\r\n\r\n```json\r\n{\r\n  \"revocation index\": 1,\r\n  \"revocation group\": \"mydomain.com/users\",\r\n  \"schema\": \"http://schema.org/Person\"\r\n}\r\n```",
       "createdAt": "2022-02-21T16:40:49Z",
-      "updatedAt": "2022-03-04T10:47:08Z",
+      "updatedAt": "2022-04-21T23:30:49Z",
       "closedAt": null,
       "comments": [
         {
@@ -2060,10 +2115,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "Opening this to track the ongoing work happening in the background after the merging of #62, @BasileiosKal and @mikelodder7 will co-ordinate on this and once complete we can close this issue",
       "createdAt": "2022-02-23T21:44:59Z",
-      "updatedAt": "2022-02-24T14:52:54Z",
+      "updatedAt": "2022-04-21T23:30:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -2084,10 +2141,12 @@
       "author": "andrewwhitehead",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "I'm curious what's wrong with this simpler SPK alternative which doesn't specifically use `h_0` and `s`, treating them as a hidden message: https://hackmd.io/8t8o56mvTL6p-VZyayLnTA?view\r\n\r\nOne benefit here is that blind signatures become a true extension of the core spec, probably using a [named generator](#68), and signatures which don't involve this generator at all can be supported.",
       "createdAt": "2022-02-23T22:26:05Z",
-      "updatedAt": "2022-03-07T17:34:37Z",
+      "updatedAt": "2022-04-21T23:30:29Z",
       "closedAt": null,
       "comments": [
         {
@@ -2248,10 +2307,12 @@
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "Although deterministic proof generation should not be used in practice it may be useful to support it, so we can more easily create and update test vectors. This MUST NEVER be used in practice. The main idea is to incorporate a secret key managed by the holder of the bbs signature into spkGen that is going to be used for the generation of the random elements. This secret MUST be unique for every proof generation procedure. One possible method then, is to use the same algorithm as in deterministic signing, i.e.,\r\n```\r\nH = XOF(Holders_SK || msg_i1 ||\u2026||msg_iR || pm)\r\nr1~ = OS2IP(H.read(64)) mod q\r\nr2~ = OS2IP(H.read(64)) mod q\r\n              .\r\n              .\r\n              .\r\n```\r\nIn spkGen, maybe we can also use [RFC 8937](https://www.rfc-editor.org/rfc/rfc8937.html), which gives good security properties and is easy to use, since you don't need direct access to the secret key itself. Each random element (in the non-deterministic case) could be\r\n```\r\nrandom_element_i = OS2IP(HKDF-Expand(HKDF-Extract(HASH(Sig(Holders_SK, DST)), PRF(L)), i, 64)) mod q\r\n```\r\nTo get a deterministic spk, we could just replace the PRF with an XOF or hash. That said, this does \"bound\" the holder to use a secret, even in the non-deterministic case.\r\n",
       "createdAt": "2022-02-28T11:30:24Z",
-      "updatedAt": "2022-03-02T00:10:10Z",
+      "updatedAt": "2022-04-21T23:30:20Z",
       "closedAt": null,
       "comments": [
         {
@@ -2271,13 +2332,16 @@
       "state": "OPEN",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
+      "assignees": [
+        "BasileiosKal"
+      ],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "The following is a method that could possibly allow the prover to reveal messages for which they don't have a signature, taking advantage of the Fiat\u2013Shamir challenge not containing the revealed messages. Let the prover with a signature `(A, e, s)` on messages `msg_1`, `msg_2` and `msg_3`, creating an spk revealing only `msg_1`. Going through the spkGen process the prover will calculate\r\n```\r\nC2_prover = D*(-r3~) +H0 * (s~) + H_2 * m~_2 + H_3 * m~_3\r\n```\r\nThe proof value will be,\r\n```\r\nspk = (Abar, A\u2019, D, c, e^, r2^, r3^, s^, m^_2, m^_3)\r\n```\r\nFrom the verification process we know that if `T = P1 + H_1 * msg_1` then \r\n\r\n```\r\n#EQ1: T*c + D * (-r3^) + H0*s^ + H_2 * m^_2 + H_3 * m^_3 = C2_prover\r\n```\r\n\r\nLet the prover now calculate the following,\r\n1.\t`c\u2019  = c ^ -1 mod q`\r\n2.\t`msg_adv  = m^_2 * c'`\r\n\r\nand instead of revealing spk, they send `spk2`,\r\n```\r\nspk2 = (Abar, A\u2019, D, c, e^, r2^, r3^, s^, m^_3)\r\n```\r\nwith revealed messages `msg_1` and `msg_adv`. \r\n\r\nThe verifier receiving `spk2` and `msg_1`, `msg_adv` will calculate `C1_verifier`, `C2_verifier` and check the pairing equality. Note that since `Abar, A\u2019, D, c, e^, r2^` remain the same between `spk` and `spk2`, `C1_prover = C1_verifier` and `e(A', PK) = e(Abar, P2)`. To calculate `C2_verifier` the verifier will first calculate `T2` as,\r\n\r\n```\r\nT2 = P1 + H_1 * msg_1 + H_2 * msg_adv = P1 + H_1 * msg_1 + H_2 * (m^_2 * c')\r\n```\r\nFrom that the verifier will calculate,\r\n```\r\nC2_verifier = T2*c + D * (-r3^) + H0*s^ + H_3 * m^_3 =\r\n   = D * (-r3^) + H0*s^ + (P1 + H_1 * msg_1) * c +  H_2 * (m^_2 * c' * c)  H_3 * m^_3 =  \r\n   = D * (-r3^) + H0*s^ + T * c +  H_2 * m^_2 +  H_3 * m^_3  = C2_prover\r\n```\r\nThe last equality follows from #EQ1. As a result, the verification will succeed for `msg_1` and `msg_adv`.\r\n\r\nObviously, this should not be possible, since this proves knowledge of a signature that the prover doesn't have (which contains `msg_adv`). If I'm correct on the above, most likely the only issue is with the Fiat\u2013Shamir heuristic. Note that if the protocol was interactive, that method will not work, since the prover would have to \"commit\" to the messages prior of getting the challenge `c`. Hence we should also pass the revealed messages to the hash of the challenge during spkGen and spkVerify, to \"commit\" them before the challenge is created. ",
       "createdAt": "2022-02-28T11:37:48Z",
-      "updatedAt": "2022-03-07T19:59:08Z",
+      "updatedAt": "2022-04-21T23:30:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -2502,11 +2566,12 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "Currently the core sign, verify, spkGen and spkVerify operations are silent on the form the messages take into the algorithm, based on conversations with @mikelodder7 these are most often inputed in the form of scalars as outputed by the MapToScalar function being proposed in #61. We should clarify this further in the spec.",
       "createdAt": "2022-03-06T23:53:49Z",
-      "updatedAt": "2022-03-21T02:29:45Z",
+      "updatedAt": "2022-04-21T23:30:01Z",
       "closedAt": null,
       "comments": []
     },
@@ -2518,13 +2583,16 @@
       "state": "OPEN",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "BasileiosKal"
+      ],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "At the moment within the scope of this specification there are several points of extension, such as\r\n\r\n- How messages are mapped to their appropriate scalar values\r\n- How the generators used to commit each message are created (e.g from a global, issuer specific or signature specific seed)\r\n\r\nMany of these above decisions will be limited or at least formally defined in a concrete [ciphersuite](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-bls12-381-ciphersuite) to promote interoperability. However with multiple possible cipher suites overtime that make different choices, how do we ensure that a signature generated under one cipher suite is not confused with one generated under another cipher suite. \r\n\r\nOne proposal to limit the possibility of this occurring is to define that the first message in a BBS signature MUST always be revealed further more this message could contain a range of information OR something more limited like a cipher suite identifier. As raised by @BasileiosKal on the call, putting too much information in this revealed message is likely to create a correlation risk that would erode some of the benefit that BBS signatures provide, so perhaps a better middle ground would be to instead encode the cipher suite identifier (e.g for the current BLS12381 cipher suite in the spec this could be the hash scalar produced from the string `BBS_BLS12381G1_XOF:SHAKE-256`)",
       "createdAt": "2022-03-07T20:29:15Z",
-      "updatedAt": "2022-03-31T08:25:54Z",
+      "updatedAt": "2022-04-21T23:29:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -2706,10 +2774,12 @@
       "author": "brentzundel",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "The work on the specification is progressing well, but there seem to be a number of changes being considered that will cause this specification to deviate from the published and peer-reviewed academic papers.\r\n\r\nWhile there may be more, I am concerned in particular about:\r\n#19 \r\n#37\r\n#70 \r\n#78\r\n\r\nIf these changes, or any others, are made which result in a deviation from the security proofs of the source material, then new security proofs need to be written before this spec is submitted as a draft to IETF.",
       "createdAt": "2022-03-07T21:30:34Z",
-      "updatedAt": "2022-03-07T23:49:19Z",
+      "updatedAt": "2022-04-21T23:29:41Z",
       "closedAt": null,
       "comments": [
         {
@@ -2830,13 +2900,16 @@
       "state": "OPEN",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
+      "assignees": [
+        "BasileiosKal"
+      ],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "In general, I was under the impression that a signature can be used to derive proofs that would be validated with only 1 specific key (the issuers PK).\r\n\r\nThat does not seem to be the case. The holder can present proofs for credentials signed from an issuer with public key `PK`, that will be validated with `PK * y = P2 * (x*y)`, where `y` a scalar chosen by the holder. My question is: Is this dangerous?? It is not really a forgery. It may compromise the issuer's and/or holder's accountability though, i.e., an issuer may falsely claim that they never signed a specific credential or a holder that they never possessed (and used to create an spk) a credential signed from that issuer.\r\n\r\nYou can find the detailed mathematics here: https://hackmd.io/@Vasileios/HyuXt_kf9\r\n  and a reproduction here: https://github.com/BasileiosKal/dif-bbs-issue\r\n\r\nIn general the method is the following; Let the holder having the signature `(A, s, e)` on some messages. Let also the holder wanting to create a proof that would be validated with `PK * y` instead of `PK`, for some scalar `y`. During spkGen they will calculate `Abar_f = A\u2019 * y * e + B * r1 * y` and `D_f = B * r1 * y + H0 * r2`. Note that `e(Abar_f, P2) = e(A', PK * y)`. Changing some additional values in the proof, the holder can present the spk; `(A\u2019, Abar_f, D_f, \u2026)` that will be validated with `PK * y`. \r\n\r\nA similar method works with a signature. The holder can present `(A*(y^-1), s, e*y)` which is a valid signature for the key `PK * y` (which is why the above method doesn't go against the security proofs given in the literature, i.e., a bbs proof, proves knowledge of a signature not only from the secret key `x` but also for a signature from the \"secret key\" `y * x`).\r\n\r\nIf a mitigation is needed, maybe including the issuer's PK as one of the signed messages will be an efficient solution, that solves the issuer\u2019s and/or holder\u2019s accountability issue.",
       "createdAt": "2022-03-16T18:20:35Z",
-      "updatedAt": "2022-04-14T07:26:52Z",
+      "updatedAt": "2022-04-21T23:29:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -2984,11 +3057,12 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "Currently in the in spkgen and spkverify operations, the challenge is not appropriately being converted to its scalar representation, this needs to be rectified, issue originally raised during review of #84 [see here](https://github.com/decentralized-identity/bbs-signature/pull/84#pullrequestreview-911423521)",
       "createdAt": "2022-03-22T01:16:33Z",
-      "updatedAt": "2022-04-14T07:26:20Z",
+      "updatedAt": "2022-04-21T23:29:24Z",
       "closedAt": null,
       "comments": []
     },
@@ -3001,12 +3075,23 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr",
+        "blind-sign-extension"
+      ],
       "body": "We made significant progress on the core draft over the past couple of months, which is likely to have created some in-consistencies in how the blind sign draft maps onto it as an extension, this issue is just open to track this work and re-alignment.",
       "createdAt": "2022-03-28T21:32:13Z",
-      "updatedAt": "2022-03-28T21:32:13Z",
+      "updatedAt": "2022-04-22T23:27:59Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Partially addressed in #108 ",
+          "createdAt": "2022-04-22T23:27:59Z",
+          "updatedAt": "2022-04-22T23:27:59Z"
+        }
+      ]
     },
     {
       "number": 94,
@@ -3018,11 +3103,12 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "Throughout the operations defined by the spec there are numerous calls to the XOF where a certain number of bytes are read, via the .read() function. How many bytes are read is dependent on several decisions at the cipher suite level (e.g the curve used) hence the current \"magic numbers\" like 64 being used in these operations needs to be parameterised in the cipher suite definition.",
       "createdAt": "2022-04-04T21:23:27Z",
-      "updatedAt": "2022-04-05T20:05:08Z",
+      "updatedAt": "2022-04-21T23:28:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -3060,17 +3146,19 @@
       "id": "I_kwDOF8lax85HhGDd",
       "title": "Element encoding when passed to HASH or XOF.",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/96",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "pending-close",
+        "core"
       ],
       "body": "See discussion in PR #95\r\n\r\nIn the spec, we need a way to pass elements of different types (EC points, integers, scalars etc) to a hash function. In that case, the encoding of those elements becomes important. IMO there are two options:\r\n1. Explicitly making the transformation to octets for each hashed element. That would look something like\r\n```\r\nHASH(point_to_octets(PK), I2OSP(L), point_to_octets(H_1),..., point_to_octets(H_L),...)\r\n```\r\n2. Implicitly make the conversion (in the definition of the HASH for example or in a separate section etc.). This would look something like,\r\n```\r\nHASH(PK, L, H_1,..., H_L,... )\r\n``` \r\nPersonally I prefer 2. This would mean that we can also specify rules like the one Tobias pointed out [here ](https://github.com/decentralized-identity/bbs-signature/pull/95#discussion_r847082901)i.e., that each element should also be appended with its length, which i agree with. A consideration here is if we need to specify this rule for every element (even the point_to_octets outputs) or it is sufficient to specify it for general octet strings and non-negative integers (lengths of lists)??. IMO the latter will suffice, since there is not really any ubiquities that come to mind regarding the output of point_to_octets (which is also an octet string but with well defined length), but i could be mistaken.",
       "createdAt": "2022-04-11T11:49:30Z",
-      "updatedAt": "2022-04-14T07:25:58Z",
-      "closedAt": null,
+      "updatedAt": "2022-04-23T17:10:03Z",
+      "closedAt": "2022-04-23T17:10:03Z",
       "comments": [
         {
           "author": "BasileiosKal",
@@ -3078,6 +3166,20 @@
           "body": "2 additional notes:\r\n\r\n1. To @tplooker  [point](https://github.com/decentralized-identity/bbs-signature/pull/97#discussion_r847895296), making the points in G1 or G2 be prepended with their length optional swifts the weight to the cipher suite to describe when this will hold for interoperability. As a result IMO we should either make this a requirement or remove it entirely (i vote for the later, since the length of the `points_to_octets` output can be defined by its value).\r\n\r\n2. An additional consideration is whether we need to also prepend the lengths of lists to be hashed, to the list them serfs (for example the list of generators, or in the list of disclosed messages etc.)",
           "createdAt": "2022-04-12T17:39:44Z",
           "updatedAt": "2022-04-12T17:39:44Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@BasileiosKal can you confirm with the merging of #97 whether we can now close this issue?",
+          "createdAt": "2022-04-22T03:43:07Z",
+          "updatedAt": "2022-04-22T03:43:07Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeap! Closing",
+          "createdAt": "2022-04-23T17:10:03Z",
+          "updatedAt": "2022-04-23T17:10:03Z"
         }
       ]
     },
@@ -3086,7 +3188,7 @@
       "id": "I_kwDOF8lax85Hk-u6",
       "title": "Clarify that the key generation operation is optional",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/98",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3095,8 +3197,8 @@
       ],
       "body": "Currently the specification offers a definition for [key generation](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-keygen) however implementations do not have to follow this procedure to be interoperable and instead can design their own, the spec should clarify this.",
       "createdAt": "2022-04-12T02:52:22Z",
-      "updatedAt": "2022-04-14T07:25:44Z",
-      "closedAt": null,
+      "updatedAt": "2022-04-21T23:23:51Z",
+      "closedAt": "2022-04-21T23:23:51Z",
       "comments": []
     },
     {
@@ -3104,15 +3206,15 @@
       "id": "I_kwDOF8lax85Hn7gS",
       "title": "How to contribute",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/99",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "alessandroguggino",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Good morning everyone,\r\n\r\nI'm a Computer Engineering master's student working on my thesis which makes use of BBS signatures.\r\nI would like to contribute to the repository since I think I have some suggestions and corrections, especially for the Blind Signature draft. (but maybe I could be wrong)\r\n\r\nHow am I supposed to do it? I have not found any guidelines, should I just do the work and then open a pull request?\r\n\r\nThank you for reading this and for your work, I really appreciate it!",
       "createdAt": "2022-04-12T10:44:57Z",
-      "updatedAt": "2022-04-13T14:07:41Z",
-      "closedAt": null,
+      "updatedAt": "2022-04-19T11:26:44Z",
+      "closedAt": "2022-04-19T11:26:44Z",
       "comments": [
         {
           "author": "tmarkovski",
@@ -3130,10 +3232,31 @@
         },
         {
           "author": "alessandroguggino",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Thank you!\r\n@paulgrehan Sorry, so should I join the foundation to contribute (= discuss and submit updates as pull requests) to this repository? Since there are legal implications, I would like to understand them a bit more before doing it.",
           "createdAt": "2022-04-13T14:07:41Z",
           "updatedAt": "2022-04-13T14:07:41Z"
+        },
+        {
+          "author": "paul-yellowpink",
+          "authorAssociation": "NONE",
+          "body": "Hi @alessandroguggino - sorry for the delay in responding, for yourself and the group to get the most out of your participation it would be advantageous (chat in slack, join calls rather than an \"arms length\" iterative approach via PRs). It's not onerus for a student, if you are employed then it may require a contributor agreement however. If you could send an email to membership@identity.foundation I can cover in more detail :)",
+          "createdAt": "2022-04-19T03:29:45Z",
+          "updatedAt": "2022-04-19T03:29:45Z"
+        },
+        {
+          "author": "paulgrehan",
+          "authorAssociation": "NONE",
+          "body": "Sorry - logged in with my other account - still me ;)",
+          "createdAt": "2022-04-19T04:46:16Z",
+          "updatedAt": "2022-04-19T04:46:16Z"
+        },
+        {
+          "author": "alessandroguggino",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you again!\r\nI think we can close this issue then :)",
+          "createdAt": "2022-04-19T11:26:44Z",
+          "updatedAt": "2022-04-19T11:26:44Z"
         }
       ]
     },
@@ -3147,11 +3270,240 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "ready-for-pr"
+        "ready-for-pr",
+        "core"
       ],
       "body": "If a mapped message value outputted by the MapMessageToScalarAsHash evaluates to zero then effectively this message wont be signed, therefore we should add a security consideration to the spec to handle this case.",
       "createdAt": "2022-04-12T19:26:51Z",
-      "updatedAt": "2022-04-14T07:25:30Z",
+      "updatedAt": "2022-04-21T23:28:26Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 102,
+      "id": "I_kwDOF8lax85H7B82",
+      "title": "Handling information that must always be revealed in a signature proof",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/102",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "One of the features of BBS signatures is the ability for the holder/prover to selectively disclose information they share with a verifier, which is a powerful feature. However, with this new feature comes new problems to solve. For example sometimes an issuer/signer of a token/credential using a BBS signature may want to ensure that a certain sub-set of the information protected by the signature is always revealed in a generated proof. An example might be the proof block in a LD-proof or the protected headers in a JWP. \r\n\r\nThere are two main solution approaches that affect this spec that I think should be discussed:\r\n\r\n1) Where the cryptographic layer is aware of this distinction in the two classes of information being signed (one class where that information must always be revealed in any generated proof, the other where that information is able to be selectively disclosed by the holder/prover) , note there is also some relevant commentary in #95 discussing this.\r\n2) Where the cryptographic layer is essentially unaware of this distinction and it is left to the implementation layer above to enforce this behaviour if it so desires (e.g JWP or LD-Proofs)\r\n\r\nThe main tradeoffs I see here is increasing the complication of cryptographic layer for a potential increase in security of the scheme operating across application domains vs keeping the cryptographic layer simpler. Note - I use \"potential\" here deliberately as I haven't personally concluded whether there is a substantial security issue with the scheme in using 2) to achieve this outcome.\r\n\r\nTo bring things up a further level in option 1) the sign/verify API likely to be exposed by implementations is \r\n\r\n`signature = sign(privateKey, requiredRevealPayload, selectivelyDisclosablePayloads)`\r\n`result = verify(publicKey, signature, requiredRevealPayload, selectivelyDisclosablePayloads)`\r\n\r\nVS options 2) where the sign/verify API is likely to be exposed more like \r\n\r\n`signature = sign(privateKey, payloads)`\r\n`result = verify(publicKey, signature, payloads)`\r\n\r\nTechnically with option 2) implementation layers using BBS in representation formats like JWP or LDP have to define within the bounds of their own specification if certain pieces of information MUST always be revealed. For example currently JWP using BBS defines that the first \"payload\" signed is the protected header. \r\n\r\nThe potential risk I see with this model is a case when a signer is using a single key pair to sign JWP structures secured with a BBS signature AND sign payloads in other representation formats, in this threat a verifier could be handed a BBS proof revealing no payloads and be convinced it was signed under a different representation format than JWP. One could definitely argue that a signer/issuer operating in this manner is violating certain commonly agreed cryptographic best practises in failing to limit cross application key usage and therefore option 2) is fine to proceed with in this spec with an appropriate security consideration.\r\n\r\nInterested to hear how other folks view this issue, in particular from spec editors involved in the development of representation layer technologies compatible with BBS signatures (e.g JWP or LD-Proofs) @quartzjer @selfissued @dwaite @OR13 \r\n",
+      "createdAt": "2022-04-18T04:43:39Z",
+      "updatedAt": "2022-04-21T23:28:18Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "OR13",
+          "authorAssociation": "NONE",
+          "body": "This feels similar to crit in some ways. Given how frustrated some folks have been with alg none and crit in jose we should be cautious. \n\nMy gut says to make it harder for an ignorant developer or verifier to make mistakes, which leads me to believe that the signatures should be aware of required and optional disclosure.",
+          "createdAt": "2022-04-18T13:15:46Z",
+          "updatedAt": "2022-04-18T13:15:46Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "While it's traditionally higher level or application-space logic that enforces these kinds of requirements, similar to checking an issued-at or expiration... I think it's worth strongly considering having this capability in the crypto layer whenever feasible.\r\n\r\nThe tradeoff or caveat though is if the added complexity creates *any* higher possibility of a vulnerability, it's much better to deal with that when it happens in implementations (2) vs. in the algorithm itself (1).\r\n\r\nThe challenge in general with this space where BBS/JWP/LDP/etc live is that to build privacy preserving cryptographic primitives some of this logic _must_ be moved into the algorithms, and the complexity can't just be pushed up the stack.\r\n\r\nSo, sort of thinking out loud here...\r\n1. BBS is optimized for use-cases involving unlinkability\r\n2. The nothing-disclosed case is definitely a notable security consideration (but still could be a valid use-case)\r\n3. Most or nearly all issuers will want something required to be revealed\r\n4. If the location of the required payload is not uniform in every signature it becomes a linkability vector\r\n5. Adding requiredRevealPayload does not invalidate the nothing-disclosed use case (it can just be empty)\r\n6. The added algorithmic complexity to support it is minimal (in my limited understanding)\r\n\r\nI'm in favor of (1), having the algorithm natively support it.  The slightly larger calling syntax helps ensure that all implementations prioritize the distinction of what is required vs selectively disclosed, and it also provides a means for requiring disclosure that doesn't potentially introduce linkability when solved elsewhere.",
+          "createdAt": "2022-04-18T17:08:03Z",
+          "updatedAt": "2022-04-18T17:08:03Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "This issue was discussed on the WG call this morning where it was agreed that PR #95 would be updated to accomodate this change, I will tag this issue with \"ready-for-pr\" because of this pending close subject to that PR being merged",
+          "createdAt": "2022-04-19T02:32:22Z",
+          "updatedAt": "2022-04-19T02:32:22Z"
+        },
+        {
+          "author": "tmarkovski",
+          "authorAssociation": "MEMBER",
+          "body": "What checks will the routine in `sign` and `verify` do to validate if the `requiredRevealPayload` is satisfied? If it does a simple array comparison of indexes, it doesn't make sense to add this protection on the signature suite spec level.\r\nThe sign/verify method shouldn't be opinionated, unless that's required for the cryptographic construction of the signature. I understand that most use cases will want this, we're still thinking within the frames of how we currently use them: LD and JWT, but the signature suite should work outside identity use cases as well.\r\nI think I must be missing something (other than the last WG meeting), since everyone is in favor of adding this protection, which seems like an obvious architectural anti-pattern to me.",
+          "createdAt": "2022-04-20T14:44:52Z",
+          "updatedAt": "2022-04-20T14:47:21Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@tmarkovski The requiredRevealPayload is incorporated into the hash for the DST message, along with other public parameters required for the security of the signature, like the issuer's public key. Unlike the other signature messages, this one cannot be selectively revealed, and so it would not be possible to verify a signature or a proof of knowledge without knowing the correct value for requiredRevealPayload.\r\n\r\nThe spec doesn't define a format for the requiredRevealPayload beyond it being represented as a byte string, but applications can use it to enforce agreement for any additional parameters. I'm curious what makes this look like an anti-pattern to you, but I would recommend listening to the meeting recording.",
+          "createdAt": "2022-04-20T16:36:18Z",
+          "updatedAt": "2022-04-20T16:36:18Z"
+        },
+        {
+          "author": "tmarkovski",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for clarifying the use of it. My next question was why not allow any payload to participate in the DST message to allow extensions for it, but you answered that in the second paragraph. Which brings me to my next question: why is this parameter named `requiredRevealPayload` if it will allow arbitrary data by the application?\r\n\r\nMy thoughts on anti-pattern stem from the idea of using knowledge of downstream application into the spec, without making direct use of it.\r\nExample: needing a parameter for which messages are required for an application protocol is a downstream problem. However, parameter for integrity payload is a more generalized use. While both cases will be defined by applications, one is opinionated about what it is, the other one isn't.",
+          "createdAt": "2022-04-20T18:28:15Z",
+          "updatedAt": "2022-04-20T18:30:03Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We're still workshopping the naming, I think 'header' is in the lead at the moment although every term comes with its own baggage.",
+          "createdAt": "2022-04-20T18:30:49Z",
+          "updatedAt": "2022-04-20T18:30:49Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@tmarkovski essentially the conversation on the WG call yesterday and in the DIF slack channel appears to have shown support to have a cryptographically enforce-able way to support two types of information protected by a signature \r\n\r\n1) Header - Data protected by the original signature that must be revealed in any generated proof for the signature\r\n2) Payloads - An array of payloads protected by the original signature of which the holder/prover has the ability to selectively disclose\r\n\r\nThose are the current names anyway, if you have alternatives please feel free to suggest.",
+          "createdAt": "2022-04-20T20:02:03Z",
+          "updatedAt": "2022-04-20T20:02:03Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Or of course if you have a different take on the usefulness of this feature please feel free to share :)",
+          "createdAt": "2022-04-20T20:04:15Z",
+          "updatedAt": "2022-04-20T20:04:15Z"
+        },
+        {
+          "author": "tmarkovski",
+          "authorAssociation": "MEMBER",
+          "body": "I've no objections (or suggestions) on the naming or the usefulness of this feature. By reading the OP description (and not having much more context), I made an assumption that the `requiredRevealPayload` refers to required message indices that applications need disclosed, which seemed like a very specific, opinionated application argument that shouldn't have place in these algorithms directly. As @andrewwhitehead explained, this parameter is a general header payload defined as public parameter by applications, which may contain information about what message indices may be required, in addition to other info. This makes a lot more sense and clears up my confusion.",
+          "createdAt": "2022-04-20T20:25:23Z",
+          "updatedAt": "2022-04-20T20:25:23Z"
+        }
+      ]
+    },
+    {
+      "number": 103,
+      "id": "I_kwDOF8lax85H-zMV",
+      "title": "Add blurb describing replay attack protection feature of the scheme",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/103",
+      "state": "CLOSED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "tplooker"
+      ],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "Currently the [introduction](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#section-1) offers a description of two key properties the core scheme has which are selective disclosure and unlinkable presentations, however there is a third that should also be elaborated which is protection again replay attacks that the scheme naturally affords because of ability to feature a nonce in the presentation message generated as a part of the SPK.",
+      "createdAt": "2022-04-19T02:40:29Z",
+      "updatedAt": "2022-04-22T03:43:53Z",
+      "closedAt": "2022-04-22T03:43:53Z",
+      "comments": []
+    },
+    {
+      "number": 107,
+      "id": "I_kwDOF8lax85IHO3o",
+      "title": "Add generator in G1 in BlindSign",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/107",
+      "state": "CLOSED",
+      "author": "alessandroguggino",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "blind-sign-extension"
+      ],
+      "body": "From the BlindSign function:\r\nhttps://github.com/decentralized-identity/bbs-signature/blob/506d70c0d266a3b04cb8e8a58796008d5284fd2e/draft-blind-bbs-signatures.md?plain=1#L175\r\n\r\nWe should add P1, the generator point in G1, in order to make a valid signature after the unblinding:\r\n`\r\nb = commitment + P1 + h0 * s'' + h[j1] * msg[1] + ... + h[jK] * msg[K]\r\n`\r\n\r\nIf you agree with me I will open a pull request where I will change `b` as proposed and add P1's definition into the Terminology section.",
+      "createdAt": "2022-04-20T15:31:37Z",
+      "updatedAt": "2022-04-22T22:35:45Z",
+      "closedAt": "2022-04-22T22:35:45Z",
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeap! That makes sense to me.",
+          "createdAt": "2022-04-20T16:15:35Z",
+          "updatedAt": "2022-04-20T18:01:29Z"
+        },
+        {
+          "author": "alessandroguggino",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I have seen that in the main draft P1 is defined in Notation instead of Terminology. But there is no Notation section. May I add it and modify the structure of the document following the one of the main draft?\r\nThis is related to issue #90. \r\nOtherwise, I just change the calculation of b for now.",
+          "createdAt": "2022-04-20T18:19:20Z",
+          "updatedAt": "2022-04-20T18:19:20Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Yes @alessandroguggino as documented in #90 feel free to update it for consistency. I would suggest instead of duplicating the terminology you could just reference the core draft?",
+          "createdAt": "2022-04-20T20:09:03Z",
+          "updatedAt": "2022-04-20T20:09:03Z"
+        }
+      ]
+    },
+    {
+      "number": 109,
+      "id": "I_kwDOF8lax85IOCRH",
+      "title": "Update KeyValidate operation definition",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/109",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "With the changes to how we handle the message generators the procedure as defined in this section doesn't make sense now as they are no longer apart of the public key, therefore this should be updated to reflect that.",
+      "createdAt": "2022-04-21T23:13:43Z",
+      "updatedAt": "2022-04-23T03:36:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "We also need to update the syntax of using this operation inside other operations like verify and spkGen which is currently inconsistent.",
+          "createdAt": "2022-04-21T23:18:58Z",
+          "updatedAt": "2022-04-21T23:18:58Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Also once we have merged #95 I think we need to update so that KeyValidate is called for both the sign and spkGen functions also as the public key will now form part of the DST signed into the signature? @BasileiosKal ",
+          "createdAt": "2022-04-23T03:35:52Z",
+          "updatedAt": "2022-04-23T03:35:52Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "[Current language](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-validating-public-keys) in the specification hints at this check being performed across all operations, we should clear up this confusion.",
+          "createdAt": "2022-04-23T03:36:45Z",
+          "updatedAt": "2022-04-23T03:36:45Z"
+        }
+      ]
+    },
+    {
+      "number": 110,
+      "id": "I_kwDOF8lax85IOGBa",
+      "title": "presentation header vs presentation message",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/110",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "With the introduction of the header + message terminology in #95 the question for me remains whether we call the data structure currently known as presentation message that or presentation header. To me it makes more sense to call this a header and reserve the term message for the selectively disclosable payloads that are protected by the signature. We then have two types of headers 1) signature header set by the issuer/signer and required to be revealed in all proofs and 2) presentation header set by the holder/prover.",
+      "createdAt": "2022-04-21T23:43:11Z",
+      "updatedAt": "2022-04-23T19:52:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 111,
+      "id": "I_kwDOF8lax85IT7fR",
+      "title": "Review security considerations",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/111",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "Some of the security considerations documented in the spec were originally copied from the [bls-signature-draft](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04#section-5.2) and should now be re-reviewed for their applicability.",
+      "createdAt": "2022-04-23T03:41:10Z",
+      "updatedAt": "2022-04-23T03:41:10Z",
       "closedAt": null,
       "comments": []
     }
@@ -9089,13 +9441,13 @@
       "labels": [],
       "body": "Closes Issues #78 and #85 \r\n\r\n### Changes:\r\n1. Adds the number of the revealed messages, the generators, the public key and some ciphersuite specific information to a signature domain separation tag (a signed -always revealed- message).\r\n2. Switches notation from H0 to H_s, as discussed in the WG call\r\n\r\n### Note:\r\nThis PR leaves the cipher suite specific info as optional for the `sig_dst`. The reason is that when it comes to the generators, the total number of messages etc., there are real risks for not adding them to the `sig_dst`.\r\n\r\nThe last one (total number of messages) is not documented in an issue to my knowledge, but I think it is well understood that it is dangerous to not include it. For example, the prover could reveal an additional \u201chidden\u201d attribute by calculating `C1_new = C1 + H_j(U+1) * m~_j(U+1)` and `m^_j(U+1) = m~_j(U+1)` and have the proof be validated ([reproduction](https://github.com/BasileiosKal/dif-bbs-signature-dst-pr/blob/main/src/main.rs)). \r\n\r\n(Including the generators also solves this issue, so we could potentially only include the generators and not the total number of messages. That said, IMO it would be better to be more careful since it does not hurt performance or complexity)\r\n\r\nIn the case of the ciphersuite info though, IMO its good security practice to include it but not necessary?? I\u2019m more than happy to update the pr and make the ciphersuite info mandatory, but to me it seems that the separation between ciphersuites could also happen elsewhere more naturally (in hash-2-curve for example, similarly to what the bls draft does)",
       "createdAt": "2022-04-09T21:42:47Z",
-      "updatedAt": "2022-04-15T20:06:32Z",
+      "updatedAt": "2022-04-21T18:37:53Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "signature-dst",
-      "headRefOid": "92d986323c044b02a09eac66fdefc1436f9f0ce2",
+      "headRefOid": "c4a2892cd7df9db4b4db32406abcd406a4a329d9",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9191,6 +9543,41 @@
           "body": "The only thing that doesn't quite fit for me is whether ApplicationInfo should form part of a domain separation tag? All other info that goes into the computation of sig_dst seems to fit this model nicely however ApplicationInfo does not? Perhaps thats just a mental model thing however as the only alternative I see is to commit the application info into the signature using a seperate generator which would be in-efficient?",
           "createdAt": "2022-04-15T20:06:32Z",
           "updatedAt": "2022-04-15T20:06:32Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Just to muse on how a proposal to support both the cipher info and application info might work I would suggest the following\r\n\r\n```\r\nsignature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L), ApplicationInfo)\r\n\r\nInputs:\r\n\r\n- ApplicationInfo, an optional octet string containing application specific\r\n                   information. If not supplied, it defaults to the empty octet string.\r\n- msg_1,..., msg_L, octet strings. Messages to be signed.\r\n- H_1,..., H_L, points of G1. Generators used to sign the messages.\r\n- SK, a secret key output from KeyGen\r\n- PK, a public key output from SkToPk\r\n\r\nParameters:\r\n\r\n- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.\r\n- CipherInfo, an optional octet string containing context and ciphersuite specific\r\n                   information. If not supplied, it defaults to the empty octet string.\r\n- H_s, point of G1. The generator for the blinding value of the signature.\r\n- H_d, point of G1. The generator used to sign the signature domain separation tag.\r\n\r\nOutputs:\r\n\r\n- signature, an octet string\r\n\r\nProcedure:\r\n\r\n1. (W, H0, H) = octets_to_point(PK)\r\n\r\n2. dst = (PK || L || H_s || H_d || H_1 || ... || H_L || Ciphersuite_ID || CipherInfo)\r\n\r\n3. sig_info = OS2IP(HASH(dst || ApplicationInfo)) mod q\r\n\r\n4. if sig_info is 0, abort\r\n\r\n5. h = XOF(SK  || dst || msg[i] || ... || msg[L])\r\n\r\n6. for element in (e, s) do\r\n\r\n7.      element = OS2IP(h.read(64)) mod q\r\n\r\n8.      if element = 0, go back to step 4\r\n\r\n9. B = P1 + H_s * s + H_d * sig_dst + H_1 * msg_1 + ... + H_L * msg_L\r\n\r\n10. A = B * (1 / (SK + e))\r\n\r\n11. signature = (point_to_octets_min(A), e, s)\r\n\r\n12. return signature\r\n```",
+          "createdAt": "2022-04-18T05:48:41Z",
+          "updatedAt": "2022-04-18T05:50:47Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would argue that `CipherInfo` is not needed. This keeps a clear definition of what a ciphersuite is (the definition of a curve, a hash etc) which we should try to keep IMO. I wonder if we should have an additional section of `Optional Inputs` under the not optional ones. Something like,\r\n\r\n```\r\nsignature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L))\r\n\r\nInputs:\r\n\r\n- msg_1,..., msg_L, octet strings. Messages to be signed.\r\n- H_1,..., H_L, points of G1. Generators used to sign the messages.\r\n- SK, a secret key output from KeyGen\r\n- PK, a public key output from SkToPk\r\n\r\nOptional Inputs:\r\n\r\n- ApplicationInfo, an optional octet string containing application specific\r\n                    information. If not supplied, it defaults to the empty octet string.\r\n\r\nParameters:\r\n\r\n- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.\r\n- H_s, point of G1. The generator for the blinding value of the signature.\r\n- H_d, point of G1. The generator used to sign the signature domain separation tag.\r\n\r\nOutputs:\r\n\r\n- signature, an octet string\r\n\r\nProcedure:\r\n\r\n1. (W, H0, H) = octets_to_point(PK)\r\n2. ...\r\n```\r\nThis may seem as a lot of text before we define the procedure but,\r\n1. This leaves the definition of each function as simple and as close to known APIs (i.e., ecdsa, rsa etc) as possible.\r\n2.  People that don't care about `ApplicationInfo` can more easily ignore it.\r\n3. Since the `Optional Inputs` and the `Parameters` are the same for all core functions (sign, verify, spkGen and spkVerify) we can move those operations in a separate section (like core signature operations??) and define them only once in the start of this new section.\r\n\r\nI also think that naming the `ApplicationInfo`, `ProtectedInfo` instead, facilitates their usage for always revealed messages and for separation between blind and non-blind signatures, that in my opinion are the 2 main use cases for the additional information. ",
+          "createdAt": "2022-04-18T15:29:30Z",
+          "updatedAt": "2022-04-19T03:41:21Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> I would argue that CipherInfo is not needed. This keeps a clear definition of what a ciphersuite is (the definition of a curve, a hash etc) which we should try to keep IMO. I wonder if we should have an additional section of Optional Inputs under the not optional ones\r\n\r\nI still think CipherInfo is worth considering separately, this is distinct from the application level structure \"header\" IMO, CipherInfo is primarily defined to allow those who define new ciphersuites to have a somewhere to include additional public parameters they may define.",
+          "createdAt": "2022-04-19T06:03:22Z",
+          "updatedAt": "2022-04-19T06:03:22Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "An update to the PR based on the conversations of the WG around notation.\r\n1.\tThe term `domain` is used instead of `sig_dst`.\r\n2.\tThe term `header` is used for the extra info passed to the hash of the domain (ex `sig_dst`)\r\n3.\tThe term `messages` is preserved for now instead of `payloads` since there wasn\u2019t a clear consensus around moving to the `payloads` terminology yet?\r\n4.\tI took a first shot on describing the functionality of the signature\u2019s domain in the Messages and generators subsection (in considerations) but this may need its own section\r\n\r\nNote also that I don\u2019t thing we necessarily need to wait for PRs #97 and #101 to be closed for this PR to be updated. Although its true that those PRs are related, if they are merged, a wider update in the spec may be needed, which would include the changes here, if that PR is merged.\r\n\r\nAlso, the `header` is passed as an input to each operation. To me this is not ideal but making it a parameter IMO doesn\u2019t make much sense either, considering the always revealed messages use-case. I do plan to make another PR with an alternative proposal (like proposal [here](https://github.com/decentralized-identity/bbs-signature/pull/95#issuecomment-1101499779) for an `Optional Input` section) so i think it's fine to move with this approach for now.",
+          "createdAt": "2022-04-20T21:53:38Z",
+          "updatedAt": "2022-04-20T21:53:38Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@BasileiosKal can you resolve merge conflicts with this PR?",
+          "createdAt": "2022-04-21T18:33:54Z",
+          "updatedAt": "2022-04-21T18:33:54Z"
         }
       ],
       "reviews": [
@@ -10053,6 +10440,179 @@
               "updatedAt": "2022-04-14T02:27:46Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kZKh",
+          "commit": {
+            "abbreviatedOid": "30dcb4d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:32:15Z",
+          "updatedAt": "2022-04-21T18:32:16Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Feels like everything has been addressed in this thread, resolving the conversation, re-open if need be",
+              "createdAt": "2022-04-21T18:32:15Z",
+              "updatedAt": "2022-04-21T18:32:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kZ_o",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:35:45Z",
+          "updatedAt": "2022-04-21T18:35:45Z",
+          "comments": [
+            {
+              "originalPosition": 68,
+              "body": "```suggestion\r\n2. generators =  (H_s || H_d || H_1 || ... || H_L)\r\n```\r\n\r\nfor case consistency",
+              "createdAt": "2022-04-21T18:35:45Z",
+              "updatedAt": "2022-04-21T18:35:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaDj",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:36:01Z",
+          "updatedAt": "2022-04-21T18:36:01Z",
+          "comments": [
+            {
+              "originalPosition": 128,
+              "body": "```suggestion\r\n5. generators =  (H_s || H_d || H_1 || ... || H_L)\r\n```\r\n\r\nfor case consistency",
+              "createdAt": "2022-04-21T18:36:01Z",
+              "updatedAt": "2022-04-21T18:36:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaJi",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:36:24Z",
+          "updatedAt": "2022-04-21T18:36:25Z",
+          "comments": [
+            {
+              "originalPosition": 176,
+              "body": "```suggestion\r\n6. generators =  (H_s || H_d || H_1 || ... || H_L)\r\n```\r\n\r\nfor case consistency",
+              "createdAt": "2022-04-21T18:36:25Z",
+              "updatedAt": "2022-04-21T18:36:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaOH",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:36:45Z",
+          "updatedAt": "2022-04-21T18:36:45Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "```suggestion\r\n8. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU): \r\n```",
+              "createdAt": "2022-04-21T18:36:45Z",
+              "updatedAt": "2022-04-21T18:36:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaRD",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:36:56Z",
+          "updatedAt": "2022-04-21T18:36:57Z",
+          "comments": [
+            {
+              "originalPosition": 183,
+              "body": "```suggestion\r\n9.      element = HASH(PRF(8*ceil(log2(q)))) mod q\r\n```",
+              "createdAt": "2022-04-21T18:36:56Z",
+              "updatedAt": "2022-04-21T18:36:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaTz",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:37:05Z",
+          "updatedAt": "2022-04-21T18:37:06Z",
+          "comments": [
+            {
+              "originalPosition": 186,
+              "body": "```suggestion\r\n10.      if element = 0, go back to step 7\r\n```",
+              "createdAt": "2022-04-21T18:37:05Z",
+              "updatedAt": "2022-04-21T18:37:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kaZx",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:37:29Z",
+          "updatedAt": "2022-04-21T18:37:30Z",
+          "comments": [
+            {
+              "originalPosition": 269,
+              "body": "```suggestion\r\n5. generators =  (H_s || H_d || H_1 || ... || H_L)\r\n```",
+              "createdAt": "2022-04-21T18:37:29Z",
+              "updatedAt": "2022-04-21T18:37:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kahj",
+          "commit": {
+            "abbreviatedOid": "c4a2892"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "A couple more minor tweaks, getting there!",
+          "createdAt": "2022-04-21T18:37:53Z",
+          "updatedAt": "2022-04-21T18:37:53Z",
+          "comments": []
         }
       ]
     },
@@ -10061,25 +10621,42 @@
       "id": "PR_kwDOF8lax842B47S",
       "title": "Encodings for elements to be hashed",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/97",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "First approach to close issue #96\r\n\r\nEncodings suggestion of elements to be hashed (similar to the ones used by [U-Prove](https://github.com/microsoft/uprove-csharp-sdk/blob/master/docs/U-Prove%20Cryptographic%20Specification%20V1.1%20Revision%203.pdf)). \r\n\r\nThis PR follows option 2 from the above issue, i.e., the encoding of elements to be hashed is described in a separate section and used implicitly throughout the document. See PR #95  for more context.\r\n\r\nI also suggest that scalars, non-negative integers, and generic octet strings must always be prepended with their length while it is only recommended for EC points.",
       "createdAt": "2022-04-11T20:48:28Z",
-      "updatedAt": "2022-04-14T20:18:41Z",
+      "updatedAt": "2022-04-22T03:42:16Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-input-encoding",
-      "headRefOid": "2e2fac447b59ad84654e1240ec46ffecdb22651a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "87d114ad3d8e85f8dfeeae7d437f7e77434478ab",
+      "closedAt": "2022-04-22T03:42:16Z",
+      "mergedAt": "2022-04-22T03:42:16Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "d9b3a351c79900ee50a94ca632e345df81175909"
+      },
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Updates proposed by @mikelodder7 and @andrewwhitehead  during the WG call of 18/ 4/2022:\r\n1.\tLengths are extended to 8 bytes (for non-DST\u2019s octet strings). Non-negative integers are also updated to be represented with 8 bytes, to be consistent with the representation of the lengths of octet strings (which are also non-negative integers). \r\n2.\tThe second paragraph is updated to make use of I2OSP (instead of zero-extensions).\r\n3.\tThe example is updated accordingly.",
+          "createdAt": "2022-04-20T22:28:43Z",
+          "updatedAt": "2022-04-20T22:28:43Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple reviews and now approvals, open 10 days, discussed on latest WG call, merging",
+          "createdAt": "2022-04-22T03:42:11Z",
+          "updatedAt": "2022-04-22T03:42:11Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax8439SBU",
@@ -10320,6 +10897,85 @@
               "updatedAt": "2022-04-14T20:00:15Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844f5FH",
+          "commit": {
+            "abbreviatedOid": "823e834"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM now",
+          "createdAt": "2022-04-20T23:25:04Z",
+          "updatedAt": "2022-04-20T23:25:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844kbO5",
+          "commit": {
+            "abbreviatedOid": "823e834"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-21T18:40:34Z",
+          "updatedAt": "2022-04-21T18:40:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844kcfS",
+          "commit": {
+            "abbreviatedOid": "823e834"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:44:02Z",
+          "updatedAt": "2022-04-21T18:44:02Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "I think we need to clarify that the encoding rules defined below are per-element, suggested language tweak to make this clearer.\r\n\r\n```suggestion\r\nTo avoid ambiguity, each element passed to the HASH or the XOF function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,\r\n```",
+              "createdAt": "2022-04-21T18:44:02Z",
+              "updatedAt": "2022-04-21T18:44:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844lHiw",
+          "commit": {
+            "abbreviatedOid": "823e834"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T21:56:10Z",
+          "updatedAt": "2022-04-21T21:56:10Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Thanks! Updated.",
+              "createdAt": "2022-04-21T21:56:10Z",
+              "updatedAt": "2022-04-21T21:56:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844ln0y",
+          "commit": {
+            "abbreviatedOid": "87d114a"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-22T02:45:36Z",
+          "updatedAt": "2022-04-22T02:45:36Z",
+          "comments": []
         }
       ]
     },
@@ -10335,13 +10991,13 @@
       "labels": [],
       "body": "This PR introduces a `hash_to_scalar` function as discussed in the WG call. The goal is for the function to replace some of the hashing to scalars happening internally in the operations, i.e., for the `e`, `s` calculation in `sign`, in the random elements in `spkGen` and potentially for the challenge value and the `sig_dst` if we decide to use that (see PR #95). The function is not inserted yet in those operations to not block #95. If that is resolved first i will update this PR.\r\n\r\n### Note:\r\n`hash_to_field` is removed with this PR (from `MapMessageToScalarAsHash`) and is replaced with `hash_to_scalar`. Note that this will also close issue #100 since `hash_to_scalar` checks if an element is 0. My reasoning is that `hash-to-scalar` serves the same functionality while been able to be used for the cases detailed above, without needing to worry about dst's etc. Note that aside from the use of dst, `hash-to-scalar` is almost exactly `hash-to-field` using `expand-message-xof` and with `m` (the fields extension degree) = 1. \r\n\r\nAlso the dst is not removed from `MapMessageToScalarAsHash` (where it is useful). A note is also added stating that people can use `hash-to-field` if they want. However, i feel that the current construction is more flexible to serve the needs of the spec, but really keen to discuss alternatives and other proposals.",
       "createdAt": "2022-04-13T22:19:20Z",
-      "updatedAt": "2022-04-14T20:29:19Z",
+      "updatedAt": "2022-04-21T22:03:41Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-to-scalar",
-      "headRefOid": "b1f268e7ab9f27126b20b52e9867faa9fe6b09e6",
+      "headRefOid": "dd96d20be9fb5a8af294dd5edfcb1538da5403c7",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10381,6 +11037,13 @@
           "body": "Update: I added the dst handling in PR #97, so now the two PRs are consistent. If we decide to go that route, the only thing that will neet to be updated IMO is noting that the transformation descried in #97 ...\"-**may**- happen implicitly, but they MUST precede every call to the HASH or XOF function.\"",
           "createdAt": "2022-04-14T20:29:19Z",
           "updatedAt": "2022-04-14T20:29:19Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Following the [updates](https://github.com/decentralized-identity/bbs-signature/pull/97#issuecomment-1104519302) on PR #97, extended the length of a msg to be mapped to a scalar as hash to 8 bytes max.",
+          "createdAt": "2022-04-20T22:39:16Z",
+          "updatedAt": "2022-04-20T22:39:16Z"
         }
       ],
       "reviews": [
@@ -10423,8 +11086,581 @@
               "updatedAt": "2022-04-14T16:22:39Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kdQY",
+          "commit": {
+            "abbreviatedOid": "718672f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:46:59Z",
+          "updatedAt": "2022-04-21T18:47:00Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I assume whether you are using an XOF vs a conventional HASH alg is a decision for the ciphersuite, how is that captured?",
+              "createdAt": "2022-04-21T18:47:00Z",
+              "updatedAt": "2022-04-21T18:47:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844lGYH",
+          "commit": {
+            "abbreviatedOid": "718672f"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T21:49:00Z",
+          "updatedAt": "2022-04-21T21:49:01Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Thanks! That's a good point! Added an additional option in the ciphersuites: `hashing_elements_to_scalars`, to capture the two options.\r\n\r\n(My thinking: When it comes to hash-to-scalar, i don't think it needs to be captured in the ciphersuite, since it will be used by the sign and spkGen operations, i.e., no-need to communicate the use of HASH vs XOF to a verifying/relying party. For MapMessageToScallarAsHash (that uses hash-to-scalar), again it may not be necessary (since it's use should be agreed in a higher level at some extent e.g., to which messages it applies) but better be careful.)",
+              "createdAt": "2022-04-21T21:49:00Z",
+              "updatedAt": "2022-04-21T22:03:41Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 104,
+      "id": "PR_kwDOF8lax842cy8F",
+      "title": "Add Vasileios as editor",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/104",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "In light of contributions to the spec and agreement from the WG, this PR adds Vasileios as an editor to the core spec.",
+      "createdAt": "2022-04-19T20:40:02Z",
+      "updatedAt": "2022-04-21T17:59:12Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "506d70c0d266a3b04cb8e8a58796008d5284fd2e",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/update-editors",
+      "headRefOid": "db5239f61f7eb54e73b3746928dca44cd99fec25",
+      "closedAt": "2022-04-21T17:59:09Z",
+      "mergedAt": "2022-04-21T17:59:09Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "f8eb48a8a1fa6d734409bdad81daffd4b23e3939"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed in WG slack, no objections, merging.",
+          "createdAt": "2022-04-21T17:59:04Z",
+          "updatedAt": "2022-04-21T17:59:04Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax844dscW",
+          "commit": {
+            "abbreviatedOid": "db5239f"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-20T14:54:31Z",
+          "updatedAt": "2022-04-20T14:54:31Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844j_Mf",
+          "commit": {
+            "abbreviatedOid": "db5239f"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-21T17:19:13Z",
+          "updatedAt": "2022-04-21T17:19:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 105,
+      "id": "PR_kwDOF8lax842c0HQ",
+      "title": "Clarify keygen optional",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/105",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #98 plus some minor editorial changes",
+      "createdAt": "2022-04-19T20:46:40Z",
+      "updatedAt": "2022-04-21T23:23:55Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "506d70c0d266a3b04cb8e8a58796008d5284fd2e",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/editorial-pass",
+      "headRefOid": "f25567b2518a0d43cc8ec7ff1bc1bf897623560d",
+      "closedAt": "2022-04-21T23:23:51Z",
+      "mergedAt": "2022-04-21T23:23:51Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "c03dc25eee84a50dbb56d6faeaf8a24ec2127ce8"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Ready for re-review @andrewwhitehead @BasileiosKal (GH wont let me request re-review)",
+          "createdAt": "2022-04-21T17:26:48Z",
+          "updatedAt": "2022-04-21T17:26:48Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Minor editorial changes, multiple approvals, issue discussed on prior WG call, merging.",
+          "createdAt": "2022-04-21T23:23:47Z",
+          "updatedAt": "2022-04-21T23:23:47Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax844duEg",
+          "commit": {
+            "abbreviatedOid": "2a15be1"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-20T14:58:38Z",
+          "updatedAt": "2022-04-20T14:58:39Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Maybe we can tighten up 'of the equivalent form'. I think the main requirement is that it chooses keys uniformly from the key space (the scalar field).",
+              "createdAt": "2022-04-20T14:58:38Z",
+              "updatedAt": "2022-04-20T14:58:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844eRR3",
+          "commit": {
+            "abbreviatedOid": "2a15be1"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-20T16:38:48Z",
+          "updatedAt": "2022-04-20T16:38:49Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Agreed. Maybe \"...provided that the secret key is statistically close to uniformly random\" (taken from the [bls_spec](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04#section-2.3)) or \"...provided that the secret key is infeasible to guess\"?? I think the second one covers most security requirements (in the first wording one may wonder how close to uniform is enough, although maybe I'm overthinking it)??",
+              "createdAt": "2022-04-20T16:38:49Z",
+              "updatedAt": "2022-04-20T16:38:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kB7g",
+          "commit": {
+            "abbreviatedOid": "2a15be1"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T17:25:02Z",
+          "updatedAt": "2022-04-21T17:25:03Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Thanks, I missed that section in the BLS sig section have updated accordingly.",
+              "createdAt": "2022-04-21T17:25:03Z",
+              "updatedAt": "2022-04-21T17:25:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844k4Jo",
+          "commit": {
+            "abbreviatedOid": "57bc47d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-04-21T20:39:36Z",
+          "updatedAt": "2022-04-21T20:39:36Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844k-ow",
+          "commit": {
+            "abbreviatedOid": "21f6628"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T21:08:27Z",
+          "updatedAt": "2022-04-21T21:08:27Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "We could reference http://www.csl.sri.com/papers/vcdm-did-crypto-recs/crypto-review-and-recs-for-VCDM-and-DIDs-implems-FINAL-20211015.pdf here, estimating the strength at 117-120 bits. It's definitely less than 128 bits, but still \"virtually one million times stronger than BN-254\"",
+              "createdAt": "2022-04-21T21:08:27Z",
+              "updatedAt": "2022-04-21T21:08:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844lRw3",
+          "commit": {
+            "abbreviatedOid": "21f6628"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T23:09:10Z",
+          "updatedAt": "2022-04-21T23:09:10Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Thanks have updated, what do you think?",
+              "createdAt": "2022-04-21T23:09:10Z",
+              "updatedAt": "2022-04-21T23:09:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844lSbt",
+          "commit": {
+            "abbreviatedOid": "f25567b"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-21T23:14:59Z",
+          "updatedAt": "2022-04-21T23:14:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844lSew",
+          "commit": {
+            "abbreviatedOid": "21f6628"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T23:15:18Z",
+          "updatedAt": "2022-04-21T23:15:18Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Good enough for me :)",
+              "createdAt": "2022-04-21T23:15:18Z",
+              "updatedAt": "2022-04-21T23:15:19Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 106,
+      "id": "PR_kwDOF8lax842c0c6",
+      "title": "Add section on scoped proofs",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/106",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Attempts to resolve #103, open to feedback on alternative ways to describe this functionality",
+      "createdAt": "2022-04-19T20:48:40Z",
+      "updatedAt": "2022-04-22T03:44:10Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "506d70c0d266a3b04cb8e8a58796008d5284fd2e",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/replay-attack-blurb",
+      "headRefOid": "06a3bb25cc75b2b7fa97934ad6badaa53f5b20d1",
+      "closedAt": "2022-04-22T03:43:53Z",
+      "mergedAt": "2022-04-22T03:43:53Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "ea08561758d49171c62a5baca084595e9309dfb2"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "ready for re-review @andrewwhitehead @BasileiosKal ",
+          "createdAt": "2022-04-21T18:25:22Z",
+          "updatedAt": "2022-04-21T18:25:22Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, purely editorial, merging",
+          "createdAt": "2022-04-22T03:43:49Z",
+          "updatedAt": "2022-04-22T03:43:49Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax844eEdr",
+          "commit": {
+            "abbreviatedOid": "e2b9842"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-20T15:58:18Z",
+          "updatedAt": "2022-04-20T15:58:18Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Maybe 'prevent' a replay attack? Assuming the verifier chooses a sufficiently unique presentation message, a replayed proof would simply fail to verify, but the verifier wouldn't know the reason for the mismatch in the hash.",
+              "createdAt": "2022-04-20T15:58:18Z",
+              "updatedAt": "2022-04-20T15:58:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844ePiA",
+          "commit": {
+            "abbreviatedOid": "e2b9842"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-20T16:33:07Z",
+          "updatedAt": "2022-04-20T16:33:15Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I don't know if we can claim that **Scoped Proofs** are a \"new property\". Simple non interactive Schnorr proofs described in [RFC8235](https://www.rfc-editor.org/rfc/rfc8235.html#section-3) would have the same property. They just call it OtherInfo and not a presentation message. Maybe we should remove the \"new\" or substitute it with \"interesting\"??",
+              "createdAt": "2022-04-20T16:33:07Z",
+              "updatedAt": "2022-04-20T18:00:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kFLG",
+          "commit": {
+            "abbreviatedOid": "e2b9842"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T17:31:06Z",
+          "updatedAt": "2022-04-21T17:31:07Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I like detect because its what you choose to do with that information that leads to prevention. The scheme only provides you a way to be able to detect and therefore prevent.",
+              "createdAt": "2022-04-21T17:31:07Z",
+              "updatedAt": "2022-04-21T17:31:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844kFVq",
+          "commit": {
+            "abbreviatedOid": "e2b9842"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T17:31:27Z",
+          "updatedAt": "2022-04-21T17:31:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Nice! good catch, yes will update.",
+              "createdAt": "2022-04-21T17:31:27Z",
+              "updatedAt": "2022-04-21T17:31:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844lG51",
+          "commit": {
+            "abbreviatedOid": "06a3bb2"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-21T21:52:22Z",
+          "updatedAt": "2022-04-21T21:52:22Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax844lm1k",
+          "commit": {
+            "abbreviatedOid": "06a3bb2"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-22T02:35:54Z",
+          "updatedAt": "2022-04-22T02:35:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 108,
+      "id": "PR_kwDOF8lax842j1cP",
+      "title": "Add generator point in G1 in BlindSign",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/108",
+      "state": "MERGED",
+      "author": "alessandroguggino",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Updated the Blind BBS Signature Extension draft.\r\nFixes #107 + little updates for consistency to core draft, still many to do.",
+      "createdAt": "2022-04-21T13:35:13Z",
+      "updatedAt": "2022-04-22T22:35:45Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "ea08561758d49171c62a5baca084595e9309dfb2",
+      "headRepository": "alessandroguggino/bbs-signature",
+      "headRefName": "blindsign",
+      "headRefOid": "a97d54f9cd21edb574ed4fddfc0557c330bd02d5",
+      "closedAt": "2022-04-22T22:35:45Z",
+      "mergedAt": "2022-04-22T22:35:45Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "9d7bb7d050f7751e50c137707512c05fdb5a713e"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for the PR @alessandroguggino!",
+          "createdAt": "2022-04-21T18:31:27Z",
+          "updatedAt": "2022-04-21T18:31:27Z"
+        },
+        {
+          "author": "alessandroguggino",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Added the reference to the core draft as suggested by @tplooker. Thanks! ",
+          "createdAt": "2022-04-22T10:27:03Z",
+          "updatedAt": "2022-04-22T10:27:03Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Purely editorial changes to update the blind sign draft, merging.",
+          "createdAt": "2022-04-22T22:35:41Z",
+          "updatedAt": "2022-04-22T22:35:41Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax844kYlf",
+          "commit": {
+            "abbreviatedOid": "c3891e8"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:29:49Z",
+          "updatedAt": "2022-04-21T18:29:49Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Can we replace the TODO and add a reference to the core draft using this link (https://identity.foundation/bbs-signature/draft-bbs-signatures.html) using the reference syntax shown at the bottom here https://raw.githubusercontent.com/decentralized-identity/bbs-signature/main/draft-bbs-signatures.md",
+              "createdAt": "2022-04-21T18:29:49Z",
+              "updatedAt": "2022-04-21T18:29:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844nZD6",
+          "commit": {
+            "abbreviatedOid": "c3891e8"
+          },
+          "author": "alessandroguggino",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-22T10:21:51Z",
+          "updatedAt": "2022-04-22T10:21:52Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Ok, I am going to commit it",
+              "createdAt": "2022-04-22T10:21:51Z",
+              "updatedAt": "2022-04-22T10:21:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax844qbAu",
+          "commit": {
+            "abbreviatedOid": "a97d54f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-04-22T22:34:20Z",
+          "updatedAt": "2022-04-22T22:34:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 112,
+      "id": "PR_kwDOF8lax842qh-q",
+      "title": "More editorial tweaks",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/112",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "- Minor cleanup of language / syntax\r\n- Fixed some broken references\r\n- Shifted the algorithmic explanation to the appendix",
+      "createdAt": "2022-04-23T03:46:37Z",
+      "updatedAt": "2022-04-23T03:46:37Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "9d7bb7d050f7751e50c137707512c05fdb5a713e",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/editorial-tweaks",
+      "headRefOid": "91307c6450eae8d4903233cd2e57d814cab29623",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
