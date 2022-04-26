@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-24T00:09:25.200018+00:00",
+  "timestamp": "2022-04-26T00:09:08.546372+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3445,7 +3445,7 @@
       ],
       "body": "With the changes to how we handle the message generators the procedure as defined in this section doesn't make sense now as they are no longer apart of the public key, therefore this should be updated to reflect that.",
       "createdAt": "2022-04-21T23:13:43Z",
-      "updatedAt": "2022-04-23T03:36:45Z",
+      "updatedAt": "2022-04-25T15:59:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -3468,6 +3468,27 @@
           "body": "[Current language](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-validating-public-keys) in the specification hints at this check being performed across all operations, we should clear up this confusion.",
           "createdAt": "2022-04-23T03:36:45Z",
           "updatedAt": "2022-04-23T03:36:45Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It may be best to be careful, but I don't think there is a pressing reason to include keyValidate in sign and spkGen. It's use in verify and spkVerify is so we will not pass elements not in G2 in the pairings, which may resolve to unexpected behavior. The same danger doesn't seem to exist in sign and spkGen though, since we just hash the value. \r\n\r\nThat said, we must update the keyValidate procedure as described by @tplooker as well as clarify it's use.",
+          "createdAt": "2022-04-25T07:02:53Z",
+          "updatedAt": "2022-04-25T10:18:13Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I could be convinced not to require this on sign or spkgen from an efficiency perspective, so long as it is required on verify and spkverify. I think not doing it on sign or spkgen just means there is the possibility that an invalid signature or proof may be generated? ",
+          "createdAt": "2022-04-25T15:58:30Z",
+          "updatedAt": "2022-04-25T15:58:30Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "For context an interesting vulnerability was found in a Java based implementation of ECDSA recently where public key validation was being skipped https://neilmadden.blog/2022/04/19/psychic-signatures-in-java/",
+          "createdAt": "2022-04-25T15:59:51Z",
+          "updatedAt": "2022-04-25T15:59:51Z"
         }
       ]
     },
