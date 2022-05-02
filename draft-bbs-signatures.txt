@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                              1 May 2022
+                                                              2 May 2022
 
 
                         The BBS Signature Scheme
