@@ -66,9 +66,8 @@ Table of Contents
      4.4.  Randomness considerations
      4.5.  Presentation message selection
      4.6.  Implementing hash_to_curve_g1
-     4.7.  Use of Contexts
-     4.8.  Choice of underlying curve
-     4.9.  Security of spkGen
+     4.7.  Choice of underlying curve
+     4.8.  Security of spkGen
    5.  Ciphersuites
      5.1.  Ciphersuite Format
      5.2.  BLS12-381 Ciphersuite
@@ -781,8 +780,14 @@ Procedure:
 
 4.1.  Validating public keys
 
-   All algorithms in Section 3.3 that operate on points in public keys
-   require first validating those keys.
+   It is RECOMMENDED for any operation in Section 3.3 involving public
+   keys that do not have an explicit invocation to the KeyValidate
+   operation Section 3.3.3 documented in their procedure, that this
+   check be performed prior to executing the operation.  An example of
+   where this recommendation applies is the sign Section 3.3.4
+   operation.  An example of where an explicit invocation to the
+   KeyValidate operation Section 3.3.3 is already defined and therefore
+   required is the verify Section 3.3.5 operation.
 
 4.2.  Skipping membership checks
 
@@ -858,30 +863,7 @@ Procedure:
    for hash_to_curve.  Some guidance around defining this can be found
    in Section 5.
 
-4.7.  Use of Contexts
-
-   Contexts can be used to separate uses of the protocol between
-   different protocols (which is very hard to reliably do otherwise) and
-   between different uses within the same protocol.  However, the
-   following SHOULD be kept in mind:
-
-   The context SHOULD be a constant string specified by the protocol
-   using it.  It SHOULD NOT incorporate variable elements from the
-   message itself.
-
-   Contexts SHOULD NOT be used opportunistically, as that kind of use is
-   very error prone.  If contexts are used, one SHOULD require all
-   signature schemes available for use in that purpose support contexts.
-
-   Contexts are an extra input, which percolate out of APIs; as such,
-   even if the signature scheme supports contexts, those may not be
-   available for use.  This problem is compounded by the fact that many
-   times the application is not invoking the signing, verification, and
-   proof functions directly but via some other protocol.
-
-   The ZKP protocols use nonces which MUST be different in each context.
-
-4.8.  Choice of underlying curve
+4.7.  Choice of underlying curve
 
    BBS signatures can be implemented on any pairing-friendly curve.
    However care MUST be taken when selecting one that is appropriate,
@@ -890,7 +872,7 @@ Procedure:
    security according to a recent NCC ZCash cryptography review
    [ZCASH-REVIEW].
 
-4.9.  Security of spkGen
+4.8.  Security of spkGen
 
    The BBS proof, as returned by spkGen, is a zero-knowledge proof-of-
    knowledge [CDL16].  This guarantees that no information will be
