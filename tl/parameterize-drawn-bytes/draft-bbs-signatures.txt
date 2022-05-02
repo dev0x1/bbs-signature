@@ -66,9 +66,8 @@ Table of Contents
      4.4.  Randomness considerations
      4.5.  Presentation message selection
      4.6.  Implementing hash_to_curve_g1
-     4.7.  Use of Contexts
-     4.8.  Choice of underlying curve
-     4.9.  Security of spkGen
+     4.7.  Choice of underlying curve
+     4.8.  Security of spkGen
    5.  Ciphersuites
      5.1.  Ciphersuite Format
      5.2.  BLS12-381 Ciphersuite
@@ -92,6 +91,7 @@ Table of Contents
        A.3.3.  Missing Message Signature
        A.3.4.  Reordered Message Signature
        A.3.5.  Wrong Public Key Signature
+     A.4.  Signature Proof of Knowledge Algorithmic Explanation
    Authors' Addresses
 
 1.  Introduction
@@ -536,7 +536,7 @@ Procedure:
 
    3. for rand_el in (e, s) do
 
-   4.      rand_el = OS2IP(h.read(64)) mod q.
+   4.      rand_el = OS2IP(h.read(xof_no_drawn_of_bytes)) mod q.
 
    5.      if rand_el = 0, go back to step 4
 
@@ -661,61 +661,6 @@ Procedure:
 
 24. return spk
 
-3.3.6.1.  Algorithmic Explanation
-
-   The following section provides an explanation of how the Signature
-   Proof Of Knowledge Generation (SpkGen) works.
-
-   Let the prover be in possession of a BBS signature (A, e, s) with A =
-   B * (1/(e + Sk)) where Sk the signer's secret key and,
-
-   B = P1 + h0 * s + h[1] * msg_1 + ... + h[L] * msg_L
-
-   (without loss of generality we assume that the messages and
-   generators are indexed from 0 to L).  Let (i1,...,iR) be the indexes
-   of generators corresponding to messages the prover wants to disclose
-   and (j1,...,jU) be the indexes corresponding to undisclosed messages
-   (i.e., (j1,...,jU) = [L] \ (i1,...,iR)).  To prove knowledge of a
-   signature on the disclosed messages, work as follows,
-
-   *  Randomize the signature (A, e, s), by taking uniformly random r1,
-      r2 in [1, q-1], and calculate,
-
-      1.  A' = A * r1,
-      2.  Abar = A' * (-e) + B * r1
-      3.  D = B * r1 + H0 * r2.
-
-   Also set,
-
-       4.  r3 = r1 ^ -1 mod q
-       5.  s' = s + r2 * r3.
-
-   The values (A', Abar, d) will be part of the spk and are used to
-   prove possession of a BBS signature, without revealing the signature
-   itself.  Note that; e(A', Pk) = e(Abar, P2) where Pk the signer's
-   public key and P2 the base element in G2 (used to create the signer's
-   Pk, see SkToPk (#sktopk)).  This also serves to bind the spk to the
-   signer's Pk.
-
-   *  Set the following,
-
-      1.  C1 = Abar - D
-      2.  C2 = P1 +  H_i1 * msg_i1 + ... + H_iR * msg_iR
-
-   Create a non-interactive zero-knowledge generalized Schnorr proof of
-   knowledge (nizk) of the values e, r2, r3, s' and msg_j1,...,msg_jU
-   (the undisclosed messages) so that both of the following equalities
-   hold,
-
-    EQ1.  C1 = A' * (-e) - H0 * r2
-    EQ2.  C2 = D * (-r3) + H0 * s' + H_j1 * msg_j1 + ... + H_jU * msg_jU.
-
-   If both EQ1 and EQ2 hold, and e(A', Pk) = e(Abar, P2), an extractor
-   can return a valid BBS signature from the signers Sk, on the
-   disclosed messages.  The spk returned is (A', Abar, d, nizk).  To
-   validate the spk, a verifier checks that e(A', Pk) = e(Abar, P2) and
-   verifies nizk.
-
 3.3.7.  SpkVerify
 
    SpkVerify checks if a signature proof of knowledge is valid given the
@@ -797,7 +742,7 @@ Procedure:
 
 4.    while(generator_i == Identity_G1 or generator_i == P1)
 
-5.        candidate = hash_to_curve_g1(h.read(generator_no_of_bytes), dst)
+5.        candidate = hash_to_curve_g1(h.read(xof_no_drawn_of_bytes), dst)
 
 6.        if candidate not in generators: generator_i = candidate
 
@@ -835,19 +780,24 @@ Procedure:
 
 4.1.  Validating public keys
 
-   All algorithms in Section 2 that operate on points in public keys
-   require first validating those keys.  For the sign, verify and proof
-   schemes, the use of KeyValidate is REQUIRED.
+   It is RECOMMENDED for any operation in Section 3.3 involving public
+   keys that do not have an explicit invocation to the KeyValidate
+   operation Section 3.3.3 documented in their procedure, that this
+   check be performed prior to executing the operation.  An example of
+   where this recommendation applies is the sign Section 3.3.4
+   operation.  An example of where an explicit invocation to the
+   KeyValidate operation Section 3.3.3 is already defined and therefore
+   required is the verify Section 3.3.5 operation.
 
 4.2.  Skipping membership checks
 
    Some existing implementations skip the subgroup_check invocation in
-   Verify (Section 2.8), whose purpose is ensuring that the signature is
+   Verify Section 3.3.5, whose purpose is ensuring that the signature is
    an element of a prime-order subgroup.  This check is REQUIRED of
    conforming implementations, for two reasons.
 
    1.  For most pairing-friendly elliptic curves used in practice, the
-       pairing operation e (Section 1.3) is undefined when its input
+       pairing operation e Section 1.2 is undefined when its input
        points are not in the prime-order subgroups of E1 and E2.  The
        resulting behavior is unpredictable, and may enable forgeries.
 
@@ -876,13 +826,12 @@ Procedure:
    MUST be infeasible to guess and MUST be indistinguishable from
    uniformly random modulo q.
 
-   BBS signatures are nondeterministic, meaning care must be taken
-   against attacks arising from signing with bad randomness, for
-   example, the nonce reuse attack on ECDSA [HDWH12].  It is RECOMMEDNED
-   that the nonces and presentation messages used in this specification
-   are chosen at random from a trusted source of randomness (see
-   "Presentation message selection" section below for additional
-   considerations).
+   BBS proofs (SPK's) are nondeterministic, meaning care must be taken
+   against attacks arising from using bad randomness, for example, the
+   nonce reuse attack on ECDSA [HDWH12].  It is RECOMMENDED that the
+   presentation messages used in this specification contain a nonce
+   chosen at random from a trusted source of randomness, see the
+   Section 4.5 for additional considerations.
 
    BlindSign as discussed in 2.10 uses randomness from two parties so
    care MUST be taken that both sources of randomness are trusted.  If
@@ -914,30 +863,7 @@ Procedure:
    for hash_to_curve.  Some guidance around defining this can be found
    in Section 5.
 
-4.7.  Use of Contexts
-
-   Contexts can be used to separate uses of the protocol between
-   different protocols (which is very hard to reliably do otherwise) and
-   between different uses within the same protocol.  However, the
-   following SHOULD be kept in mind:
-
-   The context SHOULD be a constant string specified by the protocol
-   using it.  It SHOULD NOT incorporate variable elements from the
-   message itself.
-
-   Contexts SHOULD NOT be used opportunistically, as that kind of use is
-   very error prone.  If contexts are used, one SHOULD require all
-   signature schemes available for use in that purpose support contexts.
-
-   Contexts are an extra input, which percolate out of APIs; as such,
-   even if the signature scheme supports contexts, those may not be
-   available for use.  This problem is compounded by the fact that many
-   times the application is not invoking the signing, verification, and
-   proof functions directly but via some other protocol.
-
-   The ZKP protocols use nonces which MUST be different in each context.
-
-4.8.  Choice of underlying curve
+4.7.  Choice of underlying curve
 
    BBS signatures can be implemented on any pairing-friendly curve.
    However care MUST be taken when selecting one that is appropriate,
@@ -946,7 +872,7 @@ Procedure:
    security according to a recent NCC ZCash cryptography review
    [ZCASH-REVIEW].
 
-4.9.  Security of spkGen
+4.8.  Security of spkGen
 
    The BBS proof, as returned by spkGen, is a zero-knowledge proof-of-
    knowledge [CDL16].  This guarantees that no information will be
@@ -995,11 +921,13 @@ Procedure:
       specific per signature).  The ciphersuite MUST define this seed OR
       how to compute it as a pre-cursor operations to any others.
 
-   generator_no_of_bytes  Number of bytes to draw from the XOF when
-      creating generators as per the operation documented in
-      Section 3.3.8.  It is RECOMMENDED this value be set to one greater
-      than ceil(r+k)/8 for the ciphersuite, where r and k are parameters
-      from the underlying pairing friendly curve being used.
+   xof_no_drawn_of_bytes  Number of bytes to draw from the XOF when
+      performing operations such as creating generators as per the
+      operation documented in Section 3.3.8 or computing the e and s
+      components of the signature generated in Section 3.3.4.  It is
+      RECOMMENDED this value be set to one greater than ceil(r+k)/8 for
+      the ciphersuite, where r and k are parameters from the underlying
+      pairing friendly curve being used.
 
 5.2.  BLS12-381 Ciphersuite
 
@@ -1027,7 +955,7 @@ Procedure:
       which is used by the Section 3.3.8 operation to compute the
       required set of message generators.
 
-   generator_no_of_bytes  64
+   xof_no_drawn_of_bytes  64
 
 5.2.1.  Test Vectors
 
@@ -1181,10 +1109,20 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
 
 8.  Informative References
 
+   [ADR02]    An, J. H., Dodis, Y., and T. Rabin, "On the Security of
+              Joint Signature and Encryption", pages 83-107, April 2002,
+              <https://doi.org/10.1007/3-540-46035-7_6>.
+
    [CDL16]    Camenisch, J., Drijvers, M., and A. Lehmann, "Anonymous
               Attestation Using the Strong Diffie Hellman Assumption
               Revisited", Springer, Cham, 2016,
               <https://eprint.iacr.org/2016/663.pdf>.
+
+   [HDWH12]   Heninger, N., Durumeric, Z., Wustrow, E., and J.A.
+              Halderman, "Mining your Ps and Qs: Detection of widespread
+              weak keys in network devices", pages 205-220, August 2012,
+              <https://www.usenix.org/system/files/conference/
+              usenixsecurity12/sec12-final228.pdf>.
 
    [I-D.irtf-cfrg-bls-signature]
               Boneh, D., Gorbunov, S., Wahby, R. S., Wee, H., and Z.
@@ -1506,6 +1444,61 @@ A.3.5.  Wrong Public Key Signature
    Along with the PK value as defined in Section 5.2.1.2 as inputs into
    the Verify operation should fail signature validation due to public
    key used to verify is in-correct
+
+A.4.  Signature Proof of Knowledge Algorithmic Explanation
+
+   The following section provides an explanation of how the Signature
+   Proof Of Knowledge Generation (SpkGen) works.
+
+   Let the prover be in possession of a BBS signature (A, e, s) with A =
+   B * (1/(e + Sk)) where Sk the signer's secret key and,
+
+   B = P1 + h0 * s + h[1] * msg_1 + ... + h[L] * msg_L
+
+   (without loss of generality we assume that the messages and
+   generators are indexed from 0 to L).  Let (i1,...,iR) be the indexes
+   of generators corresponding to messages the prover wants to disclose
+   and (j1,...,jU) be the indexes corresponding to undisclosed messages
+   (i.e., (j1,...,jU) = [L] \ (i1,...,iR)).  To prove knowledge of a
+   signature on the disclosed messages, work as follows,
+
+   *  Randomize the signature (A, e, s), by taking uniformly random r1,
+      r2 in [1, q-1], and calculate,
+
+      1.  A' = A * r1,
+      2.  Abar = A' * (-e) + B * r1
+      3.  D = B * r1 + H0 * r2.
+
+   Also set,
+
+       4.  r3 = r1 ^ -1 mod q
+       5.  s' = s + r2 * r3.
+
+   The values (A', Abar, d) will be part of the spk and are used to
+   prove possession of a BBS signature, without revealing the signature
+   itself.  Note that; e(A', Pk) = e(Abar, P2) where Pk the signer's
+   public key and P2 the base element in G2 (used to create the signer's
+   Pk, see SkToPk (#sktopk)).  This also serves to bind the spk to the
+   signer's Pk.
+
+   *  Set the following,
+
+      1.  C1 = Abar - D
+      2.  C2 = P1 +  H_i1 * msg_i1 + ... + H_iR * msg_iR
+
+   Create a non-interactive zero-knowledge generalized Schnorr proof of
+   knowledge (nizk) of the values e, r2, r3, s' and msg_j1,...,msg_jU
+   (the undisclosed messages) so that both of the following equalities
+   hold,
+
+    EQ1.  C1 = A' * (-e) - H0 * r2
+    EQ2.  C2 = D * (-r3) + H0 * s' + H_j1 * msg_j1 + ... + H_jU * msg_jU.
+
+   If both EQ1 and EQ2 hold, and e(A', Pk) = e(Abar, P2), an extractor
+   can return a valid BBS signature from the signers Sk, on the
+   disclosed messages.  The spk returned is (A', Abar, d, nizk).  To
+   validate the spk, a verifier checks that e(A', Pk) = e(Abar, P2) and
+   verifies nizk.
 
 Authors' Addresses
 
