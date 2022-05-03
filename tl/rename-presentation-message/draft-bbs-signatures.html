@@ -12,10 +12,10 @@
 <meta content="
        BBS is a digital signature scheme categorized as a form of short group signature that supports several novel properties. Notably, the scheme supports signing multiple messages whilst producing a single output digital signature. Through this capability, the possessor of a signature is able to derive proofs that selectively disclose subsets of the originally signed set of messages, whilst preserving the verifiable authenticity and integrity of the messages. Furthermore, these derived proofs are said to be zero-knowledge in nature as they do not reveal the underlying signature; instead, what they reveal is a proof of knowledge of the undisclosed signature. 
     " name="description">
-<meta content="xml2rfc 3.12.4" name="generator">
+<meta content="xml2rfc 3.12.5" name="generator">
 <meta content="draft-bbs-signatures" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.4
+  xml2rfc 3.12.5
     Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -1768,7 +1768,7 @@ Procedure:
           <h4 id="name-spkgen">
 <a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-spkgen" class="section-name selfRef">SpkGen</a>
           </h4>
-<p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation header.<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
 <pre>spk = SpkGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, ph)

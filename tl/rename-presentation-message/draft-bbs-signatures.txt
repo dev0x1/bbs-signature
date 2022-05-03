@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                              2 May 2022
+                                                              3 May 2022
 
 
                         The BBS Signature Scheme
@@ -590,7 +590,8 @@ Procedure:
    zero-knowledge proof of knowledge of a signature while selectively
    disclosing messages from a signature given a vector of messages, a
    vector of indices of the revealed messages, the signer's public key,
-   and a presentation header.
+   and a presentation header (see Presentation header selection
+   (#presentation-header-selection) for more details).
 
    If an application chooses to pass the indexes of the generators
    instead, then it will also need to pass the indexes of the generators
