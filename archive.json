@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-26T00:09:08.546372+00:00",
+  "timestamp": "2022-05-03T00:09:11.032285+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3445,7 +3445,7 @@
       ],
       "body": "With the changes to how we handle the message generators the procedure as defined in this section doesn't make sense now as they are no longer apart of the public key, therefore this should be updated to reflect that.",
       "createdAt": "2022-04-21T23:13:43Z",
-      "updatedAt": "2022-04-25T15:59:51Z",
+      "updatedAt": "2022-05-02T11:04:49Z",
       "closedAt": null,
       "comments": [
         {
@@ -3489,6 +3489,13 @@
           "body": "For context an interesting vulnerability was found in a Java based implementation of ECDSA recently where public key validation was being skipped https://neilmadden.blog/2022/04/19/psychic-signatures-in-java/",
           "createdAt": "2022-04-25T15:59:51Z",
           "updatedAt": "2022-04-25T15:59:51Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the context. In that vulnerability the issue seems to be that key-validation was skiped in verify. A mallicius prover can just skip key validation either way. If we consider a malicious issuer and an honest prover senario though, then a best strategy could be for the prover to veriy the entire signature (which would also call KeyValidate) instead.\r\n\r\nThat said, i don't see any practical application in this security model (dishonest issuer, honest prover), so i would sugest removing keyValidate from spkGen and adding a security consideration to cover all the caeses after.",
+          "createdAt": "2022-05-02T11:04:49Z",
+          "updatedAt": "2022-05-02T11:04:49Z"
         }
       ]
     },
@@ -3502,13 +3509,22 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
+        "ready-for-pr",
         "core"
       ],
       "body": "With the introduction of the header + message terminology in #95 the question for me remains whether we call the data structure currently known as presentation message that or presentation header. To me it makes more sense to call this a header and reserve the term message for the selectively disclosable payloads that are protected by the signature. We then have two types of headers 1) signature header set by the issuer/signer and required to be revealed in all proofs and 2) presentation header set by the holder/prover.",
       "createdAt": "2022-04-21T23:43:11Z",
-      "updatedAt": "2022-04-23T19:52:49Z",
+      "updatedAt": "2022-05-02T21:27:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed on May 2nd WG call, in general there appeared to be no strong objection to tweaking the language in this direction so I will follow up with a PR",
+          "createdAt": "2022-05-02T21:27:44Z",
+          "updatedAt": "2022-05-02T21:27:44Z"
+        }
+      ]
     },
     {
       "number": 111,
@@ -3525,6 +3541,172 @@
       "body": "Some of the security considerations documented in the spec were originally copied from the [bls-signature-draft](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04#section-5.2) and should now be re-reviewed for their applicability.",
       "createdAt": "2022-04-23T03:41:10Z",
       "updatedAt": "2022-04-23T03:41:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 113,
+      "id": "I_kwDOF8lax85I24sb",
+      "title": "Fix inconsistency in array style arguements supplied to operations API",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/113",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "Currently sign and verify function signatures look like the following\r\n\r\n```\r\nsignature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L))\r\n```\r\n\r\nand\r\n\r\n```\r\nresult = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature)\r\n```\r\n\r\nWhereas the spkgen operations function signature looks like\r\n\r\n```\r\nspk = SpkGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, pm)\r\n```\r\n\r\nwhere RevealedIndexes is a vector/array.\r\n\r\nWe need to either change the RevealedIndexes to be more like the the destructed syntax for messages and generators e.g `(msg_1,..., msg_L), (H_1,..., H_L)` or convert all array style arguments to inputs like the current definition for RevealedIndexes.",
+      "createdAt": "2022-05-02T00:35:51Z",
+      "updatedAt": "2022-05-02T10:20:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "My vote is for the second option, i.e., convert `RevealedIndexes` to something like `(i1, i2, ..., iR)`. My reasoning is that otherwise, we will have to add many steps in each algorithm to convert each input to its destructed form (i.e., `1.  (msg_1, ..., msg_L) = messages`, `2.  (H_1, ..., H_L) = generators` etc.) that may hurt readability.\r\n\r\nOn the other hand, i feel like the term RevealedIndexes is very easy to understand, so although not internally consistent, leaving the inputs as they are (and sacrificing consistency) may be the best tradeoff for readability. ",
+          "createdAt": "2022-05-02T10:19:13Z",
+          "updatedAt": "2022-05-02T10:20:12Z"
+        }
+      ]
+    },
+    {
+      "number": 114,
+      "id": "I_kwDOF8lax85I25iP",
+      "title": "Improve Terminology and Syntax Consistency",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/114",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "Related to #25 currently the spec has a mix of casing for operation names, inputs, parameters and outputs this should be made consistent including whether short or more descriptive names are used.\r\n\r\nSuggested rules for inputs outputs and parameters \r\n\r\n- use snake case\r\n- use fully qualified names e.g msg -> message PK -> public_key\r\n\r\nSuggested rules for function naming\r\n\r\n- use snake case e.g SpkGen => spk_gen",
+      "createdAt": "2022-05-02T00:44:16Z",
+      "updatedAt": "2022-05-02T18:53:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I'd also like to clarify that I think the section names should shift to using fully qualified names e.g KeyGen -> Key Generation where the actual function name would be `key_gen`",
+          "createdAt": "2022-05-02T00:47:44Z",
+          "updatedAt": "2022-05-02T00:47:44Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "alternatively if we think names will become to large even with just applying the rule to inputs outputs and parameters, then I'm happy to stick with brief names e.g msg",
+          "createdAt": "2022-05-02T00:48:38Z",
+          "updatedAt": "2022-05-02T00:48:38Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Raised by @BasileiosKal on the call the proposal to rename SpkGen to ProofGen or something similar because the proof is not just a signature proof of knowledge.",
+          "createdAt": "2022-05-02T18:53:26Z",
+          "updatedAt": "2022-05-02T18:53:26Z"
+        }
+      ]
+    },
+    {
+      "number": 117,
+      "id": "I_kwDOF8lax85I3Uae",
+      "title": "Consider making \"messages\" and therefore \"message generators\" optional to all operation APIs",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/117",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "Now we have introduced the concept of an optional header in #95 I want to consider whether we allow for constructions of BBS signatures which do not make use of the \"selective disclosure\" feature, instead just use BBS as an ordinary group signature. I believe there are several interesting usecases such as privacy preserving access tokens or hardware attestations that would likely use BBS in this form.\r\n\r\nIn short my proposal is for both the header and messages (along with message generators) to be optional. Meaning a signer could create a signature that has neither, either or both a header and array of messages.",
+      "createdAt": "2022-05-02T04:18:15Z",
+      "updatedAt": "2022-05-02T23:57:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1. In this case, the issuer will just sign their public key and i dont really see any issues with that. We can specify that L >= 0 (where L the number of messages that can be selectively disclosed).",
+          "createdAt": "2022-05-02T10:39:13Z",
+          "updatedAt": "2022-05-02T10:39:13Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "One thing to check is in making this change whether there is anything different in the SpkGen or SpkVerify operations?",
+          "createdAt": "2022-05-02T23:57:12Z",
+          "updatedAt": "2022-05-02T23:57:12Z"
+        }
+      ]
+    },
+    {
+      "number": 118,
+      "id": "I_kwDOF8lax85I5N1W",
+      "title": "Ciphersuits format",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/118",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "The ciphersuites definition currently used in the spec needs to be updated.\r\n1. There are terms that must be defined by most likely referencing their definition to some other spec. Examples include the base points of G1 and G2, the prime order p of those groups the security level of the ciphersuite (`k` in PR #116). Are there any other definitions we should include??\r\n2. A specific format for the ID of each ciphersuite must also be defined. Something like,\r\n```\r\nCipher_ID = \"BBS_\" || H2C_SUITE_ID || GEN_SC || HASH_OUTPUT_LEN || _\"\r\n```\r\nwhere `GEN_SC` will be used to distinguish between the scopes of the generators seed (i.e., global or issuer specific) and `HASH_OUTPUT_LEN` between the number of bytes drawn for each XOF (since the consensus seems to be that we will parameterize that value)??",
+      "createdAt": "2022-05-02T14:27:27Z",
+      "updatedAt": "2022-05-02T18:36:36Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 119,
+      "id": "I_kwDOF8lax85I6dIS",
+      "title": "Reference/Spec Implementation Language/Framework Selection",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/119",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "As resolved earlier this year multiple WG members expressed support for there to be a prototypical style implementation housed within this repo to test the implementability of the spec.\r\n\r\nThere are multiple possible languages/frameworks we could use, below is a bit of a list including key libraries we could use\r\n\r\n- Rust using https://docs.rs/bls12_381/latest/bls12_381/\r\n- Python using https://github.com/zebra-lucky/python-bls\r\n- Javascript using https://github.com/paulmillr/noble-bls12-381",
+      "createdAt": "2022-05-02T19:51:23Z",
+      "updatedAt": "2022-05-02T23:09:08Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ok, time to stop procrastinating and start carving out time for this. I'll volunteer to implement a JavaScript one, since that's my most recently used language. I'll start something in my own repo; we can discuss next where that should go.",
+          "createdAt": "2022-05-02T22:38:55Z",
+          "updatedAt": "2022-05-02T22:39:46Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks @christianpaquin really appreciate you taking the pen here!",
+          "createdAt": "2022-05-02T23:09:07Z",
+          "updatedAt": "2022-05-02T23:09:07Z"
+        }
+      ]
+    },
+    {
+      "number": 121,
+      "id": "I_kwDOF8lax85I7MCT",
+      "title": "Rename Spk to Proof",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/121",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "As raised by @BasileiosKal on the WG call this morning currently we refer to the proofs in the spec as the Spk when in reality the proofs generated are more complex then just a signature proof of knowledge (SPK), therefore renaming SpkGen and SpkVerify to me to ProofGen and ProofVerify would be more accurate.",
+      "createdAt": "2022-05-02T23:55:47Z",
+      "updatedAt": "2022-05-02T23:56:01Z",
       "closedAt": null,
       "comments": []
     }
@@ -9462,13 +9644,13 @@
       "labels": [],
       "body": "Closes Issues #78 and #85 \r\n\r\n### Changes:\r\n1. Adds the number of the revealed messages, the generators, the public key and some ciphersuite specific information to a signature domain separation tag (a signed -always revealed- message).\r\n2. Switches notation from H0 to H_s, as discussed in the WG call\r\n\r\n### Note:\r\nThis PR leaves the cipher suite specific info as optional for the `sig_dst`. The reason is that when it comes to the generators, the total number of messages etc., there are real risks for not adding them to the `sig_dst`.\r\n\r\nThe last one (total number of messages) is not documented in an issue to my knowledge, but I think it is well understood that it is dangerous to not include it. For example, the prover could reveal an additional \u201chidden\u201d attribute by calculating `C1_new = C1 + H_j(U+1) * m~_j(U+1)` and `m^_j(U+1) = m~_j(U+1)` and have the proof be validated ([reproduction](https://github.com/BasileiosKal/dif-bbs-signature-dst-pr/blob/main/src/main.rs)). \r\n\r\n(Including the generators also solves this issue, so we could potentially only include the generators and not the total number of messages. That said, IMO it would be better to be more careful since it does not hurt performance or complexity)\r\n\r\nIn the case of the ciphersuite info though, IMO its good security practice to include it but not necessary?? I\u2019m more than happy to update the pr and make the ciphersuite info mandatory, but to me it seems that the separation between ciphersuites could also happen elsewhere more naturally (in hash-2-curve for example, similarly to what the bls draft does)",
       "createdAt": "2022-04-09T21:42:47Z",
-      "updatedAt": "2022-04-21T18:37:53Z",
+      "updatedAt": "2022-05-02T21:01:01Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
+      "baseRefOid": "7cd8ad33cb92e37cff7bbd077e87cbc62ac17549",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "signature-dst",
-      "headRefOid": "c4a2892cd7df9db4b4db32406abcd406a4a329d9",
+      "headRefOid": "6a9a1f2e57dbcb3bc8847ef996e0489387ef3d60",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10634,6 +10816,99 @@
           "createdAt": "2022-04-21T18:37:53Z",
           "updatedAt": "2022-04-21T18:37:53Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845JKh4",
+          "commit": {
+            "abbreviatedOid": "ef659fb"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T04:28:41Z",
+          "updatedAt": "2022-05-02T04:28:41Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "I like doing element access via the square bracket syntax as you have done here, but is this not in consistent with line 434? I'd prefer we do it this way but it needs to be the same throughout the doc",
+              "createdAt": "2022-05-02T04:28:41Z",
+              "updatedAt": "2022-05-02T04:28:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845JKmy",
+          "commit": {
+            "abbreviatedOid": "ef659fb"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T04:29:47Z",
+          "updatedAt": "2022-05-02T04:29:48Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "```suggestion\r\n          information. If not supplied, it defaults to an empty string.\r\n```",
+              "createdAt": "2022-05-02T04:29:48Z",
+              "updatedAt": "2022-05-02T04:29:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845K5Wy",
+          "commit": {
+            "abbreviatedOid": "ef659fb"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T14:41:03Z",
+          "updatedAt": "2022-05-02T14:41:03Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "Updated. Thanks!",
+              "createdAt": "2022-05-02T14:41:03Z",
+              "updatedAt": "2022-05-02T14:41:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845L2ic",
+          "commit": {
+            "abbreviatedOid": "12744d1"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T18:29:48Z",
+          "updatedAt": "2022-05-02T18:29:48Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "```suggestion\r\n5. h = XOF(SK  || domain || msg_1 || ... || msg_L)\r\n```",
+              "createdAt": "2022-05-02T18:29:48Z",
+              "updatedAt": "2022-05-02T18:29:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845Mby3",
+          "commit": {
+            "abbreviatedOid": "6a9a1f2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-02T21:01:01Z",
+          "updatedAt": "2022-05-02T21:01:01Z",
+          "comments": []
         }
       ]
     },
@@ -11012,7 +11287,7 @@
       "labels": [],
       "body": "This PR introduces a `hash_to_scalar` function as discussed in the WG call. The goal is for the function to replace some of the hashing to scalars happening internally in the operations, i.e., for the `e`, `s` calculation in `sign`, in the random elements in `spkGen` and potentially for the challenge value and the `sig_dst` if we decide to use that (see PR #95). The function is not inserted yet in those operations to not block #95. If that is resolved first i will update this PR.\r\n\r\n### Note:\r\n`hash_to_field` is removed with this PR (from `MapMessageToScalarAsHash`) and is replaced with `hash_to_scalar`. Note that this will also close issue #100 since `hash_to_scalar` checks if an element is 0. My reasoning is that `hash-to-scalar` serves the same functionality while been able to be used for the cases detailed above, without needing to worry about dst's etc. Note that aside from the use of dst, `hash-to-scalar` is almost exactly `hash-to-field` using `expand-message-xof` and with `m` (the fields extension degree) = 1. \r\n\r\nAlso the dst is not removed from `MapMessageToScalarAsHash` (where it is useful). A note is also added stating that people can use `hash-to-field` if they want. However, i feel that the current construction is more flexible to serve the needs of the spec, but really keen to discuss alternatives and other proposals.",
       "createdAt": "2022-04-13T22:19:20Z",
-      "updatedAt": "2022-04-21T22:03:41Z",
+      "updatedAt": "2022-05-02T21:02:38Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "52db5c7a02f5b8ab82816c923617ed16f95641a9",
@@ -11147,6 +11422,19 @@
               "updatedAt": "2022-04-21T22:03:41Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845McJB",
+          "commit": {
+            "abbreviatedOid": "dd96d20"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-02T21:02:38Z",
+          "updatedAt": "2022-05-02T21:02:38Z",
+          "comments": []
         }
       ]
     },
@@ -11662,20 +11950,526 @@
       "id": "PR_kwDOF8lax842qh-q",
       "title": "More editorial tweaks",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/112",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "- Minor cleanup of language / syntax\r\n- Fixed some broken references\r\n- Shifted the algorithmic explanation to the appendix",
       "createdAt": "2022-04-23T03:46:37Z",
-      "updatedAt": "2022-04-23T03:46:37Z",
+      "updatedAt": "2022-05-02T19:57:55Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "9d7bb7d050f7751e50c137707512c05fdb5a713e",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/editorial-tweaks",
-      "headRefOid": "91307c6450eae8d4903233cd2e57d814cab29623",
+      "headRefOid": "0ff10a86d28bd1df659761e0355966d99a90f168",
+      "closedAt": "2022-05-02T19:57:29Z",
+      "mergedAt": "2022-05-02T19:57:29Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "36b40005733294e344e1724688616df51e43ef0c"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "- Removed the use of context security consideration because it is addressed in other considerations and context is an undefined term in the spec\r\n- tweaked the language around the recommendations for KeyValidation.",
+          "createdAt": "2022-05-02T04:45:19Z",
+          "updatedAt": "2022-05-02T04:45:19Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed on 2nd May WG call, resolved to merge, multiple approvals",
+          "createdAt": "2022-05-02T19:57:25Z",
+          "updatedAt": "2022-05-02T19:57:25Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845KWb3",
+          "commit": {
+            "abbreviatedOid": "f1384f9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T12:37:41Z",
+          "updatedAt": "2022-05-02T12:43:42Z",
+          "comments": [
+            {
+              "originalPosition": 84,
+              "body": "```suggestion\r\nBBS proofs (SPK's) are nondeterministic, meaning care must be taken against attacks arising from using bad randomness, for example, the nonce reuse attack on ECDSA [@HDWH12]. It is RECOMMENDED that the presentation messages used in this specification contain a nonce chosen at random from a trusted source of randomness, see the (#presentation-message-selection) for additional considerations.\r\n```\r\n\r\nThis may be a little confusing. Signatures as described in the spec are (or can be) deterministic. Also, the presentation message appears in spkGen and not in sign. For that i suggest making the consideration about the BBS+ proofs instead of the signatures.\r\n\r\nThe term nonce is also not used in the spec, but the intent is for the nonce to be contained in the presentation message. I think the suggested change reflects that.",
+              "createdAt": "2022-05-02T12:37:41Z",
+              "updatedAt": "2022-05-02T12:43:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845L18B",
+          "commit": {
+            "abbreviatedOid": "0ff10a8"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-02T18:27:17Z",
+          "updatedAt": "2022-05-02T18:27:17Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845MB9t",
+          "commit": {
+            "abbreviatedOid": "0ff10a8"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-02T19:17:00Z",
+          "updatedAt": "2022-05-02T19:17:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 115,
+      "id": "PR_kwDOF8lax843JQXi",
+      "title": "Update KeyValidate operation",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/115",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #109 ",
+      "createdAt": "2022-05-02T03:50:11Z",
+      "updatedAt": "2022-05-02T21:59:49Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "7cd8ad33cb92e37cff7bbd077e87cbc62ac17549",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/update-key-validate",
+      "headRefOid": "2ebef0c101255810217b1447344cfb1de1a09f5e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Best to merge #95 ahead of this PR",
+          "createdAt": "2022-05-02T03:51:27Z",
+          "updatedAt": "2022-05-02T03:51:27Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "@andrewwhitehead @BasileiosKal ",
+          "createdAt": "2022-05-02T03:51:59Z",
+          "updatedAt": "2022-05-02T03:51:59Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> As i https://github.com/decentralized-identity/bbs-signature/issues/109#issuecomment-1114727062 in issue https://github.com/decentralized-identity/bbs-signature/issues/109, I would just remove keyValidate from spkGen (which is also covered by PR https://github.com/decentralized-identity/bbs-signature/pull/112). That said, not really very strong opinionated about it, so I\u2019m fine with what the WG decides.\r\n\r\nOk shall we also remove the sub-group check for A and then add it as a security consideration that signature verification should be performed prior to SpkGen?",
+          "createdAt": "2022-05-02T21:41:28Z",
+          "updatedAt": "2022-05-02T21:41:28Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": " >Ok shall we also remove the sub-group check for A and then add it as a security consideration that signature verification should be performed prior to SpkGen?\r\n \r\nYeap that makes sense to me. For now, at least. Something like @andrewwhitehead's proposal in the WG call may change this approach so i think it would be fine to merge the PR as is also. Since the goal was to update KeyValidate, i think this covers it.",
+          "createdAt": "2022-05-02T21:59:49Z",
+          "updatedAt": "2022-05-02T21:59:49Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845KGyD",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "As i [commended](https://github.com/decentralized-identity/bbs-signature/issues/109#issuecomment-1114727062) in issue #109, I would just remove keyValidate from spkGen (which is also covered by PR #112). That said, not really very strong opiniated about it, so I\u2019m fine with what the WG decides.",
+          "createdAt": "2022-05-02T11:14:00Z",
+          "updatedAt": "2022-05-02T14:32:31Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845K3gk",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T14:35:36Z",
+          "updatedAt": "2022-05-02T14:35:36Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "We need to add the key validation check to verify. The Point at infinity will allow any signature to verify. `subgroup_check` won't catch this since the point at infinity is in the subgroup. Should I submit a fix to this or do you want to change it?",
+              "createdAt": "2022-05-02T14:35:36Z",
+              "updatedAt": "2022-05-02T14:35:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845K3zI",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T14:36:29Z",
+          "updatedAt": "2022-05-02T14:36:29Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "We need to add checks that `e` and `s` are not zero to avoid creating a signature at infinity which will validate against any public key. Should I create another PR to this one or do you want to fix it?",
+              "createdAt": "2022-05-02T14:36:29Z",
+              "updatedAt": "2022-05-02T14:36:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845K4X4",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T14:38:22Z",
+          "updatedAt": "2022-05-02T14:38:22Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "I'm noticing this everywhere but curious about the best approach. All points and scalars that will be used in pairing operations should be checked in verify functions for zero and infinity to avoid returning true for invalid signatures when this is the case. How should we add this method check?",
+              "createdAt": "2022-05-02T14:38:22Z",
+              "updatedAt": "2022-05-02T14:38:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845LB88",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T15:10:01Z",
+          "updatedAt": "2022-05-02T15:10:01Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "I don't think this PR removes KeyValidate from verify??",
+              "createdAt": "2022-05-02T15:10:01Z",
+              "updatedAt": "2022-05-02T15:10:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845LB_k",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T15:10:09Z",
+          "updatedAt": "2022-05-02T15:10:10Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Don't really see how the signature validates with any PK even if e, s are 0. The signature will just become P1* SK. You will still need the correct PK to validate it?? \r\n\r\nThat said, strong +1 for adding the checks for e and s to be non 0 in validate. ",
+              "createdAt": "2022-05-02T15:10:10Z",
+              "updatedAt": "2022-05-02T15:10:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845LCAJ",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T15:10:11Z",
+          "updatedAt": "2022-05-02T15:10:12Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "That's a good point. So that means A, B, A' and Abar then (since W is already checked for 0 and infinity)?? Maybe a security consideration or an addition to the considerations section describing that all elements passed to the pairings must be checked accordingly (similar to the hash inputs lengths)??",
+              "createdAt": "2022-05-02T15:10:12Z",
+              "updatedAt": "2022-05-02T15:10:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845LywS",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T18:14:03Z",
+          "updatedAt": "2022-05-02T18:14:03Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Swap so we do the subgroup_check before checking the public key does not equal Identity_G2",
+              "createdAt": "2022-05-02T18:14:03Z",
+              "updatedAt": "2022-05-02T18:14:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845L2-j",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T18:31:39Z",
+          "updatedAt": "2022-05-02T18:31:40Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "I'm not saying it does. I'm saying we should add it.",
+              "createdAt": "2022-05-02T18:31:40Z",
+              "updatedAt": "2022-05-02T18:31:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845L3fr",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T18:33:39Z",
+          "updatedAt": "2022-05-02T18:33:40Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "That's a good start. For SpkVerify this means A', Abar, and D and scalars. For verify this means A and scalars. The public key should always be checked.",
+              "createdAt": "2022-05-02T18:33:39Z",
+              "updatedAt": "2022-05-02T18:33:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845MOXI",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T20:01:59Z",
+          "updatedAt": "2022-05-02T20:01:59Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "But the function already has it?",
+              "createdAt": "2022-05-02T20:01:59Z",
+              "updatedAt": "2022-05-02T20:02:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845MjH0",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T21:37:36Z",
+          "updatedAt": "2022-05-02T21:37:36Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Addressed",
+              "createdAt": "2022-05-02T21:37:36Z",
+              "updatedAt": "2022-05-02T21:37:36Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 116,
+      "id": "PR_kwDOF8lax843JSvR",
+      "title": "Parameterize the drawn bytes for generator creation",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/116",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #94, note this is a first pass at the PR, please check the wording particularly around the parameters r and k. Also is there ever a case where the bytes drawn from the XOF for generator creation would be different to the bytes drawn to calculate the e and s components of the signature in the [sign operation](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-sign) because if not we could generalize/share this parameter.\r\n\r\nAlso note I think #101 needs to be merged ahead of this\r\n\r\n",
+      "createdAt": "2022-05-02T04:11:37Z",
+      "updatedAt": "2022-05-02T22:02:43Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "36b40005733294e344e1724688616df51e43ef0c",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/parameterize-drawn-bytes",
+      "headRefOid": "9863fb9336d32f7c43d7561314d38536a4fa5348",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that the parameter could be shared. The collision resistance security of shake goes up to a certain level either way, so it will be no advantage drawing a larger number of bytes when creating the generators either way (e.g., more than 64 for shake256 or 32 for shake128) even if you need a lot of generators. In general, you would need 2^256 generators to have around 40% chance of a collision, so the danger is practically non-existent IMO.",
+          "createdAt": "2022-05-02T14:02:13Z",
+          "updatedAt": "2022-05-02T14:02:13Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed on WG call 2nd of May, will update to have a common variable that covers drawing bytes from XOF for e and s generation case",
+          "createdAt": "2022-05-02T18:09:16Z",
+          "updatedAt": "2022-05-02T18:09:16Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845Kti4",
+          "commit": {
+            "abbreviatedOid": "652107e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T14:03:08Z",
+          "updatedAt": "2022-05-02T14:31:56Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\n: Number of bytes to draw from the XOF when creating generators as per the operation documented in (#creategenerators). It is RECOMMENDED this value be set to one greater than `ceil(log2(p)+k)/8` for the ciphersuite, where `p` and `k` are parameters from the underlying pairing friendly curve being used.\r\n```\r\n\r\nNo need to introduce a new parameter (r) IMO.",
+              "createdAt": "2022-05-02T14:03:08Z",
+              "updatedAt": "2022-05-02T14:31:56Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\n- generator_no_of_bytes\r\n```",
+              "createdAt": "2022-05-02T14:06:10Z",
+              "updatedAt": "2022-05-02T14:31:56Z"
+            },
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\n: Number of bytes to draw from the XOF when creating generators as per the operation documented in (#creategenerators). It is RECOMMENDED this value be set to one greater than `ceil(r+k)/8` for the ciphersuite, where `p` the prime characteristic of the G1 and G2 subgroups and `k` the targeted security level (in bits) of the ciphersuite. \r\n```\r\nSince we don't describe `p` and `k` anywhere else (they are defined in the ciphersuites we reference, however this must be fixed to be clearer, opened issue #118 for that) added here a suggestion for quick explanation of what they are. This may be nice to have even if #118 is closed, since those parameters will most likely only be defined as references.",
+              "createdAt": "2022-05-02T14:30:42Z",
+              "updatedAt": "2022-05-02T14:31:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845LssY",
+          "commit": {
+            "abbreviatedOid": "b3fda95"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T17:51:13Z",
+          "updatedAt": "2022-05-02T17:51:14Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n- generator_no_of_bytes\r\n: Number of bytes to draw from the XOF when creating generators as per the operation documented in (#creategenerators). It is RECOMMENDED this value be set to one greater than `ceil(r+k)/8` for the ciphersuite, where `p` the prime characteristic of the G1 and G2 subgroups and `k` the targeted security level (in bits) of the ciphersuite.\r\n```",
+              "createdAt": "2022-05-02T17:51:14Z",
+              "updatedAt": "2022-05-02T17:51:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845Lsy5",
+          "commit": {
+            "abbreviatedOid": "d4128c6"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-02T17:51:38Z",
+          "updatedAt": "2022-05-02T17:51:39Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\n: Number of bytes to draw from the XOF when creating generators as per the operation documented in (#creategenerators). It is RECOMMENDED this value be set to one greater than `ceil(r+k)/8` for the ciphersuite, where `p` the prime characteristic of the G1 and G2 subgroups and `k` the targeted security level (in bits) of the ciphersuite.\r\n\r\n```",
+              "createdAt": "2022-05-02T17:51:39Z",
+              "updatedAt": "2022-05-02T17:51:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845MnYa",
+          "commit": {
+            "abbreviatedOid": "9863fb9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-05-02T22:02:43Z",
+          "updatedAt": "2022-05-02T22:02:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 120,
+      "id": "PR_kwDOF8lax843Mq0i",
+      "title": "Rename presentation message to presentation header",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/120",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #110 ",
+      "createdAt": "2022-05-02T23:48:17Z",
+      "updatedAt": "2022-05-02T23:48:18Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "36b40005733294e344e1724688616df51e43ef0c",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/rename-presentation-message",
+      "headRefOid": "2b9f6e9343f350b5e7f0bfecd28a8cb62f54501d",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
