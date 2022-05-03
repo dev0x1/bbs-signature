@@ -1349,27 +1349,23 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.25">presentation_message (pm)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A message generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A message generated and bound to the context of a specific proof.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">spk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">Zero-Knowledge Signature Proof of Knowledge.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.29">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.30">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
+<dt id="section-1.1-2.29">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.30">The domain separation tag.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.31">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.32">The domain separation tag.<a href="#section-1.1-2.32" class="pilcrow">¶</a>
+<dt id="section-1.1-2.31">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.32" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.33">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.34" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-1.1-2.35">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.36">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.36" class="pilcrow">¶</a>
+<dt id="section-1.1-2.33">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.34" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1771,7 +1767,7 @@ Procedure:
 <p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation message.<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
-<pre>spk = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, pm)
+<pre>proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, pm)
 
 Inputs:
 
@@ -1784,7 +1780,7 @@ Inputs:
 
 Outputs:
 
-- spk, octet string
+- proof, octet string
 
 Procedure:
 
@@ -1832,9 +1828,9 @@ Procedure:
 
 22. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
 
-23. spk = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+23. proof = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
 
-24. return spk
+24. return proof
 </pre><a href="#section-3.3.6-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1846,11 +1842,11 @@ Procedure:
           </h4>
 <p id="section-3.3.7-1">ProofVerify checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation message used in ProofGen.<a href="#section-3.3.7-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.7-2">
-<pre>result = ProofVerify(spk, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, pm)
+<pre>result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, pm)
 
 Inputs:
 
-- spk, octet string.
+- proof, octet string.
 - PK, octet string in output form from SkToPk.
 - msg_i1,..., msg_iR, octet strings. The revealed messages in input to ProofGen.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
@@ -1869,7 +1865,7 @@ Procedure:
 
 3. (j1, j2, ..., jU) = [L]\RevealedIndexes
 
-4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = spk
+4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = proof
 
 5. C1 = (Abar - D) * c + A' * e^ + H0 * r2^
 
@@ -2012,7 +2008,7 @@ Procedure:
         </h3>
 <p id="section-4.4-1">The IKM input to KeyGen MUST be infeasible to guess and MUST be kept secret. One possibility is to generate IKM from a trusted source of randomness.  Guidelines on constructing such a source are outside the scope of this document.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">Secret keys MAY be generated using other methods; in this case they MUST be infeasible to guess and MUST be indistinguishable from uniformly random modulo q.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
-<p id="section-4.4-3">BBS proofs (SPK's) are nondeterministic, meaning care must be taken against attacks arising from using bad randomness, for example, the nonce reuse attack on ECDSA <span>[<a href="#HDWH12" class="xref">HDWH12</a>]</span>. It is RECOMMENDED that the presentation messages used in this specification contain a nonce chosen at random from a trusted source of randomness, see the <a href="#presentation-message-selection" class="xref">Section 4.5</a> for additional considerations.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">BBS proofs are nondeterministic, meaning care must be taken against attacks arising from using bad randomness, for example, the nonce reuse attack on ECDSA <span>[<a href="#HDWH12" class="xref">HDWH12</a>]</span>. It is RECOMMENDED that the presentation messages used in this specification contain a nonce chosen at random from a trusted source of randomness, see the <a href="#presentation-message-selection" class="xref">Section 4.5</a> for additional considerations.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">BlindSign as discussed in 2.10 uses randomness from two parties so care MUST be taken that both sources of randomness are trusted. If one party uses weak randomness, it could compromise the signature.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 <p id="section-4.4-5">When a trusted source of randomness is used, signatures and proofs are much harder to forge or break due to the use of multiple nonces.<a href="#section-4.4-5" class="pilcrow">¶</a></p>
 </section>
@@ -2658,7 +2654,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
     5.  s' = s + r2 * r3.
 </pre><a href="#appendix-A.4-7" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.4-8">The values <code>(A', Abar, d)</code> will be part of the spk and are used to prove possession of a BBS signature, without revealing the signature itself. Note that; <code>e(A', Pk) = e(Abar, P2)</code> where <code>Pk</code> the signer's public key and P2 the base element in G2 (used to create the signer's <code>Pk</code>, see <a href="#sktopk">SkToPk</a>). This also serves to bind the spk to the signer's <code>Pk</code>.<a href="#appendix-A.4-8" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-8">The values <code>(A', Abar, d)</code> will be part of the proof and are used to prove possession of a BBS signature, without revealing the signature itself. Note that; <code>e(A', Pk) = e(Abar, P2)</code> where <code>Pk</code> the signer's public key and P2 the base element in G2 (used to create the signer's <code>Pk</code>, see <a href="#sktopk">SkToPk</a>). This also serves to bind the proof to the signer's <code>Pk</code>.<a href="#appendix-A.4-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.4-9.1">
             <p id="appendix-A.4-9.1.1">Set the following,<a href="#appendix-A.4-9.1.1" class="pilcrow">¶</a></p>
@@ -2675,7 +2671,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
     EQ2.  C2 = D * (-r3) + H0 * s' + H_j1 * msg_j1 + ... + H_jU * msg_jU.
 </pre><a href="#appendix-A.4-11" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.4-12">If both EQ1 and EQ2 hold, and <code>e(A', Pk) = e(Abar, P2)</code>, an extractor can return a valid BBS signature from the signers <code>Sk</code>, on the disclosed messages. The spk returned is <code>(A', Abar, d, nizk)</code>. To validate the spk, a verifier checks that <code>e(A', Pk) = e(Abar, P2)</code> and verifies <code>nizk</code>.<a href="#appendix-A.4-12" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-12">If both EQ1 and EQ2 hold, and <code>e(A', Pk) = e(Abar, P2)</code>, an extractor can return a valid BBS signature from the signers <code>Sk</code>, on the disclosed messages. The proof returned is <code>(A', Abar, d, nizk)</code>. To validate the proof, a verifier checks that <code>e(A', Pk) = e(Abar, P2)</code> and verifies <code>nizk</code>.<a href="#appendix-A.4-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
