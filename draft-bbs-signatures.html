@@ -1309,7 +1309,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.5">L</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.6">The total number of messages that the signature scheme can sign.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.6">The total number of signed messages.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.7">R</dt>
@@ -1332,40 +1332,44 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.1-2.16">The generator corresponding to a given msg.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.17">H0</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
+<dt id="section-1.1-2.17">H_s</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.19">signature</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The digital signature output.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
+<dt id="section-1.1-2.19">H_d</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.20">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.21">commitment</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.22">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
+<dt id="section-1.1-2.21">signature</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.22">The digital signature output.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.23">nonce</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A cryptographic nonce<a href="#section-1.1-2.24" class="pilcrow">¶</a>
+<dt id="section-1.1-2.23">commitment</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.25">presentation_header (ph)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+<dt id="section-1.1-2.25">nonce</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A cryptographic nonce<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">presentation_header (ph)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.29">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.30">The domain separation tag.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
+<dt id="section-1.1-2.29">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.30">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.31">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.32" class="pilcrow">¶</a>
+<dt id="section-1.1-2.31">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.32">The domain separation tag.<a href="#section-1.1-2.32" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.33">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.34" class="pilcrow">¶</a>
+<dt id="section-1.1-2.33">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.34" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.1-2.35">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.36">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.36" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1514,7 +1518,8 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           <h4 id="name-messages-and-generators">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-messages-and-generators" class="section-name selfRef">Messages and generators</a>
           </h4>
-<p id="section-3.2.2-1">Throughout the operations of this signature scheme, each message that is signed is paired with a specific generator (point in G1). Specifically, if a generator <code>H_1</code> is raised to the power of <code>msg_1</code> during signing, then <code>H_1</code> should be raised to the power of <code>msg_1</code> in all other operations as well (signature verification, proof generation and proof verification). For simplicity, each function will take as input the list of generators to be used with the messages. Those generators can be any distinct element from the generators list <code>H</code>. Applications for efficiency can elect to pass the indexes of those generators to the list <code>H</code> instead. Care must be taken for the correct generator to be raised to the correct message in that case.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">Throughout the operations of this signature scheme, each message that is signed is paired with a specific generator (point in G1). Specifically, if a generator <code>H_1</code> is multiplied with <code>msg_1</code> during signing, then <code>H_1</code> MUST be multiplied with <code>msg_1</code> in all other operations as well (signature verification, proof generation and proof verification). For simplicity, each function will take as input the list of generators to be used with the messages. Those generators can be any distinct element from the generators list <code>H</code>. Applications for efficiency can elect to pass the indexes of those generators to the list <code>H</code> instead. Care must be taken for the correct generator to be raised to the correct message in that case.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">Aside from the message generators, the scheme uses two additional generators: <code>H_s</code> and <code>H_d</code>. The first (<code>H_s</code>), is used for the blinding value (<code>s</code>) of the signature. The second generator (<code>H_d</code>), is used to sign the signature's domain, which binds both signature and proof to a specific context and cryptographically protects any potential application-specific information (for example, messages that must always be disclosed etc.).<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding-of-elements-to-be-hashed">
@@ -1682,14 +1687,22 @@ Procedure:
 describes deterministic signing. For threshold signing, XOF can be replaced
 with a PRF due to the insecurity of deterministic threshold signing.<a href="#section-3.3.4-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.4-2">
-<pre>signature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L))
+<pre>signature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L), header)
 
 Inputs:
 
-- msg_1,...,msg_L, octet strings. Messages to be signed.
+- msg_1,..., msg_L, octet strings. Messages to be signed.
 - H_1,..., H_L, points of G1. Generators used to sign the messages.
 - SK, a secret key output from KeyGen
 - PK, a public key output from SkToPk
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1699,21 +1712,27 @@ Procedure:
 
 1. (W, H0, H) = octets_to_point(PK)
 
-2. h = XOF(SK  || msg[i] || ... || msg[L])
+2. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-3. for rand_el in (e, s) do
+3. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-4.      rand_el = OS2IP(h.read(64)) mod q.
+4. if domain is 0, abort
 
-5.      if rand_el = 0, go back to step 4
+5. h = XOF(SK  || domain || msg_1 || ... || msg_L)
 
-6. B = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+6. for element in (e, s) do
 
-7. A = B * (1 / (SK + e))
+7.      element = OS2IP(h.read(64)) mod q
 
-8. signature = (point_to_octets_min(A), e, s)
+8.      if element = 0, go back to step 4
 
-9. return signature
+9. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+
+10. A = B * (1 / (SK + e))
+
+11. signature = (point_to_octets_min(A), e, s)
+
+12. return signature
 </pre><a href="#section-3.3.4-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1725,7 +1744,7 @@ Procedure:
           </h4>
 <p id="section-3.3.5-1">Verify checks that a signature is valid for the octet string messages under the public key.<a href="#section-3.3.5-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.5-2">
-<pre>result = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature)
+<pre>result = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature, header)
 
 Inputs:
 
@@ -1733,6 +1752,14 @@ Inputs:
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - signature, octet string.
 - PK, a public key in the format output by SkToPk.
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1748,13 +1775,17 @@ Procedure:
 
 4. if KeyValidate(pub_key) is INVALID
 
-5. B = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. C1 = e(A, W + P2 * e)
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-7. C2 = e(B, P2)
+7. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-8. return C1 == C2
+8. C1 = e(A, W + P2 * e)
+
+9. C2 = e(B, P2)
+
+10. return C1 == C2
 </pre><a href="#section-3.3.5-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1767,7 +1798,7 @@ Procedure:
 <p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
-<pre>proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, ph)
+<pre>proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, header, ph)
 
 Inputs:
 
@@ -1776,7 +1807,15 @@ Inputs:
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
 - signature, octet string in output form from Sign
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
 - ph, octet string
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1794,43 +1833,47 @@ Procedure:
 
 5. if KeyValidate(PK) is INVALID abort
 
-6. for rand_el in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
+6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7.      rand_el = HASH(PRF(8*ceil(log2(q)))) mod q
+7. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-8.      if rand_el = 0, go back to step 7
+8. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
 
-9. b = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+9.      element = HASH(PRF(8*ceil(log2(q)))) mod q
 
-10. r3 = r1 ^ -1 mod q
+10.      if element = 0, go back to step 7
 
-11. A' = A * r1
+11. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-12. Abar = A' * (-e) + B * r1
+12. r3 = r1 ^ -1 mod q
 
-13. D = B * r1 + h0 * r2
+13. A' = A * r1
 
-14. s' = s + r2 * r3
+14. Abar = A' * (-e) + B * r1
 
-15. C1 = A' * e~ + H0 * r2~
+15. D = B * r1 + H_s * r2
 
-16. C2 = D * (-r3~) + H0 * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
+16. s' = s + r2 * r3
 
-17. c = HASH(PK || Abar || A' || D || C1 || C2 || ph)
+17. C1 = A' * e~ + H_s * r2~
 
-18. e^ = e~ + c * e
+18. C2 = D * (-r3~) + H_s * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
 
-19. r2^ = r2~ + c * r2
+19. c = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-20. r3^ = r3~ + c * r3
+20. e^ = e~ + c * e
 
-21. s^ = s~ + c * s'
+21. r2^ = r2~ + c * r2
 
-22. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
+22. r3^ = r3~ + c * r3
 
-23. proof = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+23. s^ = s~ + c * s'
 
-24. return proof
+24. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
+
+25. proof = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+
+26. return proof
 </pre><a href="#section-3.3.6-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1842,7 +1885,7 @@ Procedure:
           </h4>
 <p id="section-3.3.7-1">ProofVerify checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation header used in ProofGen.<a href="#section-3.3.7-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.7-2">
-<pre>result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, ph)
+<pre>result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, header, ph)
 
 Inputs:
 
@@ -1851,7 +1894,15 @@ Inputs:
 - msg_i1,..., msg_iR, octet strings. The revealed messages in input to ProofGen.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
 - ph, octet string
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1867,21 +1918,25 @@ Procedure:
 
 4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = proof
 
-5. C1 = (Abar - D) * c + A' * e^ + H0 * r2^
+5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. T = P1 + H_i1 * msg_i1 + ... H_iR * msg_iR
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-7. C2 = T * c + D * (-r3^) + H0 * s^ + H_j1 * m^_j1 + ... + H_jU * m^_jU
+7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
-8. cv = HASH(PK || Abar || A' || D || C1 || C2 || ph)
+8. T = P1 + H_s * domain + H_i1 * msg_i1 + ... H_iR * msg_iR
 
-9. if c != cv return INVALID
+9. C2 = T * c + D * (-r3^) + H_s * s^ + H_j1 * m^_j1 + ... + H_jU * m^_jU
 
-10. if A' == 1 return INVALID
+10. cv = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-11. if e(A', W) * e(Abar, -P2) != 1 return INVALID
+11. if c != cv return INVALID
 
-12. return VALID
+12. if A' == 1 return INVALID
+
+13. if e(A', W) * e(Abar, -P2) != 1 return INVALID
+
+14. return VALID
 </pre><a href="#section-3.3.7-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2087,6 +2142,12 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
           <li class="normal" id="section-5.1-1.8">
             <p id="section-5.1-1.8.1">message<em>generator</em>seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
+          <li class="normal" id="section-5.1-1.9">
+            <p id="section-5.1-1.9.1">blind<em>value</em>generator<em>seed: The seed used to calculate the signature blinding value generator (H</em>s). Similar to the message<em>generator</em>seed, there are multiple scopes for the blind<em>value</em>generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.10">
+            <p id="section-5.1-1.10.1">signature<em>dst</em>generator<em>seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message</em>generator<em>seed and blind</em>value<em>generator</em>seed.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
         </ul>
 </section>
 </div>
@@ -2124,8 +2185,16 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
           <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS<em>BLS12381FQ</em>XOF:SHAKE-256<em>SSWU</em>RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.15">message_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators" class="xref">Section 3.3.8</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+<dt id="section-5.2-1.15">message<em>generator</em>seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.17">blind<em>value</em>generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.18">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>BLINDING<em>VALUE</em>GENERATOR<em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H</em>s).<a href="#section-5.2-1.18" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.19">signature<em>dst</em>generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>DST<em>GENERATOR</em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.20" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
