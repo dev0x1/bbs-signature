@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                              3 May 2022
+                                                              5 May 2022
 
 
                         The BBS Signature Scheme
@@ -355,13 +355,19 @@ Table of Contents
    To avoid ambiguity, each element passed to the HASH or the XOF
    function, including situations when multiple elements are supplied in
    a concatenated form, must first be encoded to an appropriate format,
-   depending on its type.  Specifically, - Points in G1 or G2 must be
-   encoded using the point_to_octets implementation for a particular
-   ciphersuite. - Non-negative integers must be encoded using I2OSP with
-   an output length of 8 bytes. - Scalars must be zero-extended to a
-   fixed length, defined by a particular ciphersuite. - Octet strings
-   must be zero-extended to a length that is a multiple of 8 bits.
-   Then, the extended value is encoded directly.
+   depending on its type.  Specifically,
+
+   *  Points in G1 or G2 must be encoded using the point_to_octets
+      implementation for a particular ciphersuite.
+
+   *  Non-negative integers must be encoded using I2OSP with an output
+      length of 8 bytes.
+
+   *  Scalars must be zero-extended to a fixed length, defined by a
+      particular ciphersuite.
+
+   *  Octet strings must be zero-extended to a length that is a multiple
+      of 8 bits.  Then, the extended value is encoded directly.
 
    After encoding, octet strings MUST be prepended with a value
    representing the length of their binary representation in the form of
@@ -378,11 +384,11 @@ Table of Contents
 
    As an example of the above transformations, consider the following.
    Assume that one wants to hash together the message "Jane" and the
-   number 25.  The procedure would be - Calculate octets of the message
-   "Jane" and the number 25 as,
+   number 25.  The procedure would be
 
-      message_octets = 0x4a616e65
-      number_octets = I2OSP(25, 4) = 0x0000000000000019
+   *  Calculate octets of the message "Jane" and the number 25 as,
+      message_octets = 0x4a616e65 number_octets = I2OSP(25, 4) =
+      0x0000000000000019
 
    *  Calculate the length of the message binary representation
       (message_octets) and transform it to octets i.e.,
@@ -476,11 +482,11 @@ Procedure:
 
    Inputs:
 
-   - SK, a secret integer such that 0 < SK < q
+   - SK, a secret integer such that 0 < SK < q.
 
    Outputs:
 
-   - PK, a public key encoded as an octet string
+   - PK, a public key encoded as an octet string.
 
    Procedure:
 
@@ -506,7 +512,7 @@ Procedure:
 
    Outputs:
 
-   - result, either VALID or INVALID
+   - result, either VALID or INVALID.
 
    Procedure:
 
@@ -533,8 +539,8 @@ Inputs:
 
 - msg_1,..., msg_L, octet strings. Messages to be signed.
 - H_1,..., H_L, points of G1. Generators used to sign the messages.
-- SK, a secret key output from KeyGen
-- PK, a public key output from SkToPk
+- SK, a secret key output from KeyGen.
+- PK, a public key output from SkToPk.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
 
@@ -546,7 +552,7 @@ Parameters:
 
 Outputs:
 
-- signature, an octet string
+- signature, an octet string.
 
 Procedure:
 
@@ -639,14 +645,14 @@ proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signat
 
 Inputs:
 
-- PK, octet string in output form from SkToPk
+- PK, octet string in output form from SkToPk.
 - msg_1,..., msg_L, octet strings. Messages in input to Sign.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- signature, octet string in output form from Sign
+- signature, octet string in output form from Sign.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
-- ph, octet string
+- ph, octet string.
 
 Parameters:
 
@@ -656,7 +662,7 @@ Parameters:
 
 Outputs:
 
-- proof, octet string
+- proof, octet string.
 
 Procedure:
 
@@ -787,13 +793,13 @@ generators = CreateGenerators(dst, message_generator_seed, length);
 
 Inputs:
 
-dst, octet string - Domain Separation Tag
-message_generator_seed, octet string
-length, unsigned integer - Number of generators to create from the seed and dst
+- dst, octet string. Domain Separation Tag.
+- message_generator_seed, octet string.
+- length, unsigned integer. Number of generators to create from the seed and dst.
 
 Outputs:
 
-- generators, an array of generators
+- generators, an array of generators.
 
 Procedure:
 
@@ -827,11 +833,11 @@ result = MapMessageToScalarAsHash(msg, dst)
 Inputs:
 
 - msg: octet string.
-- dst: Domain separation tag; Note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter
+- dst: Domain separation tag; note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter.
 
 Outputs:
 
-- result: scalar value
+- result: scalar value.
 
 Procedure:
 

@@ -1527,29 +1527,35 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           <h4 id="name-encoding-of-elements-to-be-">
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-encoding-of-elements-to-be-" class="section-name selfRef">Encoding of elements to be hashed.</a>
           </h4>
-<p id="section-3.2.3-1">To avoid ambiguity, each element passed to the HASH or the XOF function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,
-- Points in G1 or G2 must be encoded using the <code>point_to_octets</code> implementation for a particular ciphersuite.
-- Non-negative integers must be encoded using <code>I2OSP</code> with an output length of 8 bytes.
-- Scalars must be zero-extended to a fixed length, defined by a particular ciphersuite.
-- Octet strings must be zero-extended to a length that is a multiple of 8 bits. Then, the extended value is encoded directly.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-2">After encoding, octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. If the octet string represents a DST, then its length must be encoded to octets using I2OSP with ouptut length of 1 byte. If it is a generic octet string (not representing a DST), its length must be encoded to octets using I2OSP with ouptut length of 8 bytes. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string <code>0x14d</code> will be encoded as <code>0x0000000000000002014d</code>. DSTs with length larger than 2^8 - 1 MUST be rejected. Other octet-strings (not DSTs) with length larger than 2^64 - 1, MUST also be rejected.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-3">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be
-- Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2.3-4">
-<pre>   message_octets = 0x4a616e65
-   number_octets = I2OSP(25, 4) = 0x0000000000000019
-</pre><a href="#section-3.2.3-4" class="pilcrow">¶</a>
-</div>
+<p id="section-3.2.3-1">To avoid ambiguity, each element passed to the HASH or the XOF function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2.3-5.1">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2.3-2.1">Points in G1 or G2 must be encoded using the <code>point_to_octets</code> implementation for a particular ciphersuite.<a href="#section-3.2.3-2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-5.2">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
+            <li class="normal" id="section-3.2.3-2.2">Non-negative integers must be encoded using <code>I2OSP</code> with an output length of 8 bytes.<a href="#section-3.2.3-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.3">Scalars must be zero-extended to a fixed length, defined by a particular ciphersuite.<a href="#section-3.2.3-2.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.4">Octet strings must be zero-extended to a length that is a multiple of 8 bits. Then, the extended value is encoded directly.<a href="#section-3.2.3-2.4" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-3.2.3-3">After encoding, octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. If the octet string represents a DST, then its length must be encoded to octets using I2OSP with ouptut length of 1 byte. If it is a generic octet string (not representing a DST), its length must be encoded to octets using I2OSP with ouptut length of 8 bytes. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string <code>0x14d</code> will be encoded as <code>0x0000000000000002014d</code>. DSTs with length larger than 2^8 - 1 MUST be rejected. Other octet-strings (not DSTs) with length larger than 2^64 - 1, MUST also be rejected.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-4">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be<a href="#section-3.2.3-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-5.1">Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,
+<code>
+message_octets = 0x4a616e65
+number_octets = I2OSP(25, 4) = 0x0000000000000019
+</code><a href="#section-3.2.3-5.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-5.2">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-5.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-5.3">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
 <code>
 octets_to_hash = len(message_octets) || message_octets || number_octets =
               = 0x00000000000000044a616e650000000000000019
-</code><a href="#section-3.2.3-5.2" class="pilcrow">¶</a>
+</code><a href="#section-3.2.3-5.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-5.3">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-5.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-3.2.3-5.4">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-5.4" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-3.2.3-6">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-6" class="pilcrow">¶</a></p>
@@ -1628,11 +1634,11 @@ Procedure:
 
 Inputs:
 
-- SK, a secret integer such that 0 &lt; SK &lt; q
+- SK, a secret integer such that 0 &lt; SK &lt; q.
 
 Outputs:
 
-- PK, a public key encoded as an octet string
+- PK, a public key encoded as an octet string.
 
 Procedure:
 
@@ -1661,7 +1667,7 @@ Inputs:
 
 Outputs:
 
-- result, either VALID or INVALID
+- result, either VALID or INVALID.
 
 Procedure:
 
@@ -1693,8 +1699,8 @@ Inputs:
 
 - msg_1,..., msg_L, octet strings. Messages to be signed.
 - H_1,..., H_L, points of G1. Generators used to sign the messages.
-- SK, a secret key output from KeyGen
-- PK, a public key output from SkToPk
+- SK, a secret key output from KeyGen.
+- PK, a public key output from SkToPk.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
 
@@ -1706,7 +1712,7 @@ Parameters:
 
 Outputs:
 
-- signature, an octet string
+- signature, an octet string.
 
 Procedure:
 
@@ -1802,14 +1808,14 @@ Procedure:
 
 Inputs:
 
-- PK, octet string in output form from SkToPk
+- PK, octet string in output form from SkToPk.
 - msg_1,..., msg_L, octet strings. Messages in input to Sign.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- signature, octet string in output form from Sign
+- signature, octet string in output form from Sign.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
-- ph, octet string
+- ph, octet string.
 
 Parameters:
 
@@ -1819,7 +1825,7 @@ Parameters:
 
 Outputs:
 
-- proof, octet string
+- proof, octet string.
 
 Procedure:
 
@@ -1953,13 +1959,13 @@ Procedure:
 
 Inputs:
 
-dst, octet string - Domain Separation Tag
-message_generator_seed, octet string
-length, unsigned integer - Number of generators to create from the seed and dst
+- dst, octet string. Domain Separation Tag.
+- message_generator_seed, octet string.
+- length, unsigned integer. Number of generators to create from the seed and dst.
 
 Outputs:
 
-- generators, an array of generators
+- generators, an array of generators.
 
 Procedure:
 
@@ -1998,11 +2004,11 @@ Procedure:
 Inputs:
 
 - msg: octet string.
-- dst: Domain separation tag; Note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter
+- dst: Domain separation tag; note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter.
 
 Outputs:
 
-- result: scalar value
+- result: scalar value.
 
 Procedure:
 
