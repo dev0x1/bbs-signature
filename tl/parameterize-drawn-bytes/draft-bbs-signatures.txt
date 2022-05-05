@@ -573,7 +573,7 @@ Procedure:
 
 6. for element in (e, s) do
 
-7.      element = OS2IP(h.read(xof_no_of_bytes_drawn)) mod q
+7.      element = OS2IP(h.read(xof_no_of_bytes)) mod q
 
 8.      if element = 0, go back to step 4
 
@@ -816,7 +816,7 @@ Procedure:
 
 4.    while(generator_i == Identity_G1 or generator_i == P1)
 
-5.        candidate = hash_to_curve_g1(h.read(xof_no_of_bytes_drawn), dst)
+5.        candidate = hash_to_curve_g1(h.read(xof_no_of_bytes), dst)
 
 6.        if candidate not in generators: generator_i = candidate
 
@@ -1072,7 +1072,7 @@ Procedure:
       and requirements of the message_generator_seed and
       blind_value_generator_seed.
 
-   *  xof_no_of_bytes_drawn: Number of bytes to draw from the XOF when
+   *  xof_no_of_bytes: Number of bytes to draw from the XOF when
       performing operations such as creating generators as per the
       operation documented in Section 3.3.8 or computing the e and s
       components of the signature generated in Section 3.3.4.  It is
@@ -1120,7 +1120,7 @@ Procedure:
 
    hashing_elements_to_scalars  hash_to_scalar
 
-   xof_no_of_bytes_drawn  64
+   xof_no_of_bytes  64
 
 5.2.1.  Test Vectors
 
