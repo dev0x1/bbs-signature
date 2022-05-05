@@ -12,10 +12,10 @@
 <meta content="
        BBS is a digital signature scheme categorized as a form of short group signature that supports several novel properties. Notably, the scheme supports signing multiple messages whilst producing a single output digital signature. Through this capability, the possessor of a signature is able to derive proofs that selectively disclose subsets of the originally signed set of messages, whilst preserving the verifiable authenticity and integrity of the messages. Furthermore, these derived proofs are said to be zero-knowledge in nature as they do not reveal the underlying signature; instead, what they reveal is a proof of knowledge of the undisclosed signature. 
     " name="description">
-<meta content="xml2rfc 3.12.4" name="generator">
+<meta content="xml2rfc 3.12.5" name="generator">
 <meta content="draft-bbs-signatures" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.4
+  xml2rfc 3.12.5
     Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -1123,16 +1123,19 @@ svg [stroke="fill"], svg [fill^="#fff"] {
                     <p id="section-toc.1-1.3.2.3.2.5.1"><a href="#section-3.3.5" class="xref">3.3.5</a>.  <a href="#name-verify" class="xref">Verify</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.6">
-                    <p id="section-toc.1-1.3.2.3.2.6.1"><a href="#section-3.3.6" class="xref">3.3.6</a>.  <a href="#name-spkgen" class="xref">SpkGen</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.6.1"><a href="#section-3.3.6" class="xref">3.3.6</a>.  <a href="#name-proofgen" class="xref">ProofGen</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.7">
-                    <p id="section-toc.1-1.3.2.3.2.7.1"><a href="#section-3.3.7" class="xref">3.3.7</a>.  <a href="#name-spkverify" class="xref">SpkVerify</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.7.1"><a href="#section-3.3.7" class="xref">3.3.7</a>.  <a href="#name-proofverify" class="xref">ProofVerify</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.8">
                     <p id="section-toc.1-1.3.2.3.2.8.1"><a href="#section-3.3.8" class="xref">3.3.8</a>.  <a href="#name-creategenerators" class="xref">CreateGenerators</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.9">
                     <p id="section-toc.1-1.3.2.3.2.9.1"><a href="#section-3.3.9" class="xref">3.3.9</a>.  <a href="#name-mapmessagetoscalar" class="xref">MapMessageToScalar</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.10">
+                    <p id="section-toc.1-1.3.2.3.2.10.1"><a href="#section-3.3.10" class="xref">3.3.10</a>. <a href="#name-hash-to-scalar" class="xref">Hash to scalar</a></p>
 </li>
                 </ul>
 </li>
@@ -1154,19 +1157,16 @@ svg [stroke="fill"], svg [fill^="#fff"] {
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-randomness-considerations" class="xref">Randomness considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
-                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-presentation-message-select" class="xref">Presentation message selection</a></p>
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-presentation-header-selecti" class="xref">Presentation header selection</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
                 <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="xref">4.6</a>.  <a href="#name-implementing-hash_to_curve_" class="xref">Implementing hash_to_curve_g1</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.7">
-                <p id="section-toc.1-1.4.2.7.1"><a href="#section-4.7" class="xref">4.7</a>.  <a href="#name-use-of-contexts" class="xref">Use of Contexts</a></p>
+                <p id="section-toc.1-1.4.2.7.1"><a href="#section-4.7" class="xref">4.7</a>.  <a href="#name-choice-of-underlying-curve" class="xref">Choice of underlying curve</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.8">
-                <p id="section-toc.1-1.4.2.8.1"><a href="#section-4.8" class="xref">4.8</a>.  <a href="#name-choice-of-underlying-curve" class="xref">Choice of underlying curve</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.9">
-                <p id="section-toc.1-1.4.2.9.1"><a href="#section-4.9" class="xref">4.9</a>.  <a href="#name-security-of-spkgen" class="xref">Security of spkGen</a></p>
+                <p id="section-toc.1-1.4.2.8.1"><a href="#section-4.8" class="xref">4.8</a>.  <a href="#name-security-of-proofs-generate" class="xref">Security of Proofs generated by ProofGen</a></p>
 </li>
             </ul>
 </li>
@@ -1249,6 +1249,9 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
+                <p id="section-toc.1-1.9.2.4.1"><a href="#appendix-A.4" class="xref">A.4</a>.  <a href="#name-proof-generation-and-verifi" class="xref">Proof Generation and Verification Algorithmic Explanation</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
@@ -1268,12 +1271,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <p id="section-1-3">The BBS Signature scheme provides multiple unique properties when compared with conventional digital signature schemes, however three key ones are:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4"><strong>Selective Disclosure</strong> - The scheme allows a signer to sign multiple payloads while still produce a single output signature. An intermediary then possessing the payloads and the signature can generate a proof whereby they can choose which payloads to reveal.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5"><strong>Unlinkable Proof Presentations</strong> - The proofs generated by the scheme are known as a signature proof of knowledge meaning a verifying party in receipt of a proof is unable to determine which signature was used to generate the proof.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6"><strong>Scoped Proofs</strong> - The proofs generated by the scheme feature a presentation message where the proving party is able to include any information they would like to cryptographically tie to the proof. This can include a cryptographic nonce and or an audience/domain identifier to ensure the generated proof can only be used appropriately and provides a way for a verifying/relying party to detect a replay attack.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-6"><strong>Scoped Proofs</strong> - The proofs generated by the scheme feature a presentation header where the proving party is able to include any information they would like to cryptographically tie to the proof. This can include a cryptographic nonce and or an audience/domain identifier to ensure the generated proof can only be used appropriately and provides a way for a verifying/relying party to detect a replay attack.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">Refer to <a href="#usecases" class="xref">Appendix A.2</a> for an elaboration on where and when these properties are useful<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">Below is a basic diagram describing the main entities involved in using the scheme<a href="#section-1-8" class="pilcrow">¶</a></p>
 <span id="name-basic-diagram-capturing-the"></span><figure id="figure-1">
         <div id="section-1-9.1">
-<pre class="lang-ascii-art sourcecode">  (1) sign                                       (3) spkGen                                        (5) spkVerify
+<pre class="lang-ascii-art sourcecode">  (1) sign                                       (3) ProofGen                                        (5) ProofVerify
   +-----                                         +-----                                               +-----
   |    |                                         |    |                                               |    |
   |    |                                         |    |                                               |    |
@@ -1309,7 +1312,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.5">L</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.6">The total number of messages that the signature scheme can sign.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.6">The total number of signed messages.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.7">R</dt>
@@ -1332,28 +1335,28 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.1-2.16">The generator corresponding to a given msg.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.17">H0</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
+<dt id="section-1.1-2.17">H_s</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.19">signature</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The digital signature output.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
+<dt id="section-1.1-2.19">H_d</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.20">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.21">commitment</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.22">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
+<dt id="section-1.1-2.21">signature</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.22">The digital signature output.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.23">nonce</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A cryptographic nonce<a href="#section-1.1-2.24" class="pilcrow">¶</a>
+<dt id="section-1.1-2.23">commitment</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.25">presentation_message (pm)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A message generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+<dt id="section-1.1-2.25">nonce</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A cryptographic nonce<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">spk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">Zero-Knowledge Signature Proof of Knowledge.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">presentation_header (ph)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-2.29">nizk</dt>
@@ -1489,10 +1492,10 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
             <p id="section-3.1-2.1.1">A pairing-friendly elliptic curve, plus associated functionality given in Section 1.4.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1">HASH, a hash function that MUST be a secure cryptographic hash function. For security, HASH MUST output at least ceil(log2(q)) bits, where q is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encodingofelementstobehashed">Encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.2.1">HASH, a hash function that MUST be a secure cryptographic hash function. For security, HASH MUST output at least ceil(log2(q)) bits, where q is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encoding-of-elements-to-be-hashed">Encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.3">
-            <p id="section-3.1-2.3.1">XOF, a cryptographically secure extendable-output function like SHAKE128 or SHAKE256. XOF outputs any desirable amount of bytes using the <code>.read(int)</code> method. See <a href="#encodingofelementstobehashed">Encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.3.1">XOF, a cryptographically secure extendable-output function like SHAKE128 or SHAKE256. XOF outputs any desirable amount of bytes using the <code>.read(int)</code> method. See <a href="#encoding-of-elements-to-be-hashed">Encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.4">
             <p id="section-3.1-2.4.1">PRF(n): a pseudo-random function similar to <span>[<a href="#RFC4868" class="xref">RFC4868</a>]</span>. Returns n pseudo randomly generated bytes.<a href="#section-3.1-2.4.1" class="pilcrow">¶</a></p>
@@ -1518,7 +1521,8 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           <h4 id="name-messages-and-generators">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-messages-and-generators" class="section-name selfRef">Messages and generators</a>
           </h4>
-<p id="section-3.2.2-1">Throughout the operations of this signature scheme, each message that is signed is paired with a specific generator (point in G1). Specifically, if a generator <code>H_1</code> is raised to the power of <code>msg_1</code> during signing, then <code>H_1</code> should be raised to the power of <code>msg_1</code> in all other operations as well (signature verification, proof generation and proof verification). For simplicity, each function will take as input the list of generators to be used with the messages. Those generators can be any distinct element from the generators list <code>H</code>. Applications for efficiency can elect to pass the indexes of those generators to the list <code>H</code> instead. Care must be taken for the correct generator to be raised to the correct message in that case.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">Throughout the operations of this signature scheme, each message that is signed is paired with a specific generator (point in G1). Specifically, if a generator <code>H_1</code> is multiplied with <code>msg_1</code> during signing, then <code>H_1</code> MUST be multiplied with <code>msg_1</code> in all other operations as well (signature verification, proof generation and proof verification). For simplicity, each function will take as input the list of generators to be used with the messages. Those generators can be any distinct element from the generators list <code>H</code>. Applications for efficiency can elect to pass the indexes of those generators to the list <code>H</code> instead. Care must be taken for the correct generator to be raised to the correct message in that case.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">Aside from the message generators, the scheme uses two additional generators: <code>H_s</code> and <code>H_d</code>. The first (<code>H_s</code>), is used for the blinding value (<code>s</code>) of the signature. The second generator (<code>H_d</code>), is used to sign the signature's domain, which binds both signature and proof to a specific context and cryptographically protects any potential application-specific information (for example, messages that must always be disclosed etc.).<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding-of-elements-to-be-hashed">
@@ -1526,32 +1530,43 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           <h4 id="name-encoding-of-elements-to-be-">
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-encoding-of-elements-to-be-" class="section-name selfRef">Encoding of elements to be hashed.</a>
           </h4>
-<p id="section-3.2.3-1">To avoid ambiguity, each element passed to the HASH or the XOF function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,
-- Points in G1 or G2 must be encoded using the <code>point_to_octets</code> implementation for a particular ciphersuite.
-- Non-negative integers must be encoded using <code>I2OSP</code> with an output length of 8 bytes.
-- Scalars must be zero-extended to a fixed length, defined by a particular ciphersuite.
-- Octet strings must be zero-extended to a length that is a multiple of 8 bits. Then, the extended value is encoded directly.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-2">After encoding, octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. If the octet string represents a DST, then its length must be encoded to octets using I2OSP with ouptut length of 1 byte. If it is a generic octet string (not representing a DST), its length must be encoded to octets using I2OSP with ouptut length of 8 bytes. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string <code>0x14d</code> will be encoded as <code>0x0000000000000002014d</code>. DSTs with length larger than 2^8 - 1 MUST be rejected. Other octet-strings (not DSTs) with length larger than 2^64 - 1, MUST also be rejected.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-3">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be
-- Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2.3-4">
+<p id="section-3.2.3-1">To avoid ambiguity, each element passed to the HASH or the XOF function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2.3-2.1">Points in G1 or G2 must be encoded using the <code>point_to_octets</code> implementation for a particular ciphersuite.<a href="#section-3.2.3-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.2">Non-negative integers must be encoded using <code>I2OSP</code> with an output length of 8 bytes.<a href="#section-3.2.3-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.3">Scalars must be zero-extended to a fixed length, defined by a particular ciphersuite.<a href="#section-3.2.3-2.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.4">Octet strings must be zero-extended to a length that is a multiple of 8 bits. Then, the extended value is encoded directly.<a href="#section-3.2.3-2.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-2.5">ASCII strings must be transformed into octet strings using UTF-8 encoding.<a href="#section-3.2.3-2.5" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-3.2.3-3">After encoding, octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. If the octet string represents a DST, then its length must be encoded to octets using I2OSP with ouptut length of 1 byte. If it is a generic octet string (not representing a DST), its length must be encoded to octets using I2OSP with ouptut length of 8 bytes. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string <code>0x14d</code> will be encoded as <code>0x0000000000000002014d</code>. DSTs with length larger than 2^8 - 1 MUST be rejected. Other octet-strings (not DSTs) with length larger than 2^64 - 1, MUST also be rejected.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-4">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<a href="#section-3.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-5">=======
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; update key validate
+- Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,<a href="#section-3.2.3-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.3-6">
 <pre>   message_octets = 0x4a616e65
    number_octets = I2OSP(25, 4) = 0x0000000000000019
-</pre><a href="#section-3.2.3-4" class="pilcrow">¶</a>
+</pre><a href="#section-3.2.3-6" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-3.2.3-5.1">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2.3-7.1">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-7.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-5.2">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
+            <li class="normal" id="section-3.2.3-7.2">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
 <code>
 octets_to_hash = len(message_octets) || message_octets || number_octets =
               = 0x00000000000000044a616e650000000000000019
-</code><a href="#section-3.2.3-5.2" class="pilcrow">¶</a>
+</code><a href="#section-3.2.3-7.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-5.3">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-5.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-3.2.3-7.3">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-7.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-3.2.3-6">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-6" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-8">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1567,7 +1582,7 @@ octets_to_hash = len(message_octets) || message_octets || number_octets =
 <a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-keygen" class="section-name selfRef">KeyGen</a>
           </h4>
 <p id="section-3.3.1-1">The KeyGen algorithm generates a secret key SK deterministically from a secret octet string IKM.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-2">KeyGen uses an HKDF <span>[<a href="#RFC5869" class="xref">RFC5869</a>]</span> instantiated with the hash function H.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">KeyGen uses an HKDF <span>[<a href="#RFC5869" class="xref">RFC5869</a>]</span> instantiated with the hash function HASH.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-3">For security, IKM MUST be infeasible to guess, e.g. generated by a trusted source of randomness.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-4">IKM MUST be at least 32 bytes long, but it MAY be longer.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-5">Because KeyGen is deterministic, implementations MAY choose either to store the resulting SK or to store IKM and call KeyGen to derive SK when necessary.<a href="#section-3.3.1-5" class="pilcrow">¶</a></p>
@@ -1589,20 +1604,20 @@ Parameters:
 
 Definitions:
 
-- HKDF-Extract is as defined in [@!RFC5869], instantiated with hash H.
-- HKDF-Expand is as defined in [@!RFC5869], instantiated with hash H.
+- HKDF-Extract is as defined in [@!RFC5869], instantiated with hash function HASH.
+- HKDF-Expand is as defined in [@!RFC5869], instantiated with hash function HASH.
 - I2OSP and OS2IP are as defined in [@!RFC8017], Section 4.
 - L is the integer given by ceil((3 * ceil(log2(q))) / 16).
-- "BBS-SIG-KEYGEN-SALT-" is an ASCII string comprising 20 octets.
+- INITSALT is the ASCII string "BBS-SIG-KEYGEN-SALT-".
 
 Procedure:
-1. salt = "BBS-SIG-KEYGEN-SALT-"
+1. salt = INITSALT
 
 2. SK = 0
 
 3. while SK == 0:
 
-4.     salt = H(salt)
+4.     salt = HASH(salt)
 
 5.     PRK = HKDF-Extract(salt, IKM || I2OSP(0, 1))
 
@@ -1627,11 +1642,11 @@ Procedure:
 
 Inputs:
 
-- SK, a secret integer such that 0 &lt; SK &lt; q
+- SK, a secret integer such that 0 &lt; SK &lt; q.
 
 Outputs:
 
-- PK, a public key encoded as an octet string
+- PK, a public key encoded as an octet string.
 
 Procedure:
 
@@ -1660,7 +1675,7 @@ Inputs:
 
 Outputs:
 
-- result, either VALID or INVALID
+- result, either VALID or INVALID.
 
 Procedure:
 
@@ -1684,38 +1699,52 @@ Procedure:
 describes deterministic signing. For threshold signing, XOF can be replaced
 with a PRF due to the insecurity of deterministic threshold signing.<a href="#section-3.3.4-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.4-2">
-<pre>signature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L))
+<pre>signature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L), header)
 
 Inputs:
 
-- msg_1,...,msg_L, octet strings. Messages to be signed.
+- msg_1,..., msg_L, octet strings. Messages to be signed.
 - H_1,..., H_L, points of G1. Generators used to sign the messages.
-- SK, a secret key output from KeyGen
-- PK, a public key output from SkToPk
+- SK, a secret key output from KeyGen.
+- PK, a public key output from SkToPk.
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
-- signature, an octet string
+- signature, an octet string.
 
 Procedure:
 
 1. W = octets_to_point(PK)
 
-2. h = XOF(SK  || msg[i] || ... || msg[L])
+2. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-3. for rand_el in (e, s) do
+3. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-4.      rand_el = OS2IP(h.read(64)) mod q.
+4. if domain is 0, abort
 
-5.      if rand_el = 0, go back to step 4
+5. h = XOF(SK  || domain || msg_1 || ... || msg_L)
 
-6. B = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+6. for element in (e, s) do
 
-7. A = B * (1 / (SK + e))
+7.      element = OS2IP(h.read(64)) mod q
 
-8. signature = (point_to_octets_min(A), e, s)
+8.      if element = 0, go back to step 4
 
-9. return signature
+9. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+
+10. A = B * (1 / (SK + e))
+
+11. signature = (point_to_octets_min(A), e, s)
+
+12. return signature
 </pre><a href="#section-3.3.4-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1727,7 +1756,7 @@ Procedure:
           </h4>
 <p id="section-3.3.5-1">Verify checks that a signature is valid for the octet string messages under the public key.<a href="#section-3.3.5-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.5-2">
-<pre>result = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature)
+<pre>result = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature, header)
 
 Inputs:
 
@@ -1735,6 +1764,14 @@ Inputs:
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - signature, octet string.
 - PK, a public key in the format output by SkToPk.
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1750,39 +1787,51 @@ Procedure:
 
 4. W = octets_to_point(PK)
 
-5. B = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. C1 = e(A, W + P2 * e)
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-7. C2 = e(B, P2)
+7. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-8. return C1 == C2
+8. C1 = e(A, W + P2 * e)
+
+9. C2 = e(B, P2)
+
+10. return C1 == C2
 </pre><a href="#section-3.3.5-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
-<div id="spkgen">
+<div id="proofgen">
 <section id="section-3.3.6">
-          <h4 id="name-spkgen">
-<a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-spkgen" class="section-name selfRef">SpkGen</a>
+          <h4 id="name-proofgen">
+<a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-proofgen" class="section-name selfRef">ProofGen</a>
           </h4>
-<p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation message.<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.6-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
-<pre>spk = SpkGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, pm)
+<pre>proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, header, ph)
 
 Inputs:
 
-- PK, octet string in output form from SkToPk
+- PK, octet string in output form from SkToPk.
 - msg_1,..., msg_L, octet strings. Messages in input to Sign.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- signature, octet string in output form from Sign
-- pm, octet string
+- signature, octet string in output form from Sign.
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+- ph, octet string.
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
-- spk, octet string; or INVALID
+- proof, octet string; or INVALID.
 
 Procedure:
 
@@ -1796,113 +1845,76 @@ Procedure:
 
 5. if KeyValidate(PK) is INVALID, return INVALID
 
-6. for rand_el in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
+6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7.      rand_el = HASH(PRF(8*ceil(log2(q)))) mod q
+7. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-8.      if rand_el = 0, go back to step 7
+8. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
 
-9. b = P1 + H0 * s + H_1 * msg_1 + ... + H_L * msg_L
+9.      element = HASH(PRF(8*ceil(log2(q)))) mod q
 
-10. r3 = r1 ^ -1 mod q
+10.      if element = 0, go back to step 7
 
-11. A' = A * r1
+11. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-12. Abar = A' * (-e) + B * r1
+12. r3 = r1 ^ -1 mod q
 
-13. D = B * r1 + h0 * r2
+13. A' = A * r1
 
-14. s' = s + r2 * r3
+14. Abar = A' * (-e) + B * r1
 
-15. C1 = A' * e~ + H0 * r2~
+15. D = B * r1 + H_s * r2
 
-16. C2 = D * (-r3~) + H0 * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
+16. s' = s + r2 * r3
 
-17. c = HASH(PK || Abar || A' || D || C1 || C2 || pm)
+17. C1 = A' * e~ + H_s * r2~
 
-18. e^ = e~ + c * e
+18. C2 = D * (-r3~) + H_s * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
 
-19. r2^ = r2~ + c * r2
+19. c = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-20. r3^ = r3~ + c * r3
+20. e^ = e~ + c * e
 
-21. s^ = s~ + c * s'
+21. r2^ = r2~ + c * r2
 
-22. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
+22. r3^ = r3~ + c * r3
 
-23. spk = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+23. s^ = s~ + c * s'
 
-24. return spk
+24. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
+
+25. proof = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+
+26. return proof
 </pre><a href="#section-3.3.6-3" class="pilcrow">¶</a>
 </div>
-<div id="algorithmic-explanation">
-<section id="section-3.3.6.1">
-            <h5 id="name-algorithmic-explanation">
-<a href="#section-3.3.6.1" class="section-number selfRef">3.3.6.1. </a><a href="#name-algorithmic-explanation" class="section-name selfRef">Algorithmic Explanation</a>
-            </h5>
-<p id="section-3.3.6.1-1">The following section provides an explanation of how the Signature Proof Of Knowledge Generation (SpkGen) works.<a href="#section-3.3.6.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.6.1-2">Let the prover be in possession of a BBS signature <code>(A, e, s)</code> with <code>A = B * (1/(e + Sk))</code> where <code>Sk</code> the signer's secret key and,<a href="#section-3.3.6.1-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.6.1-3">
-<pre>B = P1 + h0 * s + h[1] * msg_1 + ... + h[L] * msg_L
-</pre><a href="#section-3.3.6.1-3" class="pilcrow">¶</a>
-</div>
-<p id="section-3.3.6.1-4">(without loss of generality we assume that the messages and generators are indexed from 0 to L). Let <code>(i1,...,iR)</code> be the indexes of generators corresponding to messages the prover wants to disclose and <code>(j1,...,jU)</code> be the indexes corresponding to undisclosed messages (i.e., <code>(j1,...,jU) = [L] \ (i1,...,iR)</code>). To prove knowledge of a signature on the disclosed messages, work as follows,<a href="#section-3.3.6.1-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.3.6.1-5.1">
-                <p id="section-3.3.6.1-5.1.1">Randomize the signature <code>(A, e, s)</code>, by taking uniformly random <code>r1</code>, <code>r2</code> in [1, q-1], and calculate,<a href="#section-3.3.6.1-5.1.1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.6.1-5.1.2">
-<pre>1.  A' = A * r1,
-2.  Abar = A' * (-e) + B * r1
-3.  D = B * r1 + H0 * r2.
-</pre><a href="#section-3.3.6.1-5.1.2" class="pilcrow">¶</a>
-</div>
-</li>
-            </ul>
-<p id="section-3.3.6.1-6">Also set,<a href="#section-3.3.6.1-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.6.1-7">
-<pre>    4.  r3 = r1 ^ -1 mod q
-    5.  s' = s + r2 * r3.
-</pre><a href="#section-3.3.6.1-7" class="pilcrow">¶</a>
-</div>
-<p id="section-3.3.6.1-8">The values <code>(A', Abar, d)</code> will be part of the spk and are used to prove possession of a BBS signature, without revealing the signature itself. Note that; <code>e(A', Pk) = e(Abar, P2)</code> where <code>Pk</code> the signer's public key and P2 the base element in G2 (used to create the signer's <code>Pk</code>, see <a href="#sktopk">SkToPk</a>). This also serves to bind the spk to the signer's <code>Pk</code>.<a href="#section-3.3.6.1-8" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.3.6.1-9.1">
-                <p id="section-3.3.6.1-9.1.1">Set the following,<a href="#section-3.3.6.1-9.1.1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.6.1-9.1.2">
-<pre>1.  C1 = Abar - D
-2.  C2 = P1 +  H_i1 * msg_i1 + ... + H_iR * msg_iR
-</pre><a href="#section-3.3.6.1-9.1.2" class="pilcrow">¶</a>
-</div>
-</li>
-            </ul>
-<p id="section-3.3.6.1-10">Create a non-interactive zero-knowledge generalized Schnorr proof of knowledge (<code>nizk</code>) of the values <code>e, r2, r3, s'</code> and <code>msg_j1,...,msg_jU</code> (the undisclosed messages) so that both of the following equalities hold,<a href="#section-3.3.6.1-10" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.6.1-11">
-<pre>    EQ1.  C1 = A' * (-e) - H0 * r2
-    EQ2.  C2 = D * (-r3) + H0 * s' + H_j1 * msg_j1 + ... + H_jU * msg_jU.
-</pre><a href="#section-3.3.6.1-11" class="pilcrow">¶</a>
-</div>
-<p id="section-3.3.6.1-12">If both EQ1 and EQ2 hold, and <code>e(A', Pk) = e(Abar, P2)</code>, an extractor can return a valid BBS signature from the signers <code>Sk</code>, on the disclosed messages. The spk returned is <code>(A', Abar, d, nizk)</code>. To validate the spk, a verifier checks that <code>e(A', Pk) = e(Abar, P2)</code> and verifies <code>nizk</code>.<a href="#section-3.3.6.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
-</section>
-</div>
-<div id="spkverify">
+<div id="proofverify">
 <section id="section-3.3.7">
-          <h4 id="name-spkverify">
-<a href="#section-3.3.7" class="section-number selfRef">3.3.7. </a><a href="#name-spkverify" class="section-name selfRef">SpkVerify</a>
+          <h4 id="name-proofverify">
+<a href="#section-3.3.7" class="section-number selfRef">3.3.7. </a><a href="#name-proofverify" class="section-name selfRef">ProofVerify</a>
           </h4>
-<p id="section-3.3.7-1">SpkVerify checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation message used in SpkGen.<a href="#section-3.3.7-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.7-1">ProofVerify checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation header used in ProofGen.<a href="#section-3.3.7-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.7-2">
-<pre>result = SpkVerify(spk, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, pm)
+<pre>result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, header, ph)
 
 Inputs:
 
-- spk, octet string.
+- proof, octet string.
 - PK, octet string in output form from SkToPk.
-- msg_i1,..., msg_iR, octet strings. The revealed messages in input to spkGen.
+- msg_i1,..., msg_iR, octet strings. The revealed messages in input to ProofGen.
 - H_1,..., H_L, points of G1. The generators in input to Sign.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- pm, octet string
+- header, an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string.
+- ph, octet string
+
+Parameters:
+
+- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- H_s, point of G1. The generator for the blinding value of the signature.
+- H_d, point of G1. The generator used to sign the signature domain.
 
 Outputs:
 
@@ -1916,23 +1928,27 @@ Procedure:
 
 3. (j1, j2, ..., jU) = [L]\RevealedIndexes
 
-4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = spk
+4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = proof
 
-5. C1 = (Abar - D) * c + A' * e^ + H0 * r2^
+5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. T = P1 + H_i1 * msg_i1 + ... H_iR * msg_iR
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-7. C2 = T * c + D * (-r3^) + H0 * s^ + H_j1 * m^_j1 + ... + H_jU * m^_jU
+7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
-8. cv = HASH(PK || Abar || A' || D || C1 || C2 || pm)
+8. T = P1 + H_s * domain + H_i1 * msg_i1 + ... H_iR * msg_iR
 
-9. if c != cv, return INVALID
+9. C2 = T * c + D * (-r3^) + H_s * s^ + H_j1 * m^_j1 + ... + H_jU * m^_jU
 
-10. if A' == 1, return INVALID
+10. cv = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-11. if e(A', W) * e(Abar, -P2) != 1, return INVALID
+11. if c != cv, return INVALID
 
-12. return VALID
+12. if A' == 1, return INVALID
+
+13. if e(A', W) * e(Abar, -P2) != 1, return INVALID
+
+14. return VALID
 </pre><a href="#section-3.3.7-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1942,20 +1958,20 @@ Procedure:
           <h4 id="name-creategenerators">
 <a href="#section-3.3.8" class="section-number selfRef">3.3.8. </a><a href="#name-creategenerators" class="section-name selfRef">CreateGenerators</a>
           </h4>
-<p id="section-3.3.8-1">The CreateGenerators operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, spkgen and spkverify.<a href="#section-3.3.8-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.8-1">The CreateGenerators operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, ProofGen and ProofVerify.<a href="#section-3.3.8-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.8-2"><em>Note</em> The scope in which the seed used below is determined, is still an active conversation in the working group see <a href="#ciphersuites" class="xref">Section 5</a> for the current method being used.<a href="#section-3.3.8-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.8-3">
 <pre>generators = CreateGenerators(dst, message_generator_seed, length);
 
 Inputs:
 
-dst, octet string - Domain Separation Tag
-message_generator_seed, octet string
-length, unsigned integer - Number of generators to create from the seed and dst
+- dst, octet string. Domain Separation Tag.
+- message_generator_seed, octet string.
+- length, unsigned integer. Number of generators to create from the seed and dst.
 
 Outputs:
 
-- generators, an array of generators
+- generators, an array of generators.
 
 Procedure:
 
@@ -1981,7 +1997,7 @@ Procedure:
           <h4 id="name-mapmessagetoscalar">
 <a href="#section-3.3.9" class="section-number selfRef">3.3.9. </a><a href="#name-mapmessagetoscalar" class="section-name selfRef">MapMessageToScalar</a>
           </h4>
-<p id="section-3.3.9-1">There are multiple ways in which messages can be mapped to their respective scalar values, which is their required form to be used with the sign, verify, spkGen and spkVerify operations.<a href="#section-3.3.9-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.9-1">There are multiple ways in which messages can be mapped to their respective scalar values, which is their required form to be used with the sign, verify, ProofGen and ProofVerify operations.<a href="#section-3.3.9-1" class="pilcrow">¶</a></p>
 <div id="mapmessagetoscalarashash">
 <section id="section-3.3.9.1">
             <h5 id="name-mapmessagetoscalarashash">
@@ -1994,20 +2010,65 @@ Procedure:
 Inputs:
 
 - msg: octet string.
-- dst: Domain separation tag; Note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter
+- dst: Domain separation tag; note this is not defined as a function argument as per [@!I-D.irtf-cfrg-hash-to-curve] instead as a parameter.
 
 Outputs:
 
-- result: scalar value
+- result: scalar value.
 
 Procedure:
 
-1. result = hash_to_field(msg, 1)
+1. If len(dst) &gt; 2^8 - 1 or len(msg) &gt; 2^64 - 1, abort
 
-2. return result
+2. dst_prime = I2OSP(len(dst), 1) || dst
+
+3. msg_prime = I2OSP(len(msg), 8) || msg
+
+4. result = hash_to_scalar(msg_prime || dst_prime, 1)
+
+5. return result
 </pre><a href="#section-3.3.9.1-2" class="pilcrow">¶</a>
 </div>
 </section>
+</div>
+</section>
+</div>
+<div id="hash-to-scalar">
+<section id="section-3.3.10">
+          <h4 id="name-hash-to-scalar">
+<a href="#section-3.3.10" class="section-number selfRef">3.3.10. </a><a href="#name-hash-to-scalar" class="section-name selfRef">Hash to scalar</a>
+          </h4>
+<p id="section-3.3.10-1">This operation describes how to hash an arbitrary octet string to <code>n</code> scalar values in the multiplicative group of integers mod q. This procedure acts as a helper function, and it is used internally in various places within the operations described in the spec. To map a message to a scalar that would be passed as input to the <a href="#sign">Sign</a>, <a href="#verify">Verify</a>, <a href="#spkgen">spkGen</a> and <a href="#spkverify">spkVerify</a> functions, one must use <a href="#mapmessagetoscalar">MapMessageToScalarAsHash</a> instead.<a href="#section-3.3.10-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.10-2">The <code>hash_to_scalar</code> procedure hashes elements using an extendable-output function (XOF). Applications not wishing to use an XOF may use <code>hash_to_field</code> defined in Section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>, combined with <code>expand_message_xmd</code> defined in Section 5.4.1 of the same document, in place of <code>hash_to_scalar</code>. In that case, every element outputted by <code>hash_to_field</code> that is equal to 0 MUST be rejected. If that occurs, one should calculate more field elements (using <code>hash_to_field</code>), until they get <code>n</code> non-zero elements (for example, if there is only one 0 in the output of <code>hash_to_field(msg, 2)</code> one must try to calculate <code>hash_to_field(msg, 3)</code> etc.).<a href="#section-3.3.10-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.10-3">
+<pre>result = hash_to_scalar(msg_octets, n)
+
+Inputs:
+
+- msg_octets: octet string. The message to be hashed.
+- n: non-negative integer. The number of scalars to output.
+
+Parameters:
+
+- q: non-negative integer. The prime order of the G_1 and G_2 groups,
+     defined by the ciphersuite.
+
+Outputs:
+
+- (scalar_1, ..., scalar_n): a list of scalars. A list of non-zero scalars mod q.
+
+Procedure:
+
+1. h = XOF(msg_octets)
+
+2. for i in (1, ..., n):
+
+3.     scalar_i = OS2IP(h.read(64)) mod q
+
+4.     if scalar_i is 0, go back to step 3
+
+5. return (scalar_1, ..., scalar_n)
+</pre><a href="#section-3.3.10-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2025,7 +2086,7 @@ Procedure:
         <h3 id="name-validating-public-keys">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-validating-public-keys" class="section-name selfRef">Validating public keys</a>
         </h3>
-<p id="section-4.1-1">All algorithms in Section 2 that operate on points in public keys require first validating those keys.  For the sign, verify and proof schemes, the use of KeyValidate is REQUIRED.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">It is RECOMMENDED for any operation in <a href="#operations" class="xref">Section 3.3</a> involving public keys that do not have an explicit invocation to the KeyValidate operation <a href="#keyvalidate" class="xref">Section 3.3.3</a> documented in their procedure, that this check be performed prior to executing the operation. An example of where this recommendation applies is the sign <a href="#sign" class="xref">Section 3.3.4</a> operation. An example of where an explicit invocation to the KeyValidate operation <a href="#keyvalidate" class="xref">Section 3.3.3</a> is already defined and therefore required is the verify <a href="#verify" class="xref">Section 3.3.5</a> operation.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="skipping-membership-checks">
@@ -2033,13 +2094,13 @@ Procedure:
         <h3 id="name-skipping-membership-checks">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-skipping-membership-checks" class="section-name selfRef">Skipping membership checks</a>
         </h3>
-<p id="section-4.2-1">Some existing implementations skip the subgroup_check invocation in Verify (Section 2.8), whose purpose is ensuring that the signature is an element of a prime-order subgroup.  This check is REQUIRED of conforming implementations, for two reasons.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">Some existing implementations skip the subgroup_check invocation in Verify <a href="#verify" class="xref">Section 3.3.5</a>, whose purpose is ensuring that the signature is an element of a prime-order subgroup.  This check is REQUIRED of conforming implementations, for two reasons.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-2">
 <li id="section-4.2-2.1">
-            <p id="section-4.2-2.1.1">For most pairing-friendly elliptic curves used in practice, the pairing operation e (Section 1.3) is undefined when its input points are not in the prime-order subgroups of E1 and E2. The resulting behavior is unpredictable, and may enable forgeries.<a href="#section-4.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.1.1">For most pairing-friendly elliptic curves used in practice, the pairing operation e <a href="#notation" class="xref">Section 1.2</a> is undefined when its input points are not in the prime-order subgroups of E1 and E2. The resulting behavior is unpredictable, and may enable forgeries.<a href="#section-4.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.2-2.2">
-            <p id="section-4.2-2.2.1">Even if the pairing operation behaves properly on inputs that are outside the correct subgroups, skipping the subgroup check breaks the strong unforgeability property [ADR02].<a href="#section-4.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.2.1">Even if the pairing operation behaves properly on inputs that are outside the correct subgroups, skipping the subgroup check breaks the strong unforgeability property <span>[<a href="#ADR02" class="xref">ADR02</a>]</span>.<a href="#section-4.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2059,17 +2120,17 @@ Procedure:
         </h3>
 <p id="section-4.4-1">The IKM input to KeyGen MUST be infeasible to guess and MUST be kept secret. One possibility is to generate IKM from a trusted source of randomness.  Guidelines on constructing such a source are outside the scope of this document.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">Secret keys MAY be generated using other methods; in this case they MUST be infeasible to guess and MUST be indistinguishable from uniformly random modulo q.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
-<p id="section-4.4-3">BBS signatures are nondeterministic, meaning care must be taken against attacks arising from signing with bad randomness, for example, the nonce reuse attack on ECDSA [HDWH12]. It is RECOMMEDNED that the nonces and presentation messages used in this specification are chosen at random from a trusted source of randomness (see "Presentation message selection" section below for additional considerations).<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">BBS proofs are nondeterministic, meaning care must be taken against attacks arising from using bad randomness, for example, the nonce reuse attack on ECDSA <span>[<a href="#HDWH12" class="xref">HDWH12</a>]</span>. It is RECOMMENDED that the presentation header used in this specification contain a nonce chosen at random from a trusted source of randomness, see the <a href="#presentation-header-selection" class="xref">Section 4.5</a> for additional considerations.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">BlindSign as discussed in 2.10 uses randomness from two parties so care MUST be taken that both sources of randomness are trusted. If one party uses weak randomness, it could compromise the signature.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 <p id="section-4.4-5">When a trusted source of randomness is used, signatures and proofs are much harder to forge or break due to the use of multiple nonces.<a href="#section-4.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="presentation-message-selection">
+<div id="presentation-header-selection">
 <section id="section-4.5">
-        <h3 id="name-presentation-message-select">
-<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-presentation-message-select" class="section-name selfRef">Presentation message selection</a>
+        <h3 id="name-presentation-header-selecti">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-presentation-header-selecti" class="section-name selfRef">Presentation header selection</a>
         </h3>
-<p id="section-4.5-1">The signature proofs of knowledge generated in this specification are created using a specified presentation message. A verifier-specified cryptographically random value (e.g., a nonce) featuring in the presentation message provides strong protections against replay attacks, and is RECOMMENDED in most use cases. In some settings, proofs can be generated in a non-interactive fashion, in which case verifiers MUST be able to verify the uniqueness of the presentation message values.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<p id="section-4.5-1">The signature proofs of knowledge generated in this specification are created using a specified presentation header. A verifier-specified cryptographically random value (e.g., a nonce) featuring in the presentation header provides strong protections against replay attacks, and is RECOMMENDED in most use cases. In some settings, proofs can be generated in a non-interactive fashion, in which case verifiers MUST be able to verify the uniqueness of the presentation header values.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementing-hash-to-curve-g1">
@@ -2081,32 +2142,20 @@ Procedure:
 <p id="section-4.6-2">In addition, ciphersuites MUST specify unique domain separation tags for hash_to_curve.  Some guidance around defining this can be found in <a href="#ciphersuites" class="xref">Section 5</a>.<a href="#section-4.6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="use-of-contexts">
-<section id="section-4.7">
-        <h3 id="name-use-of-contexts">
-<a href="#section-4.7" class="section-number selfRef">4.7. </a><a href="#name-use-of-contexts" class="section-name selfRef">Use of Contexts</a>
-        </h3>
-<p id="section-4.7-1">Contexts can be used to separate uses of the protocol between different protocols (which is very hard to reliably do otherwise) and between different uses within the same protocol. However, the following SHOULD be kept in mind:<a href="#section-4.7-1" class="pilcrow">¶</a></p>
-<p id="section-4.7-2">The context SHOULD be a constant string specified by the protocol using it. It SHOULD NOT incorporate variable elements from the message itself.<a href="#section-4.7-2" class="pilcrow">¶</a></p>
-<p id="section-4.7-3">Contexts SHOULD NOT be used opportunistically, as that kind of use is very error prone. If contexts are used, one SHOULD require all signature schemes available for use in that purpose support contexts.<a href="#section-4.7-3" class="pilcrow">¶</a></p>
-<p id="section-4.7-4">Contexts are an extra input, which percolate out of APIs; as such, even if the signature scheme supports contexts, those may not be available for use. This problem is compounded by the fact that many times the application is not invoking the signing, verification, and proof functions directly but via some other protocol.<a href="#section-4.7-4" class="pilcrow">¶</a></p>
-<p id="section-4.7-5">The ZKP protocols use nonces which MUST be different in each context.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="choice-of-underlying-curve">
-<section id="section-4.8">
+<section id="section-4.7">
         <h3 id="name-choice-of-underlying-curve">
-<a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-choice-of-underlying-curve" class="section-name selfRef">Choice of underlying curve</a>
+<a href="#section-4.7" class="section-number selfRef">4.7. </a><a href="#name-choice-of-underlying-curve" class="section-name selfRef">Choice of underlying curve</a>
         </h3>
-<p id="section-4.8-1">BBS signatures can be implemented on any pairing-friendly curve. However care MUST be taken when selecting one that is appropriate, this specification defines a ciphersuite for using the BLS12-381 curve in <a href="#ciphersuites" class="xref">Section 5</a> which as a curve achieves around 117 bits of security according to a recent NCC ZCash cryptography review <span>[<a href="#ZCASH-REVIEW" class="xref">ZCASH-REVIEW</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
+<p id="section-4.7-1">BBS signatures can be implemented on any pairing-friendly curve. However care MUST be taken when selecting one that is appropriate, this specification defines a ciphersuite for using the BLS12-381 curve in <a href="#ciphersuites" class="xref">Section 5</a> which as a curve achieves around 117 bits of security according to a recent NCC ZCash cryptography review <span>[<a href="#ZCASH-REVIEW" class="xref">ZCASH-REVIEW</a>]</span>.<a href="#section-4.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="security-of-spkgen">
-<section id="section-4.9">
-        <h3 id="name-security-of-spkgen">
-<a href="#section-4.9" class="section-number selfRef">4.9. </a><a href="#name-security-of-spkgen" class="section-name selfRef">Security of spkGen</a>
+<div id="security-of-proofs-generated-by-proofgen">
+<section id="section-4.8">
+        <h3 id="name-security-of-proofs-generate">
+<a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-security-of-proofs-generate" class="section-name selfRef">Security of Proofs generated by ProofGen</a>
         </h3>
-<p id="section-4.9-1">The BBS proof, as returned by spkGen, is a zero-knowledge proof-of-knowledge <span>[<a href="#CDL16" class="xref">CDL16</a>]</span>. This guarantees that no information will be revealed about the signature itself or the undisclosed messages, from the output of spkGen. Note that the security proofs in <span>[<a href="#CDL16" class="xref">CDL16</a>]</span> work on type 3 pairing setting. This means that G1 should be different from G2 and with no efficient isomorphism between them.<a href="#section-4.9-1" class="pilcrow">¶</a></p>
+<p id="section-4.8-1">The proof, as returned by ProofGen, is a zero-knowledge proof-of-knowledge <span>[<a href="#CDL16" class="xref">CDL16</a>]</span>. This guarantees that no information will be revealed about the signature itself or the undisclosed messages, from the output of ProofGen. Note that the security proofs in <span>[<a href="#CDL16" class="xref">CDL16</a>]</span> work on type 3 pairing setting. This means that G1 should be different from G2 and with no efficient isomorphism between them.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2124,7 +2173,7 @@ Procedure:
         </h3>
 <ul class="normal">
 <li class="normal" id="section-5.1-1.1">
-            <p id="section-5.1-1.1.1">H: a cryptographic hash function.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.1.1">HASH: a cryptographic hash function.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.2">
             <p id="section-5.1-1.2.1">point_to_octets:
@@ -2148,7 +2197,16 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.7.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation<a href="#section-5.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.8">
-            <p id="section-5.1-1.8.1">message<em>generator</em>seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.8.1">hashing<em>elements</em>to<em>scalars: either hash</em>to<em>scalar using H (in this case H MUST be an XOF), or hash</em>to_field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.9">
+            <p id="section-5.1-1.9.1">message<em>generator</em>seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.10">
+            <p id="section-5.1-1.10.1">blind<em>value</em>generator<em>seed: The seed used to calculate the signature blinding value generator (H</em>s). Similar to the message<em>generator</em>seed, there are multiple scopes for the blind<em>value</em>generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.11">
+            <p id="section-5.1-1.11.1">signature<em>dst</em>generator<em>seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message</em>generator<em>seed and blind</em>value<em>generator</em>seed.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2159,7 +2217,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-bls12-381-ciphersuite" class="section-name selfRef">BLS12-381 Ciphersuite</a>
         </h3>
 <span class="break"></span><dl class="dlParallel" id="section-5.2-1">
-          <dt id="section-5.2-1.1">H</dt>
+          <dt id="section-5.2-1.1">HASH</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.2">SHAKE-256 as defined in <span>[<a href="#SHA3" class="xref">SHA3</a>]</span><a href="#section-5.2-1.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
@@ -2187,8 +2245,20 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
           <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS<em>BLS12381FQ</em>XOF:SHAKE-256<em>SSWU</em>RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.15">message_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators" class="xref">Section 3.3.8</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+<dt id="section-5.2-1.15">message<em>generator</em>seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.17">blind<em>value</em>generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.18">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>BLINDING<em>VALUE</em>GENERATOR<em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H</em>s).<a href="#section-5.2-1.18" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.19">signature<em>dst</em>generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>DST<em>GENERATOR</em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.20" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.21">hashing<em>elements</em>to_scalars</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.22">hash<em>to</em>scalar<a href="#section-5.2-1.22" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -2370,9 +2440,17 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
       </h2>
 <dl class="references">
+<dt id="ADR02">[ADR02]</dt>
+      <dd>
+<span class="refAuthor">An, J. H.</span>, <span class="refAuthor">Dodis, Y.</span>, and <span class="refAuthor">T. Rabin</span>, <span class="refTitle">"On the Security of Joint Signature and Encryption"</span>, <span class="seriesInfo">pages 83-107</span>, <time datetime="2002-04" class="refDate">April 2002</time>, <span>&lt;<a href="https://doi.org/10.1007/3-540-46035-7_6">https://doi.org/10.1007/3-540-46035-7_6</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="CDL16">[CDL16]</dt>
       <dd>
 <span class="refAuthor">Camenisch, J.</span>, <span class="refAuthor">Drijvers, M.</span>, and <span class="refAuthor">A. Lehmann</span>, <span class="refTitle">"Anonymous Attestation Using the Strong Diffie Hellman Assumption Revisited"</span>, <span class="seriesInfo">Springer, Cham</span>, <time datetime="2016" class="refDate">2016</time>, <span>&lt;<a href="https://eprint.iacr.org/2016/663.pdf">https://eprint.iacr.org/2016/663.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="HDWH12">[HDWH12]</dt>
+      <dd>
+<span class="refAuthor">Heninger, N.</span>, <span class="refAuthor">Durumeric, Z.</span>, <span class="refAuthor">Wustrow, E.</span>, and <span class="refAuthor">J.A. Halderman</span>, <span class="refTitle">"Mining your Ps and Qs: Detection of widespread weak keys in network devices"</span>, <span class="seriesInfo">pages 205-220</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf">https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-cfrg-bls-signature">[I-D.irtf-cfrg-bls-signature]</dt>
       <dd>
@@ -2415,7 +2493,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 
 * expand_message: expand_message_xof (Section 5.4.2 of [@!I-D.irtf-cfrg-hash-to-curve])
 
-* H: SHAKE-256
+* HASH: SHAKE-256
 
 * L: 64
 
@@ -2464,7 +2542,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 
 * expand_message: expand_message_xof (Section 5.4.2 of [@!I-D.irtf-cfrg-hash-to-curve])
 
-* H: SHAKE-256
+* HASH: SHAKE-256
 
 * L: 64
 
@@ -2678,6 +2756,55 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 <p id="appendix-A.3.5-5">Along with the PK value as defined in <a href="#key-pair" class="xref">Section 5.2.1.2</a> as inputs into the Verify operation should fail signature validation due to public key used to verify is in-correct<a href="#appendix-A.3.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
+<div id="proof-generation-and-verification-algorithmic-explanation">
+<section id="appendix-A.4">
+        <h3 id="name-proof-generation-and-verifi">
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-proof-generation-and-verifi" class="section-name selfRef">Proof Generation and Verification Algorithmic Explanation</a>
+        </h3>
+<p id="appendix-A.4-1">The following section provides an explanation of how the ProofGen and ProofVerify operations work.<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-2">Let the prover be in possession of a BBS signature <code>(A, e, s)</code> with <code>A = B * (1/(e + Sk))</code> where <code>Sk</code> the signer's secret key and,<a href="#appendix-A.4-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.4-3">
+<pre>B = P1 + h0 * s + h[1] * msg_1 + ... + h[L] * msg_L
+</pre><a href="#appendix-A.4-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.4-4">(without loss of generality we assume that the messages and generators are indexed from 0 to L). Let <code>(i1,...,iR)</code> be the indexes of generators corresponding to messages the prover wants to disclose and <code>(j1,...,jU)</code> be the indexes corresponding to undisclosed messages (i.e., <code>(j1,...,jU) = [L] \ (i1,...,iR)</code>). To prove knowledge of a signature on the disclosed messages, work as follows,<a href="#appendix-A.4-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.4-5.1">
+            <p id="appendix-A.4-5.1.1">Randomize the signature <code>(A, e, s)</code>, by taking uniformly random <code>r1</code>, <code>r2</code> in [1, q-1], and calculate,<a href="#appendix-A.4-5.1.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.4-5.1.2">
+<pre>1.  A' = A * r1,
+2.  Abar = A' * (-e) + B * r1
+3.  D = B * r1 + H0 * r2.
+</pre><a href="#appendix-A.4-5.1.2" class="pilcrow">¶</a>
+</div>
+</li>
+        </ul>
+<p id="appendix-A.4-6">Also set,<a href="#appendix-A.4-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.4-7">
+<pre>    4.  r3 = r1 ^ -1 mod q
+    5.  s' = s + r2 * r3.
+</pre><a href="#appendix-A.4-7" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.4-8">The values <code>(A', Abar, d)</code> will be part of the proof and are used to prove possession of a BBS signature, without revealing the signature itself. Note that; <code>e(A', Pk) = e(Abar, P2)</code> where <code>Pk</code> the signer's public key and P2 the base element in G2 (used to create the signer's <code>Pk</code>, see <a href="#sktopk">SkToPk</a>). This also serves to bind the proof to the signer's <code>Pk</code>.<a href="#appendix-A.4-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.4-9.1">
+            <p id="appendix-A.4-9.1.1">Set the following,<a href="#appendix-A.4-9.1.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.4-9.1.2">
+<pre>1.  C1 = Abar - D
+2.  C2 = P1 +  H_i1 * msg_i1 + ... + H_iR * msg_iR
+</pre><a href="#appendix-A.4-9.1.2" class="pilcrow">¶</a>
+</div>
+</li>
+        </ul>
+<p id="appendix-A.4-10">Create a non-interactive zero-knowledge generalized Schnorr proof of knowledge (<code>nizk</code>) of the values <code>e, r2, r3, s'</code> and <code>msg_j1,...,msg_jU</code> (the undisclosed messages) so that both of the following equalities hold,<a href="#appendix-A.4-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.4-11">
+<pre>    EQ1.  C1 = A' * (-e) - H0 * r2
+    EQ2.  C2 = D * (-r3) + H0 * s' + H_j1 * msg_j1 + ... + H_jU * msg_jU.
+</pre><a href="#appendix-A.4-11" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.4-12">If both EQ1 and EQ2 hold, and <code>e(A', Pk) = e(Abar, P2)</code>, an extractor can return a valid BBS signature from the signers <code>Sk</code>, on the disclosed messages. The proof returned is <code>(A', Abar, d, nizk)</code>. To validate the proof, a verifier checks that <code>e(A', Pk) = e(Abar, P2)</code> and verifies <code>nizk</code>.<a href="#appendix-A.4-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
