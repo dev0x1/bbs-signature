@@ -51,7 +51,7 @@ organization = "MATTR"
 
 .# Abstract
 
-BBS is a digital signature scheme categorized as a form of short group signature that supports several novel properties. Notably, the scheme supports signing multiple messages whilst producing a single output digital signature. Through this capability, the possessor of a signature is able to derive proofs that selectively disclose subsets of the originally signed set of messages, whilst preserving the verifiable authenticity and integrity of the messages. Furthermore, these derived proofs are said to be zero-knowledge in nature as they do not reveal the underlying signature; instead, what they reveal is a proof of knowledge of the undisclosed signature.
+BBS is a digital signature scheme categorized as a form of short group signature that supports several unique properties. Notably, the scheme supports signing multiple messages whilst producing a single output digital signature. Through this capability, the possessor of a signature is able to derive proofs that selectively disclose subsets of the originally signed set of messages, whilst preserving the verifiable authenticity and integrity of the messages. Furthermore, these derived proofs are said to be zero-knowledge in nature as they do not reveal the underlying signature; instead, what they reveal is a proof of knowledge of the undisclosed signature.
 
 {mainmatter}
 
@@ -91,6 +91,50 @@ Below is a basic diagram describing the main entities involved in using the sche
 +----------+                                   +-----------+                                        +-----------+
 ~~~
 !---
+
+!---
+~~~ ascii-art
+
++----------+
+|  header  |
+|----------|
+|  msg_1   |
+|  ....    |
+|  msg_L   |
++----------+
+                                +-----------+
+     +              ------>     | signature |
+                                +-----------+
++----------+
+|    SK    |
++----------+
+~~~
+!---
+
+
+!---
+~~~ ascii-art
++----------------+
+|  +----------+  |
+|  |  header  |  |
+|  |----------|  |
+|  |  msg_1   |  |
+|  |  ....    |  |
+|  |  msg_n   |  |
+|  +----------+  |
++----------------+
+|   signature    |
++----------------+
+
+                                  +----------------------+
+        +            ------>      | Verified? TRUE/FALSE |
+                                  +----------------------+
+   +----------+
+   |    PK    |
+   +----------+
+~~~
+!---
+
 Figure: Basic diagram capturing the main entities involved in using the scheme
 
 **Note** The protocols implied by the items annotated by an asterisk are out of scope for this specification
@@ -119,9 +163,6 @@ msg
 
 generator
 : A valid point on the selected sub-group of the curve being used that is used to commit a value.
-
-H\[i\]
-: The generator corresponding to a given msg.
 
 H_s
 : A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.
@@ -277,7 +318,7 @@ For readability, this document makes these transformations implicitly, but they 
 
 ### KeyGen
 
-The KeyGen algorithm generates a secret key SK deterministically from a secret octet string IKM.
+This operation generates a secret key SK deterministically from a secret octet string IKM.
 
 KeyGen uses an HKDF [@!RFC5869] instantiated with the hash function HASH.
 
@@ -334,7 +375,7 @@ Procedure:
 
 ### SkToPk
 
-SkToPk algorithm takes a secret key SK and outputs a corresponding public key.
+This operation takes a secret key SK and outputs a corresponding public key.
 
 ```
 PK = SkToPk(SK)
@@ -358,7 +399,7 @@ Procedure:
 
 ### KeyValidate
 
-KeyValidate checks if the public key is valid.
+This operation checks if the public key is valid.
 
 As an optimization, implementations MAY cache the result of KeyValidate in order to avoid unnecessarily repeating validation for known keys.
 
@@ -388,33 +429,31 @@ Procedure:
 
 ### Sign
 
-Sign computes a signature from SK, PK, over a vector of messages. This method
-describes deterministic signing. For threshold signing, XOF can be replaced
-with a PRF due to the insecurity of deterministic threshold signing.
+This operation computes a deterministic signature from an SK, over a header and a vector of messages.
 
 ```
-signature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L), header)
+signature = Sign(SK, header, (msg_1,..., msg_L))
 
 Inputs:
 
-- msg_1,..., msg_L, octet strings. Messages to be signed.
-- H_1,..., H_L, points of G1. Generators used to sign the messages.
-- SK, a secret key output from KeyGen.
-- PK, a public key output from SkToPk.
-- header, an optional octet string containing context and application specific
-          information. If not supplied, it defaults to an empty string.
+- SK, a secret key of the form outputted by the KeyGen operation.
+- header, an optional octet string containing context and application specific information. If not supplied, it defaults to an empty string.
+- msg_1,..., msg_L, an optional vector of octet strings. Application specific messages.
 
 Parameters:
 
-- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- Ciphersuite_ID, ASCII string. The unique ID of the ciphersuite.
 - H_s, point of G1. The generator for the blinding value of the signature.
 - H_d, point of G1. The generator used to sign the signature domain.
+- H_1,..., H_L, points of G1. Generators used to commit each message.
 
 Outputs:
 
 - signature, an octet string.
 
 Procedure:
+
+1. PK = SkToPk(SK)
 
 1. (W, H0, H) = octets_to_point(PK)
 
@@ -443,25 +482,25 @@ Procedure:
 
 ### Verify
 
-Verify checks that a signature is valid for the octet string messages under the public key.
+This operation checks that a signature is valid for a given header and vector of messages against the supplied public key.
 
 ```
-result = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature, header)
+result = Verify(PK, header, (msg_1,..., msg_L), signature)
 
 Inputs:
 
-- msg_1,..., msg_L, octet strings. Messages in input to Sign.
-- H_1,..., H_L, points of G1. The generators in input to Sign.
-- signature, octet string.
-- PK, a public key in the format output by SkToPk.
+- PK, a public key of the form outputted by the SkToPk operation.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
+- msg_1,..., msg_L, an optional vector of octet strings. Application specific messages.
+- signature, octet string.
 
 Parameters:
 
-- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- Ciphersuite_ID, ASCII string. The unique ID of the ciphersuite.
 - H_s, point of G1. The generator for the blinding value of the signature.
 - H_d, point of G1. The generator used to sign the signature domain.
+- H_1,..., H_L, points of G1. Generators used to commit each message.
 
 Outputs:
 
@@ -497,24 +536,24 @@ A signature proof of knowledge generating algorithm that creates a zero-knowledg
 If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.
 
 ```
-proof = ProofGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, header, ph)
+proof = ProofGen(PK, header, (msg_1,..., msg_L), RevealedIndexes, signature, ph)
 
 Inputs:
 
 - PK, octet string in output form from SkToPk.
-- msg_1,..., msg_L, octet strings. Messages in input to Sign.
-- H_1,..., H_L, points of G1. The generators in input to Sign.
-- RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- signature, octet string in output form from Sign.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
+- msg_1,..., msg_L, an optional vector of octet strings. Messages in input to Sign.
+- RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
+- signature, octet string in output form from Sign.
 - ph, octet string.
 
 Parameters:
 
-- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- Ciphersuite_ID, ASCII string. The unique ID of the ciphersuite.
 - H_s, point of G1. The generator for the blinding value of the signature.
 - H_d, point of G1. The generator used to sign the signature domain.
+- H_1,..., H_L, points of G1. Generators used to commit each message.
 
 Outputs:
 
@@ -577,17 +616,16 @@ Procedure:
 
 ### ProofVerify
 
-ProofVerify checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation header used in ProofGen.
+This operation checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation header used in ProofGen.
 
 ```
-result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), (H_1,..., H_L), RevealedIndexes, header, ph)
+result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), RevealedIndexes, header, ph)
 
 Inputs:
 
 - proof, octet string.
 - PK, octet string in output form from SkToPk.
-- msg_i1,..., msg_iR, octet strings. The revealed messages in input to ProofGen.
-- H_1,..., H_L, points of G1. The generators in input to Sign.
+- msg_i1,..., msg_iR, an optional vector of octet strings. The revealed messages in input to ProofGen.
 - RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
 - header, an optional octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
@@ -595,9 +633,10 @@ Inputs:
 
 Parameters:
 
-- Ciphersuite_ID, octet string. The unique ID of the ciphersuite.
+- Ciphersuite_ID, ASCII string. The unique ID of the ciphersuite.
 - H_s, point of G1. The generator for the blinding value of the signature.
 - H_d, point of G1. The generator used to sign the signature domain.
+- H_1,..., H_L, points of G1. Generators used to commit each message.
 
 Outputs:
 
@@ -636,7 +675,7 @@ Procedure:
 
 ### CreateGenerators
 
-The CreateGenerators operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, ProofGen and ProofVerify.
+This operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, ProofGen and ProofVerify.
 
 *Note* The scope in which the seed used below is determined, is still an active conversation in the working group see (#ciphersuites) for the current method being used.
 
