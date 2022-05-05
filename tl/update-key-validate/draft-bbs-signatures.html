@@ -1544,29 +1544,26 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
 </li>
           </ul>
 <p id="section-3.2.3-3">After encoding, octet strings MUST be prepended with a value representing the length of their binary representation in the form of the number of bytes. If the octet string represents a DST, then its length must be encoded to octets using I2OSP with ouptut length of 1 byte. If it is a generic octet string (not representing a DST), its length must be encoded to octets using I2OSP with ouptut length of 8 bytes. The combined value (encoded value + length prefix) binary representation is then encoded as a single octet string. For example, the string <code>0x14d</code> will be encoded as <code>0x0000000000000002014d</code>. DSTs with length larger than 2^8 - 1 MUST be rejected. Other octet-strings (not DSTs) with length larger than 2^64 - 1, MUST also be rejected.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-4">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<a href="#section-3.2.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-5">=======
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; update key validate
-- Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,<a href="#section-3.2.3-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2.3-6">
-<pre>   message_octets = 0x4a616e65
-   number_octets = I2OSP(25, 4) = 0x0000000000000019
-</pre><a href="#section-3.2.3-6" class="pilcrow">¶</a>
-</div>
+<p id="section-3.2.3-4">As an example of the above transformations, consider the following. Assume that one wants to hash together the message <code>"Jane"</code> and the number <code>25</code>. The procedure would be<a href="#section-3.2.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2.3-7.1">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-7.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2.3-5.1">Calculate octets of the message <code>"Jane"</code> and the number <code>25</code> as,
+<code>
+message_octets = 0x4a616e65
+number_octets = I2OSP(25, 4) = 0x0000000000000019
+</code><a href="#section-3.2.3-5.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-7.2">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
+            <li class="normal" id="section-3.2.3-5.2">Calculate the length of the message binary representation (message_octets) and transform it to octets i.e., <code>len(message_octets) = I2OSP(4, 8) = 0x0000000000000004</code>.<a href="#section-3.2.3-5.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-3.2.3-5.3">Prepend the length calculated in the previous step to the message's binary representation and concatenate the result with the octets representing the number <code>25</code>, to get the octets to be hashed,
 <code>
 octets_to_hash = len(message_octets) || message_octets || number_octets =
               = 0x00000000000000044a616e650000000000000019
-</code><a href="#section-3.2.3-7.2" class="pilcrow">¶</a>
+</code><a href="#section-3.2.3-5.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-3.2.3-7.3">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-7.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-3.2.3-5.4">hash the result (i.e., <code>HASH(octets_to_hash)</code>)<a href="#section-3.2.3-5.4" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-3.2.3-8">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-8" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-6">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

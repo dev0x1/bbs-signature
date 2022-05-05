@@ -388,13 +388,11 @@ Table of Contents
 
    As an example of the above transformations, consider the following.
    Assume that one wants to hash together the message "Jane" and the
-   number 25.  The procedure would be <<<<<<< HEAD
+   number 25.  The procedure would be
 
-   ======= >>>>>>> update key validate - Calculate octets of the message
-   "Jane" and the number 25 as,
-
-      message_octets = 0x4a616e65
-      number_octets = I2OSP(25, 4) = 0x0000000000000019
+   *  Calculate octets of the message "Jane" and the number 25 as,
+      message_octets = 0x4a616e65 number_octets = I2OSP(25, 4) =
+      0x0000000000000019
 
    *  Calculate the length of the message binary representation
       (message_octets) and transform it to octets i.e.,
