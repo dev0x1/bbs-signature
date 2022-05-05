@@ -573,7 +573,7 @@ Procedure:
 
 6. for element in (e, s) do
 
-7.      rand_el = OS2IP(h.read(xof_no_drawn_of_bytes)) mod q.
+7.      element = OS2IP(h.read(xof_no_drawn_of_bytes)) mod q.
 
 8.      if element = 0, go back to step 4
 
@@ -1072,7 +1072,7 @@ Procedure:
       and requirements of the message_generator_seed and
       blind_value_generator_seed.
 
-   xof_no_drawn_of_bytes  Number of bytes to draw from the XOF when
+   *  xof_no_drawn_of_bytes: Number of bytes to draw from the XOF when
       performing operations such as creating generators as per the
       operation documented in Section 3.3.8 or computing the e and s
       components of the signature generated in Section 3.3.4.  It is
