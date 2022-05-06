@@ -1559,7 +1559,7 @@ octets_to_hash = len(message_octets) || message_octets || number_octets =
 </li>
           </ul>
 <p id="section-3.2.3-6">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-6" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-7">Optional input or parameters to operations that feature in a call to a HASH or XOF function, that are not supplied to the operation should be omitted from the call, for example if X is an optional input/parameter whilst A and B are required then the procedural step of <code>HASH(A || X || B)</code> MUST be evaluated to <code>HASH(A || B)</code>.<a href="#section-3.2.3-7" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-7">Optional input/parameters to operations that feature in a call to a HASH or XOF function, that are not supplied to the operation should be omitted from the call, for example if X is an optional input/parameter whilst A and B are required then the procedural step of <code>HASH(A || X || B)</code> MUST be evaluated to <code>HASH(A || B)</code>.<a href="#section-3.2.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
