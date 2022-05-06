@@ -437,7 +437,7 @@ SK = KeyGen(IKM)
 
 Inputs:
 
-- IKM, a secret octet string. See requirements above.
+- IKM (REQUIRED), a secret octet string. See requirements above.
 
 Outputs:
 
@@ -487,7 +487,7 @@ Procedure:
 
    Inputs:
 
-   - SK, a secret integer such that 0 < SK < q.
+   - SK (REQUIRED), a secret integer such that 0 < SK < q.
 
    Outputs:
 
@@ -513,7 +513,7 @@ Procedure:
 
    Inputs:
 
-   - PK, a public key in the format output by SkToPk.
+   - PK (REQUIRED), a public key in the format output by SkToPk.
 
    Outputs:
 
@@ -540,9 +540,9 @@ signature = Sign(SK, header, (msg_1,..., msg_L))
 
 Inputs:
 
-- SK, a secret key of the form outputted by the KeyGen operation.
-- header, an optional octet string containing context and application specific information. If not supplied, it defaults to an empty string.
-- msg_1,..., msg_L, an optional vector of octet strings. Application specific messages.
+- SK (REQUIRED), a secret key of the form outputted by the KeyGen operation.
+- header (OPTIONAL), an octet string containing context and application specific information. If not supplied, it defaults to an empty string.
+- msg_1,..., msg_L (OPTIONAL), a vector of octet strings. Application specific messages.
 
 Parameters:
 
@@ -588,15 +588,15 @@ Procedure:
    This operation checks that a signature is valid for a given header
    and vector of messages against the supplied public key.
 
-result = Verify(PK, header, (msg_1,..., msg_L), signature)
+result = Verify(PK, signature, header, (msg_1,..., msg_L))
 
 Inputs:
 
-- PK, a public key of the form outputted by the SkToPk operation.
-- header, an optional octet string containing context and application specific
+- PK (REQUIRED), a public key of the form outputted by the SkToPk operation.
+- signature (REQUIRED), octet string.
+- header (OPTIONAL), an octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
-- msg_1,..., msg_L, an optional vector of octet strings. Application specific messages.
-- signature, octet string.
+- msg_1,..., msg_L (OPTIONAL), an optional vector of octet strings. Application specific messages.
 
 Parameters:
 
@@ -644,17 +644,17 @@ Procedure:
    instead, then it will also need to pass the indexes of the generators
    corresponding to the revealed messages.
 
-proof = ProofGen(PK, header, (msg_1,..., msg_L), RevealedIndexes, signature, ph)
+proof = ProofGen(PK, signature, ph, header, (msg_1,..., msg_L), RevealedIndexes)
 
 Inputs:
 
-- PK, octet string in output form from SkToPk.
-- header, an optional octet string containing context and application specific
+- PK (REQUIRED), octet string in output form from SkToPk.
+- signature (REQUIRED), octet string in output form from Sign.
+- ph (REQUIRED), octet string.
+- header (OPTIONAL), an octet string containing context and application specific
           information. If not supplied, it defaults to an empty string.
-- msg_1,..., msg_L, an optional vector of octet strings. Messages in input to Sign.
-- RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- signature, octet string in output form from Sign.
-- ph, octet string.
+- msg_1,..., msg_L (OPTIONAL), an optional vector of octet strings. Messages in input to Sign.
+- RevealedIndexes (OPTIONAL), vector of unsigned integers. Indexes of revealed messages.
 
 Parameters:
 
@@ -728,17 +728,17 @@ Procedure:
    messages, a vector with the indices of these revealed messages, and
    the presentation header used in ProofGen.
 
-result = ProofVerify(proof, PK, (msg_i1,..., msg_iR), RevealedIndexes, header, ph)
+result = ProofVerify(proof, PK, ph, header, (msg_i1,..., msg_iR), RevealedIndexes)
 
 Inputs:
 
-- proof, octet string.
-- PK, octet string in output form from SkToPk.
-- msg_i1,..., msg_iR, an optional vector of octet strings. The revealed messages in input to ProofGen.
-- RevealedIndexes, vector of unsigned integers. Indexes of revealed messages.
-- header, an optional octet string containing context and application specific
-          information. If not supplied, it defaults to an empty string.
-- ph, octet string
+- proof (REQUIRED), octet string.
+- PK (REQUIRED), octet string in output form from SkToPk.
+- ph (REQUIRED), octet string
+- header (OPTIONAL), an optional octet string containing context and application specific
+          information. If not supplied, it defaults to an empty string. // TODO may want to be optional
+- msg_i1,..., msg_iR (OPTIONAL), an optional vector of octet strings. The revealed messages in input to ProofGen.
+- RevealedIndexes (OPTIONAL), vector of unsigned integers. Indexes of revealed messages.
 
 Parameters:
 
@@ -763,7 +763,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing?
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
