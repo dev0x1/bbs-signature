@@ -768,7 +768,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing? Note L should be zero here to, not omitted
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
