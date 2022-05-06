@@ -271,6 +271,8 @@ As an example of the above transformations, consider the following. Assume that 
 
 For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.
 
+Optional input or parameters to operations that feature in a call to a HASH or XOF function, that are not supplied to the operation should be omitted from the call, for example if X is an optional input/parameter whilst A and B are required then the procedural step of `HASH(A || X || B)` MUST be evaluated to `HASH(A || B)`.
+
 ## Operations
 
 ### KeyGen
@@ -356,7 +358,7 @@ Procedure:
 
 ### KeyValidate
 
-This operation checks if a given public key is valid.
+This operation checks if a public key is valid.
 
 As an optimization, implementations MAY cache the result of KeyValidate in order to avoid unnecessarily repeating validation for known public keys.
 
@@ -584,8 +586,7 @@ Inputs:
 - PK (REQUIRED), octet string in output form from SkToPk.
 - ph (REQUIRED), octet string
 - header (OPTIONAL), an optional octet string containing context and application specific
-          information. If not supplied, it defaults to an empty string. // TODO may want to be optional
-- msg_i1,..., msg_iR (OPTIONAL), an optional vector of octet strings. The revealed messages in input to ProofGen.
+          information. If not supplied, it defaults to an empty string.
 - RevealedIndexes (OPTIONAL), vector of unsigned integers. Indexes of revealed messages.
 
 Parameters:
@@ -611,7 +612,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing?
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing? Note L should be zero here to, not omitted
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
