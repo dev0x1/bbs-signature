@@ -275,7 +275,7 @@ For readability, this document makes these transformations implicitly, but they 
 
 ### KeyGen
 
-This operation generates a secret key SK deterministically from a secret octet string IKM.
+This operation generates a secret key (SK) deterministically from a secret octet string (IKM).
 
 KeyGen uses an HKDF [@!RFC5869] instantiated with the hash function HASH.
 
@@ -300,7 +300,7 @@ Outputs:
 
 Parameters:
 
-- key_info, an optional octet string. if this is not supplied, it MUST default to an empty string.
+- key_info (OPTIONAL), an octet string. if this is not supplied, it MUST default to an empty string.
 
 Definitions:
 
@@ -328,11 +328,11 @@ Procedure:
 8. return SK
 ```
 
-**Note** This operation is the RECOMMENDED way of generating secret keys, but its use is not required for compatibility, and implementations MAY use a different KeyGen procedure.  For security, such an alternative KeyGen procedure MUST output SK that is statistically close to uniformly random in the range 1 <= SK < r.
+**Note** This operation is the RECOMMENDED way of generating a secret key, but its use is not required for compatibility, and implementations MAY use a different KeyGen procedure. For security, such an alternative MUST output a secret key that is statistically close to uniformly random in the range 1 <= SK < r.
 
 ### SkToPk
 
-This operation takes a secret key SK and outputs a corresponding public key.
+This operation takes a secret key (SK) and outputs a corresponding public key (PK).
 
 ```
 PK = SkToPk(SK)
@@ -356,9 +356,9 @@ Procedure:
 
 ### KeyValidate
 
-This operation checks if the public key is valid.
+This operation checks if a given public key is valid.
 
-As an optimization, implementations MAY cache the result of KeyValidate in order to avoid unnecessarily repeating validation for known keys.
+As an optimization, implementations MAY cache the result of KeyValidate in order to avoid unnecessarily repeating validation for known public keys.
 
 ```
 result = KeyValidate(PK)
@@ -386,7 +386,7 @@ Procedure:
 
 ### Sign
 
-This operation computes a deterministic signature from an SK, over a header and a vector of messages.
+This operation computes a deterministic signature from a secret key (SK), over a header and a vector of messages.
 
 ```
 signature = Sign(SK, header, (msg_1,..., msg_L))
@@ -439,7 +439,7 @@ Procedure:
 
 ### Verify
 
-This operation checks that a signature is valid for a given header and vector of messages against the supplied public key.
+This operation checks that a signature is valid for a given header and vector of messages against a supplied public key (PK).
 
 ```
 result = Verify(PK, signature, header, (msg_1,..., msg_L))
@@ -573,7 +573,7 @@ Procedure:
 
 ### ProofVerify
 
-This operation checks if a signature proof of knowledge is valid given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation header used in ProofGen.
+This operation checks that a proof is valid for a given header, vector of revealed messages (along side their corresponding originally index position when signed) against, presentation header against a public key (PK).
 
 ```
 result = ProofVerify(proof, PK, ph, header, (msg_i1,..., msg_iR), RevealedIndexes)
@@ -632,9 +632,7 @@ Procedure:
 
 ### CreateGenerators
 
-This operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, ProofGen and ProofVerify.
-
-*Note* The scope in which the seed used below is determined, is still an active conversation in the working group see (#ciphersuites) for the current method being used.
+This operation creates a set of generators that form a part of the public parameters used by the scheme to accomplish operations such as Sign, Verify, ProofGen and ProofVerify.
 
 ```
 generators = CreateGenerators(dst, message_generator_seed, length);
@@ -700,6 +698,7 @@ Procedure:
 ```
 
 ### Hash to scalar
+
 This operation describes how to hash an arbitrary octet string to `n` scalar values in the multiplicative group of integers mod q. This procedure acts as a helper function, and it is used internally in various places within the operations described in the spec. To map a message to a scalar that would be passed as input to the [Sign](#sign), [Verify](#verify), [spkGen](#spkgen) and [spkVerify](#spkverify) functions, one must use [MapMessageToScalarAsHash](#mapmessagetoscalar) instead.
 
 The `hash_to_scalar` procedure hashes elements using an extendable-output function (XOF). Applications not wishing to use an XOF may use `hash_to_field` defined in Section 5.3 of [@!I-D.irtf-cfrg-hash-to-curve], combined with `expand_message_xmd` defined in Section 5.4.1 of the same document, in place of `hash_to_scalar`. In that case, every element outputted by `hash_to_field` that is equal to 0 MUST be rejected. If that occurs, one should calculate more field elements (using `hash_to_field`), until they get `n` non-zero elements (for example, if there is only one 0 in the output of `hash_to_field(msg, 2)` one must try to calculate `hash_to_field(msg, 3)` etc.).
@@ -805,15 +804,15 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 
 - hash\_to\_field\_dst: Domain separation tag used in the hash\_to\_field operation
 
-- hashing_elements_to_scalars: either hash_to_scalar using H (in this case H MUST be an XOF), or hash_to_field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in [Hash to scalar](#hash-to-scalar)).
+- hashing\_elements\_to\_scalars: either hash_to_scalar using H (in this case H MUST be an XOF), or hash_to_field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in [Hash to scalar](#hash-to-scalar)).
 
-- message_generator_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.
+- message\_generator\_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.
 
-- blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.
+- blind\_value\_generator\_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.
 
-- signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.
+- signature\_dst\_generator\_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.
 
-- xof_no_of_bytes: Number of bytes to draw from the XOF when performing operations such as creating generators as per the operation documented in (#creategenerators) or computing the e and s components of the signature generated in (#sign). It is RECOMMENDED this value be set to one greater than `ceil(r+k)/8` for the ciphersuite, where `r` and `k` are parameters from the underlying pairing friendly curve being used.
+- xof\_no\_of\_bytes: Number of bytes to draw from the XOF when performing operations such as creating generators as per the operation documented in (#creategenerators) or computing the e and s components of the signature generated in (#sign). It is RECOMMENDED this value be set to one greater than `ceil(r+k)/8` for the ciphersuite, where `r` and `k` are parameters from the underlying pairing friendly curve being used.
 
 ## BLS12-381 Ciphersuite
 
@@ -838,19 +837,19 @@ hash\_to\_field
 hash\_to\_field\_dst
 : "BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO"
 
-message_generator_seed
+message\_generator\_seed
 : A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED" which is used by the [CreateGenerators](#creategenerators) operation to compute the required set of message generators.
 
-blind_value_generator_seed
+blind\_value\_generator\_seed
 : A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_BLINDING_VALUE_GENERATOR_SEED" which is used by the [CreateGenerators](#creategenerators) operation to compute the signature blinding value generator (H_s).
 
-signature_dst_generator_seed
+signature\_dst\_generator\_seed
 : A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_DST_GENERATOR_SEED" which is used by the [CreateGenerators](#creategenerators) operation to compute the generator used to sign the signature domain separation tag (H_d).
 
-hashing_elements_to_scalars
+hashing\_elements\_to\_scalars
 : hash_to_scalar
 
-xof_no_of_bytes
+xof\_no\_of\_bytes
 : 64
 
 ### Test Vectors
