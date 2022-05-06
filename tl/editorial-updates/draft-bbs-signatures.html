@@ -1559,6 +1559,7 @@ octets_to_hash = len(message_octets) || message_octets || number_octets =
 </li>
           </ul>
 <p id="section-3.2.3-6">For readability, this document makes these transformations implicitly, but they MUST precede every call to the HASH or XOF function.<a href="#section-3.2.3-6" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-7">Optional input or parameters to operations that feature in a call to a HASH or XOF function, that are not supplied to the operation should be omitted from the call, for example if X is an optional input/parameter whilst A and B are required then the procedural step of <code>HASH(A || X || B)</code> MUST be evaluated to <code>HASH(A || B)</code>.<a href="#section-3.2.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1656,7 +1657,7 @@ Procedure:
           <h4 id="name-keyvalidate">
 <a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-keyvalidate" class="section-name selfRef">KeyValidate</a>
           </h4>
-<p id="section-3.3.3-1">This operation checks if a given public key is valid.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-1">This operation checks if a public key is valid.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.3-2">As an optimization, implementations MAY cache the result of KeyValidate in order to avoid unnecessarily repeating validation for known public keys.<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.3-3">
 <pre>result = KeyValidate(PK)
@@ -1897,8 +1898,7 @@ Inputs:
 - PK (REQUIRED), octet string in output form from SkToPk.
 - ph (REQUIRED), octet string
 - header (OPTIONAL), an optional octet string containing context and application specific
-          information. If not supplied, it defaults to an empty string. // TODO may want to be optional
-- msg_i1,..., msg_iR (OPTIONAL), an optional vector of octet strings. The revealed messages in input to ProofGen.
+          information. If not supplied, it defaults to an empty string.
 - RevealedIndexes (OPTIONAL), vector of unsigned integers. Indexes of revealed messages.
 
 Parameters:
@@ -1924,7 +1924,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing?
+6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q // TODO re-order so optional params last also probably want to add commentary about what to do when a member in a hash computation is missing? Note L should be zero here to, not omitted
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
