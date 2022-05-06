@@ -414,8 +414,8 @@ Table of Contents
 
 3.3.1.  KeyGen
 
-   This operation generates a secret key SK deterministically from a
-   secret octet string IKM.
+   This operation generates a secret key (SK) deterministically from a
+   secret octet string (IKM).
 
    KeyGen uses an HKDF [RFC5869] instantiated with the hash function
    HASH.
@@ -445,7 +445,7 @@ Outputs:
 
 Parameters:
 
-- key_info, an optional octet string. if this is not supplied, it MUST default to an empty string.
+- key_info (OPTIONAL), an octet string. if this is not supplied, it MUST default to an empty string.
 
 Definitions:
 
@@ -472,16 +472,16 @@ Procedure:
 
 8. return SK
 
-   *Note* This operation is the RECOMMENDED way of generating secret
-   keys, but its use is not required for compatibility, and
+   *Note* This operation is the RECOMMENDED way of generating a secret
+   key, but its use is not required for compatibility, and
    implementations MAY use a different KeyGen procedure.  For security,
-   such an alternative KeyGen procedure MUST output SK that is
-   statistically close to uniformly random in the range 1 <= SK < r.
+   such an alternative MUST output a secret key that is statistically
+   close to uniformly random in the range 1 <= SK < r.
 
 3.3.2.  SkToPk
 
-   This operation takes a secret key SK and outputs a corresponding
-   public key.
+   This operation takes a secret key (SK) and outputs a corresponding
+   public key (PK).
 
    PK = SkToPk(SK)
 
@@ -503,11 +503,11 @@ Procedure:
 
 3.3.3.  KeyValidate
 
-   This operation checks if the public key is valid.
+   This operation checks if a given public key is valid.
 
    As an optimization, implementations MAY cache the result of
    KeyValidate in order to avoid unnecessarily repeating validation for
-   known keys.
+   known public keys.
 
    result = KeyValidate(PK)
 
@@ -533,8 +533,8 @@ Procedure:
 
 3.3.4.  Sign
 
-   This operation computes a deterministic signature from an SK, over a
-   header and a vector of messages.
+   This operation computes a deterministic signature from a secret key
+   (SK), over a header and a vector of messages.
 
 signature = Sign(SK, header, (msg_1,..., msg_L))
 
@@ -586,7 +586,7 @@ Procedure:
 3.3.5.  Verify
 
    This operation checks that a signature is valid for a given header
-   and vector of messages against the supplied public key.
+   and vector of messages against a supplied public key (PK).
 
 result = Verify(PK, signature, header, (msg_1,..., msg_L))
 
@@ -723,10 +723,10 @@ Procedure:
 
 3.3.7.  ProofVerify
 
-   This operation checks if a signature proof of knowledge is valid
-   given the proof, the signer's public key, a vector of revealed
-   messages, a vector with the indices of these revealed messages, and
-   the presentation header used in ProofGen.
+   This operation checks that a proof is valid for a given header,
+   vector of revealed messages (along side their corresponding
+   originally index position when signed) against, presentation header
+   against a public key (PK).
 
 result = ProofVerify(proof, PK, ph, header, (msg_i1,..., msg_iR), RevealedIndexes)
 
@@ -783,13 +783,9 @@ Procedure:
 
 3.3.8.  CreateGenerators
 
-   This operation defines how to create a set of generators that form a
-   part of the public parameters used by the BBS Signature scheme to
-   accomplish operations such as sign, verify, ProofGen and ProofVerify.
-
-   _Note_ The scope in which the seed used below is determined, is still
-   an active conversation in the working group see Section 5 for the
-   current method being used.
+   This operation creates a set of generators that form a part of the
+   public parameters used by the scheme to accomplish operations such as
+   Sign, Verify, ProofGen and ProofVerify.
 
 generators = CreateGenerators(dst, message_generator_seed, length);
 
