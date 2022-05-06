@@ -92,49 +92,6 @@ Below is a basic diagram describing the main entities involved in using the sche
 ~~~
 !---
 
-!---
-~~~ ascii-art
-
-+----------+
-|  header  |
-|----------|
-|  msg_1   |
-|  ....    |
-|  msg_L   |
-+----------+
-                                +-----------+
-     +              ------>     | signature |
-                                +-----------+
-+----------+
-|    SK    |
-+----------+
-~~~
-!---
-
-
-!---
-~~~ ascii-art
-+----------------+
-|  +----------+  |
-|  |  header  |  |
-|  |----------|  |
-|  |  msg_1   |  |
-|  |  ....    |  |
-|  |  msg_n   |  |
-|  +----------+  |
-+----------------+
-|   signature    |
-+----------------+
-
-                                  +----------------------+
-        +            ------>      | Verified? TRUE/FALSE |
-                                  +----------------------+
-   +----------+
-   |    PK    |
-   +----------+
-~~~
-!---
-
 Figure: Basic diagram capturing the main entities involved in using the scheme
 
 **Note** The protocols implied by the items annotated by an asterisk are out of scope for this specification
