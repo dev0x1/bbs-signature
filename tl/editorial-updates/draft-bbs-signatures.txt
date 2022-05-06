@@ -154,43 +154,6 @@ Table of Contents
 
                                   Figure 1
 
-   +----------+
-   |  header  |
-   |----------|
-   |  msg_1   |
-   |  ....    |
-   |  msg_L   |
-   +----------+
-                                   +-----------+
-        +              ------>     | signature |
-                                   +-----------+
-   +----------+
-   |    SK    |
-   +----------+
-
-                                  Figure 2
-
-   +----------------+
-   |  +----------+  |
-   |  |  header  |  |
-   |  |----------|  |
-   |  |  msg_1   |  |
-   |  |  ....    |  |
-   |  |  msg_n   |  |
-   |  +----------+  |
-   +----------------+
-   |   signature    |
-   +----------------+
-
-                                     +----------------------+
-           +            ------>      | Verified? TRUE/FALSE |
-                                     +----------------------+
-      +----------+
-      |    PK    |
-      +----------+
-
-                                  Figure 3
-
    Figure: Basic diagram capturing the main entities involved in using
    the scheme
 
