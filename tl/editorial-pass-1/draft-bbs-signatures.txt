@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                              6 May 2022
+                                                              7 May 2022
 
 
                         The BBS Signature Scheme
@@ -412,9 +412,10 @@ Table of Contents
 
    Optional input/parameters to operations that feature in a call to a
    HASH or XOF function, that are not supplied to the operation should
-   be omitted from the call, for example if X is an optional input/
-   parameter whilst A and B are required then the procedural step of
-   HASH(A || X || B) MUST be evaluated to HASH(A || B).
+   default to an empty octet string.  For example, if X is an optional
+   input/parameter that is not supplied, whilst A and B are required,
+   then the procedural step of HASH(A || X || B) MUST be evaluated to
+   HASH(A || "" || B).
 
 3.3.  Operations
 
