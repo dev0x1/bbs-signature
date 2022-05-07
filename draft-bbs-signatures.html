@@ -2196,19 +2196,19 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.7.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation<a href="#section-5.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.8">
-            <p id="section-5.1-1.8.1">hashing<em>elements</em>to<em>scalars: either hash</em>to<em>scalar using H (in this case H MUST be an XOF), or hash</em>to_field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.8.1">hashing_elements_to_scalars: either hash<em>to</em>scalar using H (in this case H MUST be an XOF), or hash<em>to</em>field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.9">
-            <p id="section-5.1-1.9.1">message<em>generator</em>seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.9.1">message_generator_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.10">
-            <p id="section-5.1-1.10.1">blind<em>value</em>generator<em>seed: The seed used to calculate the signature blinding value generator (H</em>s). Similar to the message<em>generator</em>seed, there are multiple scopes for the blind<em>value</em>generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.10.1">blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.11">
-            <p id="section-5.1-1.11.1">signature<em>dst</em>generator<em>seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message</em>generator<em>seed and blind</em>value<em>generator</em>seed.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.11.1">signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.12">
-            <p id="section-5.1-1.12.1">xof<em>no</em>of_bytes: Number of bytes to draw from the XOF when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.12.1">xof_no_of_bytes: Number of bytes to draw from the XOF when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2247,23 +2247,23 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
           <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS<em>BLS12381FQ</em>XOF:SHAKE-256<em>SSWU</em>RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.15">message<em>generator</em>seed</dt>
+<dt id="section-5.2-1.15">message_generator_seed</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.17">blind<em>value</em>generator_seed</dt>
+<dt id="section-5.2-1.17">blind_value_generator_seed</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.18">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>BLINDING<em>VALUE</em>GENERATOR<em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H</em>s).<a href="#section-5.2-1.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.19">signature<em>dst</em>generator_seed</dt>
+<dt id="section-5.2-1.19">signature_dst_generator_seed</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>DST<em>GENERATOR</em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.21">hashing<em>elements</em>to_scalars</dt>
+<dt id="section-5.2-1.21">hashing_elements_to_scalars</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.22">hash<em>to</em>scalar<a href="#section-5.2-1.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.23">xof<em>no</em>of_bytes</dt>
+<dt id="section-5.2-1.23">xof_no_of_bytes</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.24">64<a href="#section-5.2-1.24" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
