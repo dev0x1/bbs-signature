@@ -647,7 +647,7 @@ Procedure:
 
 3.3.6.  ProofGen
 
-   This operation computes a zero-knowledge, proof of knowledge of a
+   This operation computes a zero-knowledge proof-of-knowledge of a
    signature, while optionally selectively disclosing from the original
    set of signed messages.  The "prover" may also supply a presentation
    header (see Presentation header selection (#presentation-header-

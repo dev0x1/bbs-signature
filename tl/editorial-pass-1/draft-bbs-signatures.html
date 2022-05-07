@@ -1812,7 +1812,7 @@ Procedure:
           <h4 id="name-proofgen">
 <a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-proofgen" class="section-name selfRef">ProofGen</a>
           </h4>
-<p id="section-3.3.6-1">This operation computes a zero-knowledge, proof of knowledge of a signature, while optionally selectively disclosing from the original set of signed messages. The "prover" may also supply a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.6-1">This operation computes a zero-knowledge proof-of-knowledge of a signature, while optionally selectively disclosing from the original set of signed messages. The "prover" may also supply a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
 <pre>proof = ProofGen(PK, signature, header, ph, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes)
