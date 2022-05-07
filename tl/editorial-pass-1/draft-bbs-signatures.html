@@ -1697,11 +1697,12 @@ Procedure:
           </h4>
 <p id="section-3.3.4-1">This operation computes a deterministic signature from a secret key (SK), over a header and a vector of messages.<a href="#section-3.3.4-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.4-2">
-<pre>signature = Sign(SK, header, (msg_1,..., msg_L), (H_1,..., H_L))
+<pre>signature = Sign(SK, PK, header, (msg_1,..., msg_L), (H_1,..., H_L))
 
 Inputs:
 
 - SK (REQUIRED), an octet string of the form outputted by the KeyGen operation.
+- PK (REQUIRED), an octet string of the form outputted by the SkToPk operation provided the above SK as input.
 - header (OPTIONAL), an octet string containing context and application specific information. If not supplied, it defaults to an empty string.
 - msg_1,..., msg_L (OPTIONAL), a vector of octet strings. Application specific messages.
 - H_1,..., H_L (OPTIONAL), points of G1. Generators used to commit each message.
@@ -1718,31 +1719,29 @@ Outputs:
 
 Procedure:
 
-1. PK = SkToPk(SK)
+1. (W, H0, H) = octets_to_point(PK)
 
-2. (W, H0, H) = octets_to_point(PK)
+2. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-3. generators =  (H_s || H_d || H_1 || ... || H_L)
+3. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-4. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
+4. if domain is 0, abort
 
-5. if domain is 0, abort
+5. h = XOF(SK  || domain || msg_1 || ... || msg_L)
 
-6. h = XOF(SK  || domain || msg_1 || ... || msg_L)
+6. for element in (e, s) do
 
-7. for element in (e, s) do
+7.      element = OS2IP(h.read(xof_no_of_bytes)) mod q
 
-8.      element = OS2IP(h.read(xof_no_of_bytes)) mod q
+8.      if element = 0, go back to step 4
 
-9.      if element = 0, go back to step 4
+9. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-10. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+10. A = B * (1 / (SK + e))
 
-11. A = B * (1 / (SK + e))
+11. signature = (point_to_octets_min(A), e, s)
 
-12. signature = (point_to_octets_min(A), e, s)
-
-13. return signature
+12. return signature
 </pre><a href="#section-3.3.4-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2198,10 +2197,10 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.9.1">message_generator_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.10">
-            <p id="section-5.1-1.10.1">blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H<em>s). Similar to the message</em>generator<em>seed, there are multiple scopes for the blind</em>value<em>generator</em>seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.10.1">blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.11">
-            <p id="section-5.1-1.11.1">signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message<em>generator</em>seed and blind<em>value</em>generator_seed.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.11.1">signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.12">
             <p id="section-5.1-1.12.1">xof_no_of_bytes: Number of bytes to draw from the XOF when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
