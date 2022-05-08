@@ -1331,44 +1331,40 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.1-2.14">A valid point on the selected sub-group of the curve being used that is used to commit a value.<a href="#section-1.1-2.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.15">H[i]</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.16">The generator corresponding to a given msg.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
+<dt id="section-1.1-2.15">H_s</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.16">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.17">H_s</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
+<dt id="section-1.1-2.17">H_d</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.19">H_d</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.20">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
+<dt id="section-1.1-2.19">signature</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The digital signature output.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.21">signature</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.22">The digital signature output.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
+<dt id="section-1.1-2.21">nonce</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.22">A cryptographic nonce<a href="#section-1.1-2.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.23">nonce</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A cryptographic nonce<a href="#section-1.1-2.24" class="pilcrow">¶</a>
+<dt id="section-1.1-2.23">presentation_header (ph)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.25">presentation_header (ph)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+<dt id="section-1.1-2.25">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">The domain separation tag.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.29">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.30">The domain separation tag.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
+<dt id="section-1.1-2.29">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.30">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.31">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.32" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-1.1-2.33">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.34" class="pilcrow">¶</a>
+<dt id="section-1.1-2.31">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.32" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1433,7 +1429,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.2-4.21">subgroup_check(P) -&gt; VALID or INVALID</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-4.22">returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that p * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., [Bowe19].<a href="#section-1.2-4.22" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.22">returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that p * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., <span>[<a href="#Bowe19" class="xref">Bowe19</a>]</span>.<a href="#section-1.2-4.22" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1487,7 +1483,7 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
             <p id="section-3.1-2.1.1">A pairing-friendly elliptic curve, plus associated functionality given in Section 1.4.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1">HASH, a hash function that MUST be a secure cryptographic hash function. For security, HASH MUST output at least ceil(log2(q)) bits, where q is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encoding-of-elements-to-be-hashed">encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.2.1">HASH, a hash function that MUST be a secure cryptographic hash function. For security, HASH MUST output at least <code>ceil(log2(q))</code> bits, where q is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encoding-of-elements-to-be-hashed">encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.3">
             <p id="section-3.1-2.3.1">XOF, a cryptographically secure extendable-output function like SHAKE128 or SHAKE256. XOF outputs any desirable amount of bytes using the <code>.read(int)</code> method. See <a href="#encoding-of-elements-to-be-hashed">encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
@@ -1807,7 +1803,7 @@ Procedure:
           <h4 id="name-proofgen">
 <a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-proofgen" class="section-name selfRef">ProofGen</a>
           </h4>
-<p id="section-3.3.6-1">This operation computes a zero-knowledge proof-of-knowledge of a signature, while optionally selectively disclosing from the original set of signed messages. The "prover" may also supply a presentation header (see <a href="#presentation-header-selection">Presentation header selection</a> for more details).<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.6-1">This operation computes a zero-knowledge proof-of-knowledge of a signature, while optionally selectively disclosing from the original set of signed messages. The "prover" may also supply a presentation header, see <a href="#presentation-header-selection">presentation header selection</a> for more details.<a href="#section-3.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-2">If an application chooses to pass the indexes of the generators instead, then it will also need to pass the indexes of the generators corresponding to the revealed messages.<a href="#section-3.3.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.6-3">
 <pre>proof = ProofGen(PK, signature, header, ph, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes)
@@ -1966,9 +1962,8 @@ Procedure:
           <h4 id="name-creategenerators">
 <a href="#section-3.3.8" class="section-number selfRef">3.3.8. </a><a href="#name-creategenerators" class="section-name selfRef">CreateGenerators</a>
           </h4>
-<p id="section-3.3.8-1">The CreateGenerators operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as sign, verify, ProofGen and ProofVerify.<a href="#section-3.3.8-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.8-2"><em>Note</em> The scope in which the seed used below is determined, is still an active conversation in the working group see <a href="#ciphersuites" class="xref">Section 5</a> for the current method being used.<a href="#section-3.3.8-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.8-3">
+<p id="section-3.3.8-1">The CreateGenerators operation defines how to create a set of generators that form a part of the public parameters used by the BBS Signature scheme to accomplish operations such as Sign, Verify, ProofGen and ProofVerify.<a href="#section-3.3.8-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.8-2">
 <pre>generators = CreateGenerators(dst, message_generator_seed, length);
 
 Inputs:
@@ -1996,7 +1991,7 @@ Procedure:
 6.        if candidate not in generators: generator_i = candidate
 
 3. return generators
-</pre><a href="#section-3.3.8-3" class="pilcrow">¶</a>
+</pre><a href="#section-3.3.8-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2005,7 +2000,7 @@ Procedure:
           <h4 id="name-mapmessagetoscalar">
 <a href="#section-3.3.9" class="section-number selfRef">3.3.9. </a><a href="#name-mapmessagetoscalar" class="section-name selfRef">MapMessageToScalar</a>
           </h4>
-<p id="section-3.3.9-1">There are multiple ways in which messages can be mapped to their respective scalar values, which is their required form to be used with the sign, verify, ProofGen and ProofVerify operations.<a href="#section-3.3.9-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.9-1">There are multiple ways in which messages can be mapped to their respective scalar values, which is their required form to be used with the Sign, Verify, ProofGen and ProofVerify operations.<a href="#section-3.3.9-1" class="pilcrow">¶</a></p>
 <div id="mapmessagetoscalarashash">
 <section id="section-3.3.9.1">
             <h5 id="name-mapmessagetoscalarashash">
@@ -2245,7 +2240,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.9">hash_to_curve_g1_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.10">"BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO"<a href="#section-5.2-1.10" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.10">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO"<a href="#section-5.2-1.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.11">hash_to_field</dt>
@@ -2253,23 +2248,23 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.13">hash_to_field_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS<em>BLS12381FQ</em>XOF:SHAKE-256<em>SSWU</em>RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.15">message_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>MESSAGE</em>GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.16">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.17">blind_value_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.18">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>BLINDING<em>VALUE</em>GENERATOR<em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H</em>s).<a href="#section-5.2-1.18" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.18">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_BLINDING_VALUE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H_s).<a href="#section-5.2-1.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.19">signature_dst_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS<em>BLS12381G1</em>XOF:SHAKE-256<em>SSWU</em>RO<em>SIGNATURE</em>DST<em>GENERATOR</em>SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.20" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_DST_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.21">hashing_elements_to_scalars</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.22">hash<em>to</em>scalar<a href="#section-5.2-1.22" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.22">hash_to_scalar<a href="#section-5.2-1.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.23">xof_no_of_bytes</dt>
@@ -2458,6 +2453,10 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 <dt id="ADR02">[ADR02]</dt>
       <dd>
 <span class="refAuthor">An, J. H.</span>, <span class="refAuthor">Dodis, Y.</span>, and <span class="refAuthor">T. Rabin</span>, <span class="refTitle">"On the Security of Joint Signature and Encryption"</span>, <span class="seriesInfo">pages 83-107</span>, <time datetime="2002-04" class="refDate">April 2002</time>, <span>&lt;<a href="https://doi.org/10.1007/3-540-46035-7_6">https://doi.org/10.1007/3-540-46035-7_6</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Bowe19">[Bowe19]</dt>
+      <dd>
+<span class="refAuthor">Bowe, S.</span>, <span class="refTitle">"Faster subgroup checks for BLS12-381"</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://eprint.iacr.org/2019/814">https://eprint.iacr.org/2019/814</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="CDL16">[CDL16]</dt>
       <dd>

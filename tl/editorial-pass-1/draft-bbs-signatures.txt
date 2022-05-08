@@ -179,8 +179,6 @@ Table of Contents
    generator  A valid point on the selected sub-group of the curve being
       used that is used to commit a value.
 
-   H[i]  The generator corresponding to a given msg.
-
    H_s  A generator for the blinding value in the signature.  The value
       of H_s is defined by each ciphersuite and must always be supplied
       to the operations listing it as a parameter.
@@ -646,8 +644,8 @@ Procedure:
    This operation computes a zero-knowledge proof-of-knowledge of a
    signature, while optionally selectively disclosing from the original
    set of signed messages.  The "prover" may also supply a presentation
-   header (see Presentation header selection (#presentation-header-
-   selection) for more details).
+   header, see presentation header selection (#presentation-header-
+   selection) for more details.
 
    If an application chooses to pass the indexes of the generators
    instead, then it will also need to pass the indexes of the generators
@@ -802,12 +800,8 @@ Procedure:
 
    The CreateGenerators operation defines how to create a set of
    generators that form a part of the public parameters used by the BBS
-   Signature scheme to accomplish operations such as sign, verify,
+   Signature scheme to accomplish operations such as Sign, Verify,
    ProofGen and ProofVerify.
-
-   _Note_ The scope in which the seed used below is determined, is still
-   an active conversation in the working group see Section 5 for the
-   current method being used.
 
 generators = CreateGenerators(dst, message_generator_seed, length);
 
@@ -841,7 +835,7 @@ Procedure:
 
    There are multiple ways in which messages can be mapped to their
    respective scalar values, which is their required form to be used
-   with the sign, verify, ProofGen and ProofVerify operations.
+   with the Sign, Verify, ProofGen and ProofVerify operations.
 
 3.3.9.1.  MapMessageToScalarAsHash
 
@@ -1292,6 +1286,9 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
    [ADR02]    An, J. H., Dodis, Y., and T. Rabin, "On the Security of
               Joint Signature and Encryption", pages 83-107, April 2002,
               <https://doi.org/10.1007/3-540-46035-7_6>.
+
+   [Bowe19]   Bowe, S., "Faster subgroup checks for BLS12-381", July
+              2019, <https://eprint.iacr.org/2019/814>.
 
    [CDL16]    Camenisch, J., Drijvers, M., and A. Lehmann, "Anonymous
               Attestation Using the Strong Diffie Hellman Assumption
