@@ -1331,48 +1331,44 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.1-2.14">A valid point on the selected sub-group of the curve being used that is used to commit a value.<a href="#section-1.1-2.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.15">H[i]</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.16">The generator corresponding to a given msg.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
+<dt id="section-1.1-2.15">H_s</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.16">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.17">H_s</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the blinding value in the signature. The value of H_s is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
+<dt id="section-1.1-2.17">H_d</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.18">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.19">H_d</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.20">A generator for the signature domain, which binds both signature and proof to a specific context. The value of H_d is defined by each ciphersuite and must always be supplied to the operations listing it as a parameter.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
+<dt id="section-1.1-2.19">signature</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.20">The digital signature output.<a href="#section-1.1-2.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.21">signature</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.22">The digital signature output.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
+<dt id="section-1.1-2.21">commitment</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.22">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.23">commitment</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.24" class="pilcrow">¶</a>
+<dt id="section-1.1-2.23">nonce</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A cryptographic nonce<a href="#section-1.1-2.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.25">nonce</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A cryptographic nonce<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+<dt id="section-1.1-2.25">presentation_header (ph)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">presentation_header (ph)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.29">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.30">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
+<dt id="section-1.1-2.29">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.30">The domain separation tag.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.31">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.32">The domain separation tag.<a href="#section-1.1-2.32" class="pilcrow">¶</a>
+<dt id="section-1.1-2.31">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.32" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.33">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.34" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-1.1-2.35">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.36">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.36" class="pilcrow">¶</a>
+<dt id="section-1.1-2.33">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.34" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
