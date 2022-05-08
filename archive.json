@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-05T00:09:03.942396+00:00",
+  "timestamp": "2022-05-08T00:09:04.307669+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -1354,7 +1354,7 @@
       "id": "I_kwDOF8lax85CbiGG",
       "title": "Add documentation on how contributors can build the HTML / TXT version of spec locally",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/34",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1363,8 +1363,8 @@
       ],
       "body": "Requires users to have make installed, list commands and add to a contributors document in the repository",
       "createdAt": "2022-01-26T01:00:19Z",
-      "updatedAt": "2022-05-04T14:43:51Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-05T00:57:55Z",
+      "closedAt": "2022-05-05T00:57:55Z",
       "comments": [
         {
           "author": "christianpaquin",
@@ -3127,7 +3127,7 @@
       "id": "I_kwDOF8lax85HEYLC",
       "title": "Parameterise the bytes drawn from the XOF so they are defined by the cipher suite",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/94",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3137,8 +3137,8 @@
       ],
       "body": "Throughout the operations defined by the spec there are numerous calls to the XOF where a certain number of bytes are read, via the .read() function. How many bytes are read is dependent on several decisions at the cipher suite level (e.g the curve used) hence the current \"magic numbers\" like 64 being used in these operations needs to be parameterised in the cipher suite definition.",
       "createdAt": "2022-04-04T21:23:27Z",
-      "updatedAt": "2022-04-21T23:28:43Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-05T22:41:35Z",
+      "closedAt": "2022-05-05T22:41:35Z",
       "comments": [
         {
           "author": "andrewwhitehead",
@@ -3675,7 +3675,7 @@
       ],
       "body": "Now we have introduced the concept of an optional header in #95 I want to consider whether we allow for constructions of BBS signatures which do not make use of the \"selective disclosure\" feature, instead just use BBS as an ordinary group signature. I believe there are several interesting usecases such as privacy preserving access tokens or hardware attestations that would likely use BBS in this form.\r\n\r\nIn short my proposal is for both the header and messages (along with message generators) to be optional. Meaning a signer could create a signature that has neither, either or both a header and array of messages.",
       "createdAt": "2022-05-02T04:18:15Z",
-      "updatedAt": "2022-05-04T02:51:29Z",
+      "updatedAt": "2022-05-06T12:28:48Z",
       "closedAt": null,
       "comments": [
         {
@@ -3719,6 +3719,27 @@
           "body": "The method could also accept an optional list of (generator, message) pairs.",
           "createdAt": "2022-05-04T02:51:29Z",
           "updatedAt": "2022-05-04T02:51:29Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> The method could also accept an optional list of (generator, message) pairs.\r\n\r\nWe could but IMO it may be hard to get the values out of that list of tuples to be used in the operation, i.e., if the input is `[(H_1, msg_1), (H_2, msg_2), ...., (H_n, msg_n)]` wouldn't it be a little unclear how we will get the generators out to be passed in the `domain` etc.?? \r\n\r\nFurther i like passing a list of messages because it makes the API as similar as possible to standard \"known\" digital signatures, so people can draw clear lines between them (i.e., say stuff like \"it's just a digital signature but instead of 1 message you will pass a list of messages\" etc), just to help with adoption.\r\n\r\nThat said, i do recognize that the pairs approach makes sense and I'm definitely not opposed to it. I would like to see a PR to get a better idea of how it is going to look.",
+          "createdAt": "2022-05-05T17:08:23Z",
+          "updatedAt": "2022-05-05T17:08:23Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "The other option I would like us to consider is making the message generators parameters instead of inputs. How these generators are used most commonly in a cipher suite I suspect will be the determining factor in whether we make this change. IMO having not seen any security issues with sharing generators across signatures and issuers I think implementations are more likely to treat message generators as globally shared values, cached by implementations. If we believe this is going to be normal then documenting the message generators as parameters rather than inputs makes more sense to me.",
+          "createdAt": "2022-05-05T20:30:36Z",
+          "updatedAt": "2022-05-05T20:30:36Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So to recap it seems that there are three options,\r\n\r\n1. The current approach i.e., a messages list and a generator list as input.  This will look like the following\r\n     ```\r\n    signature = Sign(SK, PK, (msg_1, ..., msg_L), (H_1, ..., H_L), header)\r\n     ```\r\n2. @tplooker's proposal to pass the generators as parameters. This will look like,\r\n    ````\r\n    signature = Sign(SK, PK, (msg_1, ..., msg_L), header)\r\n   \r\n    Parameters: \r\n    - (H_1, ..., H_L): The generators used for the signature\r\n    ````\r\n3. @andrewwhitehead's proposal of passing one list with (generator, message) pairs. This will look like,\r\n    ```\r\n    signature = Sign(SK, PK, [(H_1, msg_1), ..., (H_L, msg_L)], header)\r\n    ```\r\n\r\nMy thoughts (see also the discussion above for more context): \r\n- Option 2 does give the clearer API. I'm only worried that we may break the separation between what constitutes as input and what as parameter.\r\n- Option 3 does remove the need to have to check if the messages and the generators lists have the same length. It may create the need to also pass an additional list of generators to ProofVerify though because that operation requires all the generators, not just the ones corresponding to the revealed messages. This may create some inconsistency between the ProofGen and ProofVerify api?? (not really sure about that)\r\n\r\nCurrently im leaning more towards option 2, if we can sufficiently justify the choice to the cfrg (see #125 also)",
+          "createdAt": "2022-05-06T11:39:38Z",
+          "updatedAt": "2022-05-06T12:28:48Z"
         }
       ]
     },
@@ -3788,6 +3809,78 @@
       "createdAt": "2022-05-02T23:55:47Z",
       "updatedAt": "2022-05-03T19:47:04Z",
       "closedAt": "2022-05-03T19:47:04Z",
+      "comments": []
+    },
+    {
+      "number": 125,
+      "id": "I_kwDOF8lax85JJiFS",
+      "title": "Refine the relationship/differences between inputs vs parameters for operations",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/125",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "Currently for each operation documented in the spec we have the notion of both inputs and parameters, a convention adopted from the [bls-signature-draft](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04). \r\n\r\nLoosely what I think we have been following as a largely unwritten rule is that inputs are usually more dynamic or application driven/supplied in nature, where as parameters are more constant across multiple invocations of an operation(s).\r\n\r\nTo make things more complex we also appear to have two types/scopes of parameters, parameters shared across all operations vs parameters semi-unique to an operation, although it doesn't look like we are following this strictly. \r\n\r\nI think we need to\r\n\r\n1) Rationalise the difference between what constitutes an input vs a parameter\r\n2) Decide on the scoping of various parameters and how we notate them in reference to specific operations for example do we inline them all? or reference them from a common section that applies to all operations, or both?\r\n\r\nFurthermore I think we need to revisit certain values that may instead be considered parameters instead of inputs, in particular message generators. This is discussed more in #117 ",
+      "createdAt": "2022-05-05T22:28:35Z",
+      "updatedAt": "2022-05-06T11:56:55Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "One option would be to define that anything that is described by a ciphersuite (i.e., base points etc.,) is a parameter. This will also apply to the message generators.\r\n\r\nA stricter definition will be to consider anything that is defined by a ciphersuite AND it is independent from any inputs to be a parameter. This doesn't really apply to the message generators (their number depends to the number of messages).\r\n\r\nRegarding 2 my vote is to inline the parameters if we would to consider the message generators as a parameter. If the message generators are supplied as input we can have a separate section to avoid repeated text.",
+          "createdAt": "2022-05-06T11:56:54Z",
+          "updatedAt": "2022-05-06T11:56:54Z"
+        }
+      ]
+    },
+    {
+      "number": 126,
+      "id": "I_kwDOF8lax85JJk6A",
+      "title": "Add an `IsValidPoint` operation",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/126",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "As raised by @mikelodder7 in #115 there are numerous cases within existing operations that require validating points, therefore having a single operation that documents these steps rather than repeating them will improve readability.",
+      "createdAt": "2022-05-05T22:49:38Z",
+      "updatedAt": "2022-05-05T22:55:11Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Additional context [here](https://github.com/decentralized-identity/bbs-signature/pull/115#discussion_r863084747)",
+          "createdAt": "2022-05-05T22:55:11Z",
+          "updatedAt": "2022-05-05T22:55:11Z"
+        }
+      ]
+    },
+    {
+      "number": 127,
+      "id": "I_kwDOF8lax85JJlGw",
+      "title": "Validate e and s signature components non-zero",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/127",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "Raised by @mikelodder7 [here](https://github.com/decentralized-identity/bbs-signature/pull/115/files#r862931354)",
+      "createdAt": "2022-05-05T22:51:31Z",
+      "updatedAt": "2022-05-05T22:52:24Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -11389,24 +11482,26 @@
       "id": "PR_kwDOF8lax842NG7x",
       "title": "Adding a hash-to-scalar function",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/101",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR introduces a `hash_to_scalar` function as discussed in the WG call. The goal is for the function to replace some of the hashing to scalars happening internally in the operations, i.e., for the `e`, `s` calculation in `sign`, in the random elements in `spkGen` and potentially for the challenge value and the `sig_dst` if we decide to use that (see PR #95). The function is not inserted yet in those operations to not block #95. If that is resolved first i will update this PR.\r\n\r\n### Note:\r\n`hash_to_field` is removed with this PR (from `MapMessageToScalarAsHash`) and is replaced with `hash_to_scalar`. Note that this will also close issue #100 since `hash_to_scalar` checks if an element is 0. My reasoning is that `hash-to-scalar` serves the same functionality while been able to be used for the cases detailed above, without needing to worry about dst's etc. Note that aside from the use of dst, `hash-to-scalar` is almost exactly `hash-to-field` using `expand-message-xof` and with `m` (the fields extension degree) = 1. \r\n\r\nAlso the dst is not removed from `MapMessageToScalarAsHash` (where it is useful). A note is also added stating that people can use `hash-to-field` if they want. However, i feel that the current construction is more flexible to serve the needs of the spec, but really keen to discuss alternatives and other proposals.",
       "createdAt": "2022-04-13T22:19:20Z",
-      "updatedAt": "2022-05-03T21:42:43Z",
+      "updatedAt": "2022-05-05T19:07:53Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "bf04fa7e8dd1ebee1a6c5f554c38b9a9cb571a87",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-to-scalar",
       "headRefOid": "bb32dcb581b900fdafffbafc4138e8f46fbb1ece",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-05-05T19:07:53Z",
+      "mergedAt": "2022-05-05T19:07:53Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "7691a42b2eab7834999966620479d6dd8285307a"
+      },
       "comments": [
         {
           "author": "andrewwhitehead",
@@ -11463,6 +11558,13 @@
           "body": "> Same here @BasileiosKal can you resolve conflicts?\r\n\r\nYeap. Done! Thanks!",
           "createdAt": "2022-05-03T21:42:43Z",
           "updatedAt": "2022-05-03T21:42:43Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed on WG call, open 3 weeks, merging",
+          "createdAt": "2022-05-05T19:07:44Z",
+          "updatedAt": "2022-05-05T19:07:44Z"
         }
       ],
       "reviews": [
@@ -11557,6 +11659,19 @@
           "body": "",
           "createdAt": "2022-05-02T21:02:38Z",
           "updatedAt": "2022-05-02T21:02:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845cSLA",
+          "commit": {
+            "abbreviatedOid": "bb32dcb"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good, #116 will need to be updated if this is merged.",
+          "createdAt": "2022-05-05T17:24:07Z",
+          "updatedAt": "2022-05-05T17:25:10Z",
           "comments": []
         }
       ]
@@ -12170,13 +12285,13 @@
       "labels": [],
       "body": "Fixes #109 ",
       "createdAt": "2022-05-02T03:50:11Z",
-      "updatedAt": "2022-05-03T17:08:28Z",
+      "updatedAt": "2022-05-07T22:54:50Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "7cd8ad33cb92e37cff7bbd077e87cbc62ac17549",
+      "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/update-key-validate",
-      "headRefOid": "2ebef0c101255810217b1447344cfb1de1a09f5e",
+      "headRefOid": "2cfc0b8f94e751dbae2f5b213dbf52b704214f92",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -12524,6 +12639,86 @@
               "updatedAt": "2022-05-03T17:08:28Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845dfLC",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T22:54:26Z",
+          "updatedAt": "2022-05-05T22:54:26Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Have raised #126 to capture this",
+              "createdAt": "2022-05-05T22:54:26Z",
+              "updatedAt": "2022-05-05T22:54:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845dfM6",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T22:54:40Z",
+          "updatedAt": "2022-05-05T22:54:40Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Have raised #127 to capture this",
+              "createdAt": "2022-05-05T22:54:40Z",
+              "updatedAt": "2022-05-05T22:54:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845dfVQ",
+          "commit": {
+            "abbreviatedOid": "5b13c39"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T22:55:41Z",
+          "updatedAt": "2022-05-05T22:55:41Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "Referenced in #126 ",
+              "createdAt": "2022-05-05T22:55:41Z",
+              "updatedAt": "2022-05-05T22:55:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845dfZd",
+          "commit": {
+            "abbreviatedOid": "2ebef0c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T22:56:00Z",
+          "updatedAt": "2022-05-05T22:56:01Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "Referenced in #126 ",
+              "createdAt": "2022-05-05T22:56:01Z",
+              "updatedAt": "2022-05-05T22:56:01Z"
+            }
+          ]
         }
       ]
     },
@@ -12532,24 +12727,26 @@
       "id": "PR_kwDOF8lax843JSvR",
       "title": "Parameterize the drawn bytes for generator creation",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/116",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Fixes #94, note this is a first pass at the PR, please check the wording particularly around the parameters r and k. Also is there ever a case where the bytes drawn from the XOF for generator creation would be different to the bytes drawn to calculate the e and s components of the signature in the [sign operation](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-sign) because if not we could generalize/share this parameter.\r\n\r\nAlso note I think #101 needs to be merged ahead of this\r\n\r\n",
       "createdAt": "2022-05-02T04:11:37Z",
-      "updatedAt": "2022-05-02T22:02:43Z",
+      "updatedAt": "2022-05-05T22:41:50Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "36b40005733294e344e1724688616df51e43ef0c",
+      "baseRefOid": "7691a42b2eab7834999966620479d6dd8285307a",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/parameterize-drawn-bytes",
-      "headRefOid": "9863fb9336d32f7c43d7561314d38536a4fa5348",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "ffabec558ba01d279fc6ee6b41a0536918f58038",
+      "closedAt": "2022-05-05T22:41:35Z",
+      "mergedAt": "2022-05-05T22:41:35Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "2abab63c75fb113468dfb33a5fd2395d99852c0e"
+      },
       "comments": [
         {
           "author": "BasileiosKal",
@@ -12564,6 +12761,13 @@
           "body": "Discussed on WG call 2nd of May, will update to have a common variable that covers drawing bytes from XOF for e and s generation case",
           "createdAt": "2022-05-02T18:09:16Z",
           "updatedAt": "2022-05-02T18:09:16Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed on previous WG call, merging.",
+          "createdAt": "2022-05-05T22:41:26Z",
+          "updatedAt": "2022-05-05T22:41:26Z"
         }
       ],
       "reviews": [
@@ -12650,6 +12854,19 @@
           "body": "LGTM",
           "createdAt": "2022-05-02T22:02:43Z",
           "updatedAt": "2022-05-02T22:02:43Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845dcvL",
+          "commit": {
+            "abbreviatedOid": "ffabec5"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-05T22:35:40Z",
+          "updatedAt": "2022-05-05T22:35:40Z",
           "comments": []
         }
       ]
@@ -12951,25 +13168,35 @@
       "id": "PR_kwDOF8lax843S769",
       "title": "Hash usage harmonization",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/123",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "christianpaquin",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Harmonized use of hash function (use `HASH` vs `H`), clarified starting salt value in KeyGen, fixed broken MD links and some typos.",
       "createdAt": "2022-05-04T14:40:16Z",
-      "updatedAt": "2022-05-04T21:27:50Z",
+      "updatedAt": "2022-05-05T20:00:21Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "7b24c5f4237268a45035ea94e25149c2ebb8f74c",
+      "baseRefOid": "6a335d07695b9e58b3a96273f79485273c498fc4",
       "headRepository": "christianpaquin/bbs-signature",
       "headRefName": "hash-clarifications",
-      "headRefOid": "80758d78fe57c356899774bb0fe78575a30c42c8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "5235e40e4179c026ba9262a865cb3aafc56f7e7e",
+      "closedAt": "2022-05-05T19:06:34Z",
+      "mergedAt": "2022-05-05T19:06:34Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "f834e4ab06bfb3c9729c25fc6e6ebc0f5f31de4a"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, purely editorial, merging",
+          "createdAt": "2022-05-05T19:06:31Z",
+          "updatedAt": "2022-05-05T19:06:31Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax845WqS3",
@@ -13196,6 +13423,112 @@
               "updatedAt": "2022-05-04T21:21:51Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845YwkA",
+          "commit": {
+            "abbreviatedOid": "80758d7"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T01:24:03Z",
+          "updatedAt": "2022-05-05T01:24:03Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "> If so I would update this section as follows.\r\n\r\nIf we had the ASCII encoding rules to the hash section (which I'll do), I don't think having the explicit value is necessary in that section (feels repetitive? and a precedent to doubly-explain hash procedure everywhere else..) ",
+              "createdAt": "2022-05-05T01:24:03Z",
+              "updatedAt": "2022-05-05T01:24:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845YxtE",
+          "commit": {
+            "abbreviatedOid": "5235e40"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-05-05T01:40:12Z",
+          "updatedAt": "2022-05-05T01:40:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845YxwW",
+          "commit": {
+            "abbreviatedOid": "5235e40"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T01:40:57Z",
+          "updatedAt": "2022-05-05T01:40:57Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Quick question, are these rendering as a list for you in the HTML? they dont appear to be in the published version right now?",
+              "createdAt": "2022-05-05T01:40:57Z",
+              "updatedAt": "2022-05-05T01:40:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845YzL3",
+          "commit": {
+            "abbreviatedOid": "5235e40"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T02:01:49Z",
+          "updatedAt": "2022-05-05T02:01:50Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Yes they are ([here](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-encoding-of-elements-to-be-))",
+              "createdAt": "2022-05-05T02:01:50Z",
+              "updatedAt": "2022-05-05T02:01:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845YzhO",
+          "commit": {
+            "abbreviatedOid": "5235e40"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T02:06:38Z",
+          "updatedAt": "2022-05-05T02:06:38Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Ah my mistakes was looking at an old version.",
+              "createdAt": "2022-05-05T02:06:38Z",
+              "updatedAt": "2022-05-05T02:06:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845cJCO",
+          "commit": {
+            "abbreviatedOid": "5235e40"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LG",
+          "createdAt": "2022-05-05T16:50:32Z",
+          "updatedAt": "2022-05-05T16:50:32Z",
+          "comments": []
         }
       ]
     },
@@ -13204,25 +13537,42 @@
       "id": "PR_kwDOF8lax843T1Sj",
       "title": "markdown fixes and documentation generation info",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/124",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "christianpaquin",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "* Added text/html doc generation instructions in README; fixes #34 \r\n* Added empty line in blind spec (fixes mmark error)\r\n* Added empty line before bullet lists to fix HTML rendering\r\n* Added missing periods for inputs/outputs bullet lists, for consistency",
       "createdAt": "2022-05-04T18:52:44Z",
-      "updatedAt": "2022-05-04T19:59:52Z",
+      "updatedAt": "2022-05-05T00:57:56Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "7b24c5f4237268a45035ea94e25149c2ebb8f74c",
       "headRepository": "christianpaquin/bbs-signature",
       "headRefName": "md-fixes-and-doc-gen-info",
-      "headRefOid": "33faf59e160f43207c8765ae6d81e7ccc9461362",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "8d8a6a40cc647dd0ade1decc1d09ae7c5d15fee8",
+      "closedAt": "2022-05-05T00:57:56Z",
+      "mergedAt": "2022-05-05T00:57:55Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "6a335d07695b9e58b3a96273f79485273c498fc4"
+      },
+      "comments": [
+        {
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> LGTM, looks like there are a couple of conflicts to resolve though?\r\n\r\nResolved.",
+          "createdAt": "2022-05-05T00:55:12Z",
+          "updatedAt": "2022-05-05T00:55:12Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, purely editorial, merging.",
+          "createdAt": "2022-05-05T00:57:40Z",
+          "updatedAt": "2022-05-05T00:57:51Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax845Xohr",
@@ -13248,6 +13598,382 @@
           "body": "LGTM, looks like there are a couple of conflicts to resolve though?",
           "createdAt": "2022-05-04T19:59:52Z",
           "updatedAt": "2022-05-04T19:59:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDOF8lax843YmXk",
+      "title": "Adding revealed messages to challenge hash",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/128",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #74 \r\n\r\nAdding the revealed messages as well as the signature domain value to the challenge hash in ProofGen and ProofVerify.",
+      "createdAt": "2022-05-05T23:08:43Z",
+      "updatedAt": "2022-05-05T23:23:42Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "revealed_messages",
+      "headRefOid": "5cf69fea2d9a6edfec6aa6ad5b3c37245278c080",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Couple of updates, \r\n1. Per @tplooker suggestion the R value (number of revealed messages) is added to the challenge hash.\r\n2. Removed the PK from the challenge hash since it is already part of the domain value.",
+          "createdAt": "2022-05-05T23:23:26Z",
+          "updatedAt": "2022-05-05T23:23:26Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845djay",
+          "commit": {
+            "abbreviatedOid": "09e1557"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-05-05T23:09:55Z",
+          "updatedAt": "2022-05-05T23:09:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845djrk",
+          "commit": {
+            "abbreviatedOid": "09e1557"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T23:12:07Z",
+          "updatedAt": "2022-05-05T23:12:08Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "One minor question do we want to include `R` alongside the actual revealed messages like we include L alongside the generators in the domain?",
+              "createdAt": "2022-05-05T23:12:07Z",
+              "updatedAt": "2022-05-05T23:12:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845dlCk",
+          "commit": {
+            "abbreviatedOid": "09e1557"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-05T23:23:42Z",
+          "updatedAt": "2022-05-05T23:23:42Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "Done. Thanks!",
+              "createdAt": "2022-05-05T23:23:42Z",
+              "updatedAt": "2022-05-05T23:23:42Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDOF8lax843Z09j",
+      "title": "Editorial pass",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/129",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "- Adds a paragraph to handle when optional elements pash to a HASH or XOF function\r\n- Clarifies which inputs/parameters are required vs optional\r\n- Fixes some un-escaped underscores\r\n- Tweaks some language for each operation description\r\n- Reorders parameters in all the operations so required ones are first\r\n- Computes the public key from the SK instead of having it supplied (this might be controversial?)",
+      "createdAt": "2022-05-06T09:35:59Z",
+      "updatedAt": "2022-05-07T23:44:15Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "e6fdff409942c7924fb69bd0f69b5c7fb5e66442",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/editorial-pass-1",
+      "headRefOid": "9af5789a4ffb5ed6f8c82d8b08088cf50c955f5b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845ffXu",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I really like the direction of this PR. Just some minor comments.",
+          "createdAt": "2022-05-06T12:05:21Z",
+          "updatedAt": "2022-05-06T12:21:59Z",
+          "comments": [
+            {
+              "originalPosition": 107,
+              "body": "Not really a big fun of defining the messages as \"Application specific\". It's definitely correct, however, it may raise the question of \"what other messages are there??\"",
+              "createdAt": "2022-05-06T12:05:21Z",
+              "updatedAt": "2022-05-06T12:21:59Z"
+            },
+            {
+              "originalPosition": 126,
+              "body": "Although i like the simpler API with not having to supply the PK this may add unnecessary computations?? The PK will most likely be cached. It doesn't really guard against un trusted issuers either (they can just skip this step).",
+              "createdAt": "2022-05-06T12:08:51Z",
+              "updatedAt": "2022-05-06T12:21:59Z"
+            },
+            {
+              "originalPosition": 245,
+              "body": "```suggestion\r\nThis operation checks that a proof is valid for a header, vector of revealed messages (along side their index corresponding to their original position when signed) and presentation header against a public key (PK).\r\n```\r\nJust a minor suggestion though the original is also completely fine. So really not necessary to use the alternative.",
+              "createdAt": "2022-05-06T12:14:27Z",
+              "updatedAt": "2022-05-06T12:21:59Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\nOptional input/parameters to operations that feature in a call to a HASH or XOF function, that are not supplied to the operation should default to an empty octet string. For example, if X is an optional input/parameter that is not supplied, whilst A and B are required, then the procedural step of `HASH(A || X || B)` MUST be evaluated to `HASH(A || \"\" || B)`.\r\n```\r\nSince, in some places where we hash optional values we specify that if not supplied they default to the empty string, the above suggestion might be a little more accurate??",
+              "createdAt": "2022-05-06T12:19:52Z",
+              "updatedAt": "2022-05-07T21:53:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845hfEq",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-06T18:50:50Z",
+          "updatedAt": "2022-05-06T18:50:55Z",
+          "comments": [
+            {
+              "originalPosition": 330,
+              "body": "```suggestion\r\n- (scalar_1, ..., scalar_n), a list of scalars. A list of non-zero scalars mod q.\r\n```",
+              "createdAt": "2022-05-06T18:50:50Z",
+              "updatedAt": "2022-05-06T18:50:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iIt1",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-06T23:18:54Z",
+          "updatedAt": "2022-05-06T23:18:54Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "Im happy to keep supplying the public key to the operation API, provided we add a consideration that implementations SHOULD validate the relationship between SK and PK, does that work as a compromise?",
+              "createdAt": "2022-05-06T23:18:54Z",
+              "updatedAt": "2022-05-06T23:18:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iJhd",
+          "commit": {
+            "abbreviatedOid": "d1e974d"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-06T23:31:04Z",
+          "updatedAt": "2022-05-06T23:31:05Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "What about empty octet string to be more specific?",
+              "createdAt": "2022-05-06T23:31:04Z",
+              "updatedAt": "2022-05-06T23:31:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iZMS",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-07T10:13:35Z",
+          "updatedAt": "2022-05-07T10:13:35Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Yeap. That sounds better.",
+              "createdAt": "2022-05-07T10:13:35Z",
+              "updatedAt": "2022-05-07T10:13:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iZb6",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-07T10:27:26Z",
+          "updatedAt": "2022-05-07T10:27:26Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "If we are worried about issuers making mistakes then yes a consideration sounds as a better option. Maybe another option could also be to make the relationship clear in the definition of the inputs in Sign? Something like;\r\n\r\n```\r\n- SK (REQUIRED), an octet string of the form outputted by the KeyGen operation.\r\n- PK (REQUIRED), an octet string encoded public key output from SkToPk on input the above SK.\r\n```",
+              "createdAt": "2022-05-07T10:27:26Z",
+              "updatedAt": "2022-05-07T10:27:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845ilQK",
+          "commit": {
+            "abbreviatedOid": "5707399"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-07T22:06:38Z",
+          "updatedAt": "2022-05-07T22:06:39Z",
+          "comments": [
+            {
+              "originalPosition": 107,
+              "body": "Have removed for now, we can further refine this language later.",
+              "createdAt": "2022-05-07T22:06:39Z",
+              "updatedAt": "2022-05-07T22:06:39Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDOF8lax843bTqJ",
+      "title": "Added escape char before some underscores to fix MD rendering <eom>",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/130",
+      "state": "MERGED",
+      "author": "christianpaquin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-05-06T16:51:55Z",
+      "updatedAt": "2022-05-07T04:33:57Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
+      "headRepository": "christianpaquin/bbs-signature",
+      "headRefName": "fix-md-escaping",
+      "headRefOid": "e7d8f35fc82a2a5ebed1308c722c418db84800d6",
+      "closedAt": "2022-05-07T04:33:57Z",
+      "mergedAt": "2022-05-07T04:33:57Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "e6fdff409942c7924fb69bd0f69b5c7fb5e66442"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Minor editorial changes, multiple approvals, merging",
+          "createdAt": "2022-05-07T04:33:53Z",
+          "updatedAt": "2022-05-07T04:33:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845iIpV",
+          "commit": {
+            "abbreviatedOid": "17a00db"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-06T23:17:50Z",
+          "updatedAt": "2022-05-06T23:17:51Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I dont think these need to be escaped do they? just the ones outside of a code block?",
+              "createdAt": "2022-05-06T23:17:50Z",
+              "updatedAt": "2022-05-06T23:17:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iOoP",
+          "commit": {
+            "abbreviatedOid": "17a00db"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-07T01:39:15Z",
+          "updatedAt": "2022-05-07T01:39:15Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Good catch. Fixed (here and in CreateGenerators)",
+              "createdAt": "2022-05-07T01:39:15Z",
+              "updatedAt": "2022-05-07T01:39:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845iRe0",
+          "commit": {
+            "abbreviatedOid": "e7d8f35"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2022-05-07T03:46:42Z",
+          "updatedAt": "2022-05-07T03:46:42Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845iR02",
+          "commit": {
+            "abbreviatedOid": "e7d8f35"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-07T04:06:01Z",
+          "updatedAt": "2022-05-07T04:06:01Z",
           "comments": []
         }
       ]
