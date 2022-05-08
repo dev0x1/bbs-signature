@@ -1347,32 +1347,28 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.1-2.22">The digital signature output.<a href="#section-1.1-2.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.23">commitment</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A pedersen commitment composed of 1 or more messages.<a href="#section-1.1-2.24" class="pilcrow">¶</a>
+<dt id="section-1.1-2.23">nonce</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.24">A cryptographic nonce<a href="#section-1.1-2.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.25">nonce</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A cryptographic nonce<a href="#section-1.1-2.26" class="pilcrow">¶</a>
+<dt id="section-1.1-2.25">presentation_header (ph)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.26">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.27">presentation_header (ph)</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A payload generated and bound to the context of a specific spk.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
+<dt id="section-1.1-2.27">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.28">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.29">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.30">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
+<dt id="section-1.1-2.29">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.30">The domain separation tag.<a href="#section-1.1-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.31">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.32">The domain separation tag.<a href="#section-1.1-2.32" class="pilcrow">¶</a>
+<dt id="section-1.1-2.31">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.32">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.32" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-2.33">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.1-2.34" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-1.1-2.35">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.1-2.36">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.36" class="pilcrow">¶</a>
+<dt id="section-1.1-2.33">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-2.34">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.1-2.34" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1394,51 +1390,50 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-1.2-3">[n]: Denotes all integers from 1 to n.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
-<p id="section-1.2-4">Terms specific to pairing-friendly elliptic curves that are relevant to this document are restated below, originally defined in <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span><a href="#section-1.2-4" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-1.2-5">
-          <dt id="section-1.2-5.1">E1, E2</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.2">elliptic curve groups defined over finite fields. This document assumes that E1 has a more compact representation than E2, i.e., because E1 is defined over a smaller field than E2.<a href="#section-1.2-5.2" class="pilcrow">¶</a>
+<p id="section-1.2-3">Terms specific to pairing-friendly elliptic curves that are relevant to this document are restated below, originally defined in <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span><a href="#section-1.2-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-1.2-4">
+          <dt id="section-1.2-4.1">E1, E2</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.2">elliptic curve groups defined over finite fields. This document assumes that E1 has a more compact representation than E2, i.e., because E1 is defined over a smaller field than E2.<a href="#section-1.2-4.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.3">G1, G2</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.4">subgroups of E1 and E2 (respectively) having prime order p.<a href="#section-1.2-5.4" class="pilcrow">¶</a>
+<dt id="section-1.2-4.3">G1, G2</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.4">subgroups of E1 and E2 (respectively) having prime order p.<a href="#section-1.2-4.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.5">GT</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.6">a subgroup, of prime order p, of the multiplicative group of a field extension.<a href="#section-1.2-5.6" class="pilcrow">¶</a>
+<dt id="section-1.2-4.5">GT</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.6">a subgroup, of prime order p, of the multiplicative group of a field extension.<a href="#section-1.2-4.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.7">e</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.8">G1 x G2 -&gt; GT: a non-degenerate bilinear map.<a href="#section-1.2-5.8" class="pilcrow">¶</a>
+<dt id="section-1.2-4.7">e</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.8">G1 x G2 -&gt; GT: a non-degenerate bilinear map.<a href="#section-1.2-4.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.9">q</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.10">The prime order of the G1 and G2 subgroups.<a href="#section-1.2-5.10" class="pilcrow">¶</a>
+<dt id="section-1.2-4.9">q</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.10">The prime order of the G1 and G2 subgroups.<a href="#section-1.2-4.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.11">P1, P2</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.12">points on G1 and G2 respectively. For a pairing-friendly curve, this document denotes operations in E1 and E2 in additive notation, i.e., P + Q denotes point addition and x * P denotes scalar multiplication. Operations in GT are written in multiplicative notation, i.e., a * b is field multiplication.<a href="#section-1.2-5.12" class="pilcrow">¶</a>
+<dt id="section-1.2-4.11">P1, P2</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.12">points on G1 and G2 respectively. For a pairing-friendly curve, this document denotes operations in E1 and E2 in additive notation, i.e., P + Q denotes point addition and x * P denotes scalar multiplication. Operations in GT are written in multiplicative notation, i.e., a * b is field multiplication.<a href="#section-1.2-4.12" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.13">Identity_G1, Identity_G1</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.14">The identity element for the G1 and G2 subgroups respectively.<a href="#section-1.2-5.14" class="pilcrow">¶</a>
+<dt id="section-1.2-4.13">Identity_G1, Identity_G1</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.14">The identity element for the G1 and G2 subgroups respectively.<a href="#section-1.2-4.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.15">hash_to_curve_g1(ostr) -&gt; P</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.16">A cryptographic hash function that takes as an arbitrary octet string input and returns a point in G1 as defined in <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-1.2-5.16" class="pilcrow">¶</a>
+<dt id="section-1.2-4.15">hash_to_curve_g1(ostr) -&gt; P</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.16">A cryptographic hash function that takes as an arbitrary octet string input and returns a point in G1 as defined in <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-1.2-4.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.17">point_to_octets(P) -&gt; ostr</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.18">returns the canonical representation of the point P as an octet string. This operation is also known as serialization.<a href="#section-1.2-5.18" class="pilcrow">¶</a>
+<dt id="section-1.2-4.17">point_to_octets(P) -&gt; ostr</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.18">returns the canonical representation of the point P as an octet string. This operation is also known as serialization.<a href="#section-1.2-4.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.19">octets_to_point(ostr) -&gt; P</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.20">returns the point P corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of point_to_octets.  This operation is also known as deserialization.<a href="#section-1.2-5.20" class="pilcrow">¶</a>
+<dt id="section-1.2-4.19">octets_to_point(ostr) -&gt; P</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.20">returns the point P corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of point_to_octets.  This operation is also known as deserialization.<a href="#section-1.2-4.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-5.21">subgroup_check(P) -&gt; VALID or INVALID</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-5.22">returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that p * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., [Bowe19].<a href="#section-1.2-5.22" class="pilcrow">¶</a>
+<dt id="section-1.2-4.21">subgroup_check(P) -&gt; VALID or INVALID</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.22">returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that p * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., [Bowe19].<a href="#section-1.2-4.22" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
