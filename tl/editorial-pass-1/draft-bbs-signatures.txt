@@ -255,7 +255,7 @@ Table of Contents
 
    subgroup_check(P) -> VALID or INVALID  returns VALID when the point P
       is an element of the subgroup of order p, and INVALID otherwise.
-      This function can always be implemented by checking that p * P is
+      This function can always be implemented by checking that q * P is
       equal to the identity element.  In some cases, faster checks may
       also exist, e.g., [Bowe19].
 
