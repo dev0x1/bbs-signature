@@ -1429,7 +1429,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.2-4.21">subgroup_check(P) -&gt; VALID or INVALID</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-4.22">returns VALID when the point P is an element of the subgroup of order q, and INVALID otherwise. This function can always be implemented by checking that q * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., <span>[<a href="#Bowe19" class="xref">Bowe19</a>]</span>.<a href="#section-1.2-4.22" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-1.2-4.22">returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that p * P is equal to the identity element.  In some cases, faster checks may also exist, e.g., <span>[<a href="#Bowe19" class="xref">Bowe19</a>]</span>.<a href="#section-1.2-4.22" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1618,7 +1618,7 @@ Procedure:
 8. return SK
 </pre><a href="#section-3.3.1-7" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3.1-8"><strong>Note</strong> This operation is the RECOMMENDED way of generating a secret key, but its use is not required for compatibility, and implementations MAY use a different KeyGen procedure. For security, such an alternative MUST output a secret key that is statistically close to uniformly random in the range 0 &lt; SK &lt; r.<a href="#section-3.3.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-8"><strong>Note</strong> This operation is the RECOMMENDED way of generating a secret key, but its use is not required for compatibility, and implementations MAY use a different KeyGen procedure. For security, such an alternative MUST output a secret key that is statistically close to uniformly random in the range 1 &lt;= SK &lt; r.<a href="#section-3.3.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sktopk">
@@ -1669,15 +1669,15 @@ Outputs:
 
 Procedure:
 
-1. (W, H0, H) = octets_to_point(PK)
+1. W = octets_to_point(PK)
 
-2. If W == Identity_G2, return INVALID
+2. if W is INVALID, return INVALID
 
-3. result = subgroup_check(W) &amp;&amp; subgroup_check(H0)
+3. if subgroup_check(A) is INVALID, return INVALID
 
-4. for i in 0 to len(H): result &amp;= subgroup_check(H[i])
+4. If W == Identity_G2, return INVALID
 
-5. return result
+5. return VALID
 </pre><a href="#section-3.3.3-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1715,7 +1715,9 @@ Outputs:
 
 Procedure:
 
-1. (W, H0, H) = octets_to_point(PK)
+1. W = octets_to_point(PK)
+
+2. if W is INVALID, abort
 
 2. generators =  (H_s || H_d || H_1 || ... || H_L)
 
@@ -1777,23 +1779,25 @@ Procedure:
 
 1. (A, e, s) = (octets_to_point(signature.A), OS2IP(signature.e), OS2IP(signature.s))
 
-2. pub_key = octets_to_point(PK)
+2. if A is INVALID return INVALID
 
-3. if subgroup_check(A) is INVALID
+3. if subgroup_check(A) is INVALID, return INVALID
 
-4. if KeyValidate(pub_key) is INVALID
+4. if KeyValidate(PK) is INVALID, return INVALID
 
-5. generators =  (H_s || H_d || H_1 || ... || H_L)
+5. W = octets_to_point(PK)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
+6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+7. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-8. C1 = e(A, W + P2 * e)
+8. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-9. C2 = e(B, P2)
+9. C1 = e(A, W + P2 * e)
 
-10. return C1 == C2
+10. C2 = e(B, P2)
+
+11. return C1 == C2
 </pre><a href="#section-3.3.5-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1831,7 +1835,7 @@ Definitions:
 
 Outputs:
 
-- proof, a proof encoded as an octet string.
+- proof, octet string; or INVALID.
 
 Procedure:
 
@@ -1841,9 +1845,9 @@ Procedure:
 
 3. (j1, j2,..., jU) = [L] \ RevealedIndexes
 
-4. if subgroup_check(A) is INVALID abort
+4. if subgroup_check(A) is INVALID, return INVALID
 
-5. if KeyValidate(PK) is INVALID abort
+5. if KeyValidate(PK) is INVALID, return INVALID
 
 6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
@@ -1926,7 +1930,7 @@ Outputs:
 
 Procedure:
 
-1. if KeyValidate(PK) is INVALID
+1. if KeyValidate(PK) is INVALID, return INVALID
 
 2. (i1, i2, ..., iR) = RevealedIndexes
 
@@ -1946,11 +1950,11 @@ Procedure:
 
 10. cv = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-11. if c != cv return INVALID
+11. if c != cv, return INVALID
 
-12. if A' == 1 return INVALID
+12. if A' == 1, return INVALID
 
-13. if e(A', W) * e(Abar, -P2) != 1 return INVALID
+13. if e(A', W) * e(Abar, -P2) != 1, return INVALID
 
 14. return VALID
 </pre><a href="#section-3.3.7-2" class="pilcrow">¶</a>

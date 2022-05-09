@@ -254,8 +254,8 @@ Table of Contents
       deserialization.
 
    subgroup_check(P) -> VALID or INVALID  returns VALID when the point P
-      is an element of the subgroup of order q, and INVALID otherwise.
-      This function can always be implemented by checking that q * P is
+      is an element of the subgroup of order p, and INVALID otherwise.
+      This function can always be implemented by checking that p * P is
       equal to the identity element.  In some cases, faster checks may
       also exist, e.g., [Bowe19].
 
@@ -478,7 +478,7 @@ Procedure:
    key, but its use is not required for compatibility, and
    implementations MAY use a different KeyGen procedure.  For security,
    such an alternative MUST output a secret key that is statistically
-   close to uniformly random in the range 0 < SK < r.
+   close to uniformly random in the range 1 <= SK < r.
 
 3.3.2.  SkToPk
 
@@ -523,15 +523,15 @@ Outputs:
 
 Procedure:
 
-1. (W, H0, H) = octets_to_point(PK)
+1. W = octets_to_point(PK)
 
-2. If W == Identity_G2, return INVALID
+2. if W is INVALID, return INVALID
 
-3. result = subgroup_check(W) && subgroup_check(H0)
+3. if subgroup_check(A) is INVALID, return INVALID
 
-4. for i in 0 to len(H): result &= subgroup_check(H[i])
+4. If W == Identity_G2, return INVALID
 
-5. return result
+5. return VALID
 
 3.3.4.  Sign
 
@@ -564,7 +564,9 @@ Outputs:
 
 Procedure:
 
-1. (W, H0, H) = octets_to_point(PK)
+1. W = octets_to_point(PK)
+
+2. if W is INVALID, abort
 
 2. generators =  (H_s || H_d || H_1 || ... || H_L)
 
@@ -621,23 +623,25 @@ Procedure:
 
 1. (A, e, s) = (octets_to_point(signature.A), OS2IP(signature.e), OS2IP(signature.s))
 
-2. pub_key = octets_to_point(PK)
+2. if A is INVALID return INVALID
 
-3. if subgroup_check(A) is INVALID
+3. if subgroup_check(A) is INVALID, return INVALID
 
-4. if KeyValidate(pub_key) is INVALID
+4. if KeyValidate(PK) is INVALID, return INVALID
 
-5. generators =  (H_s || H_d || H_1 || ... || H_L)
+5. W = octets_to_point(PK)
 
-6. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
+6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+7. domain = OS2IP(HASH(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-8. C1 = e(A, W + P2 * e)
+8. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-9. C2 = e(B, P2)
+9. C1 = e(A, W + P2 * e)
 
-10. return C1 == C2
+10. C2 = e(B, P2)
+
+11. return C1 == C2
 
 3.3.6.  ProofGen
 
@@ -676,7 +680,7 @@ Definitions:
 
 Outputs:
 
-- proof, a proof encoded as an octet string.
+- proof, octet string; or INVALID.
 
 Procedure:
 
@@ -686,9 +690,9 @@ Procedure:
 
 3. (j1, j2,..., jU) = [L] \ RevealedIndexes
 
-4. if subgroup_check(A) is INVALID abort
+4. if subgroup_check(A) is INVALID, return INVALID
 
-5. if KeyValidate(PK) is INVALID abort
+5. if KeyValidate(PK) is INVALID, return INVALID
 
 6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
@@ -768,7 +772,7 @@ Outputs:
 
 Procedure:
 
-1. if KeyValidate(PK) is INVALID
+1. if KeyValidate(PK) is INVALID, return INVALID
 
 2. (i1, i2, ..., iR) = RevealedIndexes
 
@@ -788,11 +792,11 @@ Procedure:
 
 10. cv = HASH(PK || Abar || A' || D || C1 || C2 || ph)
 
-11. if c != cv return INVALID
+11. if c != cv, return INVALID
 
-12. if A' == 1 return INVALID
+12. if A' == 1, return INVALID
 
-13. if e(A', W) * e(Abar, -P2) != 1 return INVALID
+13. if e(A', W) * e(Abar, -P2) != 1, return INVALID
 
 14. return VALID
 
