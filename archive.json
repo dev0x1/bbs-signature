@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-08T00:09:04.307669+00:00",
+  "timestamp": "2022-05-10T00:08:22.769786+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3471,7 +3471,7 @@
       "id": "I_kwDOF8lax85IOCRH",
       "title": "Update KeyValidate operation definition",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/109",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3481,8 +3481,8 @@
       ],
       "body": "With the changes to how we handle the message generators the procedure as defined in this section doesn't make sense now as they are no longer apart of the public key, therefore this should be updated to reflect that.",
       "createdAt": "2022-04-21T23:13:43Z",
-      "updatedAt": "2022-05-02T11:04:49Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-09T18:17:26Z",
+      "closedAt": "2022-05-09T18:17:26Z",
       "comments": [
         {
           "author": "tplooker",
@@ -3880,6 +3880,24 @@
       "body": "Raised by @mikelodder7 [here](https://github.com/decentralized-identity/bbs-signature/pull/115/files#r862931354)",
       "createdAt": "2022-05-05T22:51:31Z",
       "updatedAt": "2022-05-05T22:52:24Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 131,
+      "id": "I_kwDOF8lax85JPXkH",
+      "title": "Consider splitting operations into Core and Higher level definitions",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/131",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "As raised by @BasileiosKal previously, to improved readability around the defined operations we could elect to group the operations into core and non-core, for instance `Sign`, `Verify`, `ProofGen` and `ProofVerify` could become `CoreSign`, `CoreVerify`, `CoreProofGen` and `CoreProofVerify`. We could then define more application specific higher-level operations like `SingleSign` and `MultiSign` where the function signatures could be something like the following\r\n\r\n```\r\nsignature = SingleSign(SK, header)\r\n```\r\n\r\n```\r\nsignature = MultiSign(SK, header, (msg_1,..., msg_L))\r\n```\r\n\r\n**Note** these ^ are just ideas about how we could encapsulate common usage patterns.",
+      "createdAt": "2022-05-08T01:25:22Z",
+      "updatedAt": "2022-05-08T22:36:16Z",
       "closedAt": null,
       "comments": []
     }
@@ -12278,24 +12296,26 @@
       "id": "PR_kwDOF8lax843JQXi",
       "title": "Update KeyValidate operation",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/115",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Fixes #109 ",
       "createdAt": "2022-05-02T03:50:11Z",
-      "updatedAt": "2022-05-07T22:54:50Z",
+      "updatedAt": "2022-05-09T18:17:36Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/update-key-validate",
-      "headRefOid": "2cfc0b8f94e751dbae2f5b213dbf52b704214f92",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "dede00f4ef69ad4b0fc4fef15641dccaecec9ee0",
+      "closedAt": "2022-05-09T18:17:26Z",
+      "mergedAt": "2022-05-09T18:17:25Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "697d7b46568a6e27ae6793bb3d99b48462c97729"
+      },
       "comments": [
         {
           "author": "tplooker",
@@ -12324,6 +12344,13 @@
           "body": " >Ok shall we also remove the sub-group check for A and then add it as a security consideration that signature verification should be performed prior to SpkGen?\r\n \r\nYeap that makes sense to me. For now, at least. Something like @andrewwhitehead's proposal in the WG call may change this approach so i think it would be fine to merge the PR as is also. Since the goal was to update KeyValidate, i think this covers it.",
           "createdAt": "2022-05-02T21:59:49Z",
           "updatedAt": "2022-05-02T21:59:49Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Reviewed on WG call, multiple approvals, merging",
+          "createdAt": "2022-05-09T18:17:21Z",
+          "updatedAt": "2022-05-09T18:17:21Z"
         }
       ],
       "reviews": [
@@ -12719,6 +12746,19 @@
               "updatedAt": "2022-05-05T22:56:01Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nfC_",
+          "commit": {
+            "abbreviatedOid": "dede00f"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-09T18:16:58Z",
+          "updatedAt": "2022-05-09T18:16:58Z",
+          "comments": []
         }
       ]
     },
@@ -13614,13 +13654,13 @@
       "labels": [],
       "body": "Closes #74 \r\n\r\nAdding the revealed messages as well as the signature domain value to the challenge hash in ProofGen and ProofVerify.",
       "createdAt": "2022-05-05T23:08:43Z",
-      "updatedAt": "2022-05-05T23:23:42Z",
+      "updatedAt": "2022-05-09T18:20:03Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "revealed_messages",
-      "headRefOid": "5cf69fea2d9a6edfec6aa6ad5b3c37245278c080",
+      "headRefOid": "ab604a0cfb8439d3a76713880ec1cf2d9e6c4d26",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -13687,6 +13727,99 @@
               "updatedAt": "2022-05-05T23:23:42Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845jCFK",
+          "commit": {
+            "abbreviatedOid": "5cf69fe"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-08T22:09:11Z",
+          "updatedAt": "2022-05-08T22:09:11Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "On further thought with ProofGen, where is (msg_i1, .., msg_iR) defined?",
+              "createdAt": "2022-05-08T22:09:11Z",
+              "updatedAt": "2022-05-08T22:09:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845jCnq",
+          "commit": {
+            "abbreviatedOid": "5cf69fe"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-08T22:37:34Z",
+          "updatedAt": "2022-05-08T22:37:34Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "We need to add a step to this procedure that computes msg_i1 ... msg_iR from msg and RevealedIndexes",
+              "createdAt": "2022-05-08T22:37:34Z",
+              "updatedAt": "2022-05-08T22:37:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845jEBw",
+          "commit": {
+            "abbreviatedOid": "69808f2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-08T23:37:29Z",
+          "updatedAt": "2022-05-08T23:37:29Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n                   This vector MUST be ordered from the lowest to the highest value.\r\n```",
+              "createdAt": "2022-05-08T23:37:29Z",
+              "updatedAt": "2022-05-08T23:37:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845jECG",
+          "commit": {
+            "abbreviatedOid": "69808f2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-08T23:37:40Z",
+          "updatedAt": "2022-05-08T23:37:41Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n                   This vector MUST be ordered from the lowest to the highest value.\r\n```",
+              "createdAt": "2022-05-08T23:37:40Z",
+              "updatedAt": "2022-05-08T23:37:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nf2N",
+          "commit": {
+            "abbreviatedOid": "ab604a0"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Have updated with a comment about a way to make the procedure clearer",
+          "createdAt": "2022-05-09T18:20:03Z",
+          "updatedAt": "2022-05-09T18:20:03Z",
+          "comments": []
         }
       ]
     },
@@ -13695,25 +13828,35 @@
       "id": "PR_kwDOF8lax843Z09j",
       "title": "Editorial pass",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/129",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "- Adds a paragraph to handle when optional elements pash to a HASH or XOF function\r\n- Clarifies which inputs/parameters are required vs optional\r\n- Fixes some un-escaped underscores\r\n- Tweaks some language for each operation description\r\n- Reorders parameters in all the operations so required ones are first\r\n- Computes the public key from the SK instead of having it supplied (this might be controversial?)",
+      "body": "- Adds a paragraph to handle when optional elements pash to a HASH or XOF function\r\n- Clarifies which inputs/parameters are required vs optional\r\n- Fixes some un-escaped underscores\r\n- Tweaks some language for each operation description\r\n- Reorders parameters in all the operations so required ones are first",
       "createdAt": "2022-05-06T09:35:59Z",
-      "updatedAt": "2022-05-07T23:44:15Z",
+      "updatedAt": "2022-05-09T21:54:30Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "e6fdff409942c7924fb69bd0f69b5c7fb5e66442",
+      "baseRefOid": "89a259b1c2a5eba2218d8418931080d024a68830",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/editorial-pass-1",
-      "headRefOid": "9af5789a4ffb5ed6f8c82d8b08088cf50c955f5b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "d649c4f937e49314c90d86cd7869639d1bc15347",
+      "closedAt": "2022-05-09T21:54:24Z",
+      "mergedAt": "2022-05-09T21:54:24Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "ced07fdf5e3afe2cefef2b42732286690e54b738"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed on last WG call, merging.",
+          "createdAt": "2022-05-09T21:54:28Z",
+          "updatedAt": "2022-05-09T21:54:28Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax845ffXu",
@@ -13872,6 +14015,125 @@
               "updatedAt": "2022-05-07T22:06:39Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845kA1J",
+          "commit": {
+            "abbreviatedOid": "20dbbba"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Minor nit",
+          "createdAt": "2022-05-09T08:00:17Z",
+          "updatedAt": "2022-05-09T08:23:06Z",
+          "comments": [
+            {
+              "originalPosition": 114,
+              "body": "```suggestion\r\n**Note** This operation is the RECOMMENDED way of generating a secret key, but its use is not required for compatibility, and implementations MAY use a different KeyGen procedure. For security, such an alternative MUST output a secret key that is statistically close to uniformly random in the range 0 < SK < r.\r\n```\r\nWe use the 0 < SK < r noation above i think.",
+              "createdAt": "2022-05-09T08:00:17Z",
+              "updatedAt": "2022-05-09T08:23:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845mo3P",
+          "commit": {
+            "abbreviatedOid": "82ce1cb"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:10:11Z",
+          "updatedAt": "2022-05-09T16:10:12Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "The correct method is actually \r\n```\r\nq * P == 1\r\n```\r\nnot p * P",
+              "createdAt": "2022-05-09T16:10:12Z",
+              "updatedAt": "2022-05-09T16:10:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845mpoN",
+          "commit": {
+            "abbreviatedOid": "82ce1cb"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Just a small correction but otherwise LGTM",
+          "createdAt": "2022-05-09T16:11:59Z",
+          "updatedAt": "2022-05-09T16:11:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845nh5g",
+          "commit": {
+            "abbreviatedOid": "82ce1cb"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:27:46Z",
+          "updatedAt": "2022-05-09T18:27:47Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "```suggestion\r\n: returns VALID when the point P is an element of the subgroup of order p, and INVALID otherwise. This function can always be implemented by checking that q \\* P is equal to the identity element.  In some cases, faster checks may also exist, e.g., [@Bowe19].\r\n```",
+              "createdAt": "2022-05-09T18:27:46Z",
+              "updatedAt": "2022-05-09T18:27:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845niNL",
+          "commit": {
+            "abbreviatedOid": "2b38d07"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:28:59Z",
+          "updatedAt": "2022-05-09T18:29:00Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "```suggestion\r\n: returns VALID when the point P is an element of the subgroup of order q, and INVALID otherwise. This function can always be implemented by checking that q \\* P is equal to the identity element.  In some cases, faster checks may also exist, e.g., [@Bowe19].\r\n```",
+              "createdAt": "2022-05-09T18:28:59Z",
+              "updatedAt": "2022-05-09T18:29:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845oTB8",
+          "commit": {
+            "abbreviatedOid": "b2c58f2"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-09T21:44:49Z",
+          "updatedAt": "2022-05-09T21:44:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845oToW",
+          "commit": {
+            "abbreviatedOid": "b2c58f2"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-09T21:48:12Z",
+          "updatedAt": "2022-05-09T21:48:12Z",
+          "comments": []
         }
       ]
     },
@@ -13975,6 +14237,440 @@
           "createdAt": "2022-05-07T04:06:01Z",
           "updatedAt": "2022-05-07T04:06:01Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDOF8lax843dKsr",
+      "title": "Update hash and xof function to lower case for consistency with other declared functions",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/132",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently for most functions declared by this spec we are following a syntax of lower case / snake_case name based convention, this PR proposes to change HASH -> hash and XOF -> xof, related discussion in #114 ",
+      "createdAt": "2022-05-08T02:49:32Z",
+      "updatedAt": "2022-05-09T21:48:21Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "697d7b46568a6e27ae6793bb3d99b48462c97729",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/update-hash-fn-syntax",
+      "headRefOid": "75c9b9aee4b109a41941a45f1aff4e59789aeb20",
+      "closedAt": "2022-05-09T21:48:19Z",
+      "mergedAt": "2022-05-09T21:48:18Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "89a259b1c2a5eba2218d8418931080d024a68830"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845mqOr",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:13:16Z",
+          "updatedAt": "2022-05-09T16:13:16Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "needs `mod q` otherwise `c` is not correct.",
+              "createdAt": "2022-05-09T16:13:16Z",
+              "updatedAt": "2022-05-09T16:13:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845mqWC",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:13:31Z",
+          "updatedAt": "2022-05-09T16:13:32Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "This actually should be hash_to_scalar",
+              "createdAt": "2022-05-09T16:13:31Z",
+              "updatedAt": "2022-05-09T16:13:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845mqdP",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:13:45Z",
+          "updatedAt": "2022-05-09T16:13:45Z",
+          "comments": [
+            {
+              "originalPosition": 131,
+              "body": "hash_to_scalar",
+              "createdAt": "2022-05-09T16:13:45Z",
+              "updatedAt": "2022-05-09T16:13:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845mq9z",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:14:54Z",
+          "updatedAt": "2022-05-09T16:14:54Z",
+          "comments": [
+            {
+              "originalPosition": 176,
+              "body": "not sure what's the difference here between `hash_to_scalar` and `hash_to_field`?",
+              "createdAt": "2022-05-09T16:14:54Z",
+              "updatedAt": "2022-05-09T16:14:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nRQe",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T17:38:01Z",
+          "updatedAt": "2022-05-09T17:38:01Z",
+          "comments": [
+            {
+              "originalPosition": 176,
+              "body": "If I\u2019m not mistaken hash_to_field does not check if the field element is 0. Also hash_to_scalar does not worry about DST's etc that are not needed for the intended use cases.",
+              "createdAt": "2022-05-09T17:38:01Z",
+              "updatedAt": "2022-05-09T17:45:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nUSv",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T17:44:34Z",
+          "updatedAt": "2022-05-09T17:44:34Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "I am working on a PR to make this update everywhere it needs to happen (although we can also make the update here if we want to)",
+              "createdAt": "2022-05-09T17:44:34Z",
+              "updatedAt": "2022-05-09T18:03:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845njyx",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-09T18:34:34Z",
+          "updatedAt": "2022-05-09T18:34:34Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845oS1-",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T21:43:47Z",
+          "updatedAt": "2022-05-09T21:43:47Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "yes deferring to @BasileiosKal PR that will address this seperately.",
+              "createdAt": "2022-05-09T21:43:47Z",
+              "updatedAt": "2022-05-09T21:43:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845oTKd",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-09T21:45:32Z",
+          "updatedAt": "2022-05-09T21:45:32Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845oTbz",
+          "commit": {
+            "abbreviatedOid": "7cd06df"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T21:47:02Z",
+          "updatedAt": "2022-05-09T21:47:02Z",
+          "comments": [
+            {
+              "originalPosition": 131,
+              "body": "Will be addressed by @BasileiosKal's PR",
+              "createdAt": "2022-05-09T21:47:02Z",
+              "updatedAt": "2022-05-09T21:47:02Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 133,
+      "id": "PR_kwDOF8lax843d5Ox",
+      "title": "Signature encoding/decoding rules",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/133",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "A draft PR to document the encoding decoding rules for a signature, very early stage, keen for feedback",
+      "createdAt": "2022-05-09T00:03:09Z",
+      "updatedAt": "2022-05-09T23:28:04Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "5fba426d415b85b6156a0c001e605482bdf3b770",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/signature-encoding",
+      "headRefOid": "686e1e2da105e81e1269550bea3e9fb82e141f70",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax845kIo9",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T08:27:26Z",
+          "updatedAt": "2022-05-09T08:41:10Z",
+          "comments": [
+            {
+              "originalPosition": 211,
+              "body": "I would suggest that yes. Sinse this will be a helper function it does not need to be able to handle generic inputs. The signature values will be well formed when creating the signature in Sign.",
+              "createdAt": "2022-05-09T08:27:26Z",
+              "updatedAt": "2022-05-09T08:41:10Z"
+            },
+            {
+              "originalPosition": 219,
+              "body": "Maybe use concatenation instead of spred??",
+              "createdAt": "2022-05-09T08:30:06Z",
+              "updatedAt": "2022-05-09T08:41:10Z"
+            },
+            {
+              "originalPosition": 188,
+              "body": "Maybe add a line here like???\r\n```\r\nIsVaidPoint(A) or IsValidScalar(e) or IsValidScalar(s) are INVALID, return INVALID\r\n```\r\nWhere IsValidScalar(x) checks if the scalar x is 0 < x < q?? Another option could be to validate the signature after de-serializing??",
+              "createdAt": "2022-05-09T08:38:31Z",
+              "updatedAt": "2022-05-09T08:41:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845msJm",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:17:38Z",
+          "updatedAt": "2022-05-09T16:17:38Z",
+          "comments": [
+            {
+              "originalPosition": 188,
+              "body": "If we assume implementations always represent valid signatures after deserialization then this could work by only checking it there. However, we should keep it anyway to prevent side-channel attacks where the signature is modified after deserialization in memory and the check is missing.",
+              "createdAt": "2022-05-09T16:17:38Z",
+              "updatedAt": "2022-05-09T16:17:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845msVk",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T16:18:05Z",
+          "updatedAt": "2022-05-09T16:18:05Z",
+          "comments": [
+            {
+              "originalPosition": 211,
+              "body": "Yes agree",
+              "createdAt": "2022-05-09T16:18:05Z",
+              "updatedAt": "2022-05-09T16:18:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nlRS",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:39:54Z",
+          "updatedAt": "2022-05-09T18:39:55Z",
+          "comments": [
+            {
+              "originalPosition": 173,
+              "body": "This is incorrect, the compressed size of the scalar needs to be captured and denoted correctly.",
+              "createdAt": "2022-05-09T18:39:54Z",
+              "updatedAt": "2022-05-09T18:39:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nmHM",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:42:58Z",
+          "updatedAt": "2022-05-09T18:42:59Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "Subgroup check, also check whether this covers the infinity check.",
+              "createdAt": "2022-05-09T18:42:59Z",
+              "updatedAt": "2022-05-09T18:42:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nmSq",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:43:41Z",
+          "updatedAt": "2022-05-09T18:43:41Z",
+          "comments": [
+            {
+              "originalPosition": 183,
+              "body": "Check e is non zero",
+              "createdAt": "2022-05-09T18:43:41Z",
+              "updatedAt": "2022-05-09T18:43:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nmU6",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:43:50Z",
+          "updatedAt": "2022-05-09T18:43:51Z",
+          "comments": [
+            {
+              "originalPosition": 187,
+              "body": "Check s is non zero",
+              "createdAt": "2022-05-09T18:43:50Z",
+              "updatedAt": "2022-05-09T18:43:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845nm8K",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:46:20Z",
+          "updatedAt": "2022-05-09T18:46:21Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "If we assume A e and s are well formed then we are implicitly assuming well formed inputs vs untrusted inputs on the OctetsToSignature operation",
+              "createdAt": "2022-05-09T18:46:21Z",
+              "updatedAt": "2022-05-09T18:46:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845noVi",
+          "commit": {
+            "abbreviatedOid": "2a925de"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-09T18:51:22Z",
+          "updatedAt": "2022-05-09T18:51:23Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "Add a note that documents this is the case because only invocation of this operation is via the Sign method which already checks A e and s.",
+              "createdAt": "2022-05-09T18:51:22Z",
+              "updatedAt": "2022-05-09T18:51:23Z"
+            }
+          ]
         }
       ]
     }
