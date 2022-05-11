@@ -1745,11 +1745,11 @@ Procedure:
 
 10. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-11. A = B * (1 / (SK + e)) // Check A or B?
+11. A = B * (1 / (SK + e))
 
 12. signature_octets = signature_to_octets(A, e, s)
 
-13. return signature
+13. return signature_octets
 </pre><a href="#section-3.3.4-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2102,11 +2102,7 @@ Procedure:
 
 Inputs:
 
-- signature_octets (REQUIRED), octet string of the form output from signature_to_octets operation
-
-Parameters:
-
-- octet_point_length, the length in bytes of the octet string output by the point_to_octets function
+- signature_octets (REQUIRED), octet string of the form output from signature_to_octets operation.
 
 Outputs:
 
@@ -2114,7 +2110,7 @@ Outputs:
 
 Procedure:
 
-1. if len(signature_octets) != (octet_point_length + 2 * scalar_length), return INVALID
+1. if len(signature_octets) != (octet_point_length + 2 * octet_scalar_length), return INVALID
 
 2. a_octets = signature_octets[0..(octet_point_length - 1)]
 
@@ -2124,11 +2120,11 @@ Procedure:
 
 5. index = octet_point_length
 
-5. e = OS2IP(signature_octets[index..(index + scalar_length - 1]))
+5. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1]))
 
-6. index += scalar_length
+6. index += octet_scalar_length
 
-6. s = OS2IP(signature_octets[index..(index + scalar_length - 1)])
+6. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
 6. return (A, e, s)
 </pre><a href="#section-3.3.11-2" class="pilcrow">¶</a>
@@ -2148,9 +2144,9 @@ because its assumed these are done prior to its invocation, e.g as is the case w
 
 Inputs:
 
-- A (REQUIRED), a valid point in the G1 subgroup, different than the point at infinity. // TODO need to qualify this more?
-- e (REQUIRED), a non-negative integer representing a valid scalar value
-- s (REQUIRED), a non-negative integer representing a valid scalar value
+- A (REQUIRED), a valid point in the G1 subgroup.
+- e (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
+- s (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
 
 Outputs:
 
@@ -2160,9 +2156,9 @@ Procedure:
 
 1. A_octets = point_to_octets(A)
 
-2. e_octets = I2OSP(e, scalar_length)
+2. e_octets = I2OSP(e, octet_scalar_length)
 
-3. s_octets = I2OSP(s, scalar_length)
+3. s_octets = I2OSP(s, octet_scalar_length)
 
 4. return (a_octets || e_octets || s_octets)
 </pre><a href="#section-3.3.12-3" class="pilcrow">¶</a>
@@ -2309,7 +2305,10 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.12.1">xof_no_of_bytes: Number of bytes to draw from the xof when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.13">
-            <p id="section-5.1-1.13.1">scalar_length: Number of bytes required to represent a scalar value as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(q)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.13.1">octet_scalar_length: Number of bytes to represent a scalar value encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(q)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.14">
+            <p id="section-5.1-1.14.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the point<em>to</em>octets function. It is RECOMMENDED that this value is set to <code>ceil(log(p)/8)</code>.<a href="#section-5.1-1.14.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2368,8 +2367,12 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
           <dd style="margin-left: 1.5em" id="section-5.2-1.24">64.<a href="#section-5.2-1.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.25">scalar_length</dt>
+<dt id="section-5.2-1.25">octet_scalar_length</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.26">32, based on the RECOMMENDED approach of <code>ceil(log2(q)/8)</code>.<a href="#section-5.2-1.26" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.27">octet_point_length</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.28">48, based on the RECOMMENDED approach of <code>ceil(log(q)/8)</code>.<a href="#section-5.2-1.28" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
