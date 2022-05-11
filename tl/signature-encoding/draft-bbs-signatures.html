@@ -2120,6 +2120,8 @@ Procedure:
 
 4. if A is INVALID, return INVALID
 
+5. if A == Identity_G1, return INVALID
+
 5. index = octet_point_length
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1]))
@@ -2150,7 +2152,7 @@ because its assumed these are done prior to its invocation, e.g as is the case w
 
 Inputs:
 
-- A (REQUIRED), a valid point in the G1 subgroup.
+- A (REQUIRED), a valid point in the G1 subgroup which cannot be the identity point.
 - e (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
 - s (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
 
@@ -2287,13 +2289,13 @@ a function that returns the point P corresponding to the canonical representatio
 A cryptographic hash function that takes as an arbitrary octet string input and returns a point in G1 as defined in <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.5">
-            <p id="section-5.1-1.5.1">hash_to_curve_g1_dst: Domain separation tag used in the hash_to_curve_g1 operation<a href="#section-5.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.5.1">hash_to_curve_g1_dst: Domain separation tag used in the hash_to_curve_g1 operation.<a href="#section-5.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.6">
-            <p id="section-5.1-1.6.1">hash_to_field: A cryptographic hash function that follows the procedure outlined in section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span><a href="#section-5.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.6.1">hash_to_field: A cryptographic hash function that follows the procedure outlined in section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.7">
-            <p id="section-5.1-1.7.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation<a href="#section-5.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.7.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation.<a href="#section-5.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.8">
             <p id="section-5.1-1.8.1">hashing_elements_to_scalars: either hash<em>to</em>scalar using hash (in this case hash MUST be an xof), or hash<em>to</em>field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
@@ -2326,7 +2328,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
         </h3>
 <span class="break"></span><dl class="dlParallel" id="section-5.2-1">
           <dt id="section-5.2-1.1">hash</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.2">SHAKE-256 as defined in <span>[<a href="#SHA3" class="xref">SHA3</a>]</span><a href="#section-5.2-1.2" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.2">SHAKE-256 as defined in <span>[<a href="#SHA3" class="xref">SHA3</a>]</span>.<a href="#section-5.2-1.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.3">point_to_octets</dt>
@@ -2338,19 +2340,19 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.7">hash_to_curve_g1</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.8">follows the suite defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> for the G1 subgroup<a href="#section-5.2-1.8" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.8">follows the suite defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> for the G1 subgroup.<a href="#section-5.2-1.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.9">hash_to_curve_g1_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.10">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO"<a href="#section-5.2-1.10" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.10">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.11">hash_to_field</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.12">adopts the required parameters from the suites defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> to satisfy those described in section 5.3 <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span> along with the defined dst<a href="#section-5.2-1.12" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.12">adopts the required parameters from the suites defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> to satisfy those described in section 5.3 <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span> along with the defined dst.<a href="#section-5.2-1.12" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.13">hash_to_field_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO"<a href="#section-5.2-1.14" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.15">message_generator_seed</dt>

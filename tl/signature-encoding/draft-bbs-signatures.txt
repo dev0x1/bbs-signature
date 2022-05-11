@@ -956,6 +956,8 @@ Procedure:
 
 4. if A is INVALID, return INVALID
 
+5. if A == Identity_G1, return INVALID
+
 5. index = octet_point_length
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1]))
@@ -983,7 +985,7 @@ signature_octets = signature_to_octets(A, e, s)
 
 Inputs:
 
-- A (REQUIRED), a valid point in the G1 subgroup.
+- A (REQUIRED), a valid point in the G1 subgroup which cannot be the identity point.
 - e (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 < e < q.
 - s (REQUIRED), a non-negative integer representing a valid scalar value with the range of 0 < e < q.
 
@@ -1128,13 +1130,14 @@ Procedure:
       in [I-D.irtf-cfrg-hash-to-curve].
 
    *  hash_to_curve_g1_dst: Domain separation tag used in the
-      hash_to_curve_g1 operation
+      hash_to_curve_g1 operation.
 
    *  hash_to_field: A cryptographic hash function that follows the
-      procedure outlined in section 5.3 of [I-D.irtf-cfrg-hash-to-curve]
+      procedure outlined in section 5.3 of
+      [I-D.irtf-cfrg-hash-to-curve].
 
    *  hash_to_field_dst: Domain separation tag used in the hash_to_field
-      operation
+      operation.
 
    *  hashing_elements_to_scalars: either hash_to_scalar using hash (in
       this case hash MUST be an xof), or hash_to_field with the
@@ -1184,7 +1187,7 @@ Procedure:
 
 5.2.  BLS12-381 Ciphersuite
 
-   hash  SHAKE-256 as defined in [SHA3]
+   hash  SHAKE-256 as defined in [SHA3].
 
    point_to_octets  follows the format documented in Appendix C section
       1 of [I-D.irtf-cfrg-pairing-friendly-curves].
@@ -1193,15 +1196,15 @@ Procedure:
       2 of [I-D.irtf-cfrg-pairing-friendly-curves].
 
    hash_to_curve_g1  follows the suite defined in Appendix A.1 for the
-      G1 subgroup
+      G1 subgroup.
 
-   hash_to_curve_g1_dst  "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO"
+   hash_to_curve_g1_dst  "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO".
 
    hash_to_field  adopts the required parameters from the suites defined
       in Appendix A.1 to satisfy those described in section 5.3
-      [I-D.irtf-cfrg-hash-to-curve] along with the defined dst
+      [I-D.irtf-cfrg-hash-to-curve] along with the defined dst.
 
-   hash_to_field_dst  "BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO"
+   hash_to_field_dst  "BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO".
 
    message_generator_seed  A global seed value of
       "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED"
