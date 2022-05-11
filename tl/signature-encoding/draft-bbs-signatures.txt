@@ -981,7 +981,7 @@ signature_octets = signature_to_octets(A, e, s)
 
 Inputs:
 
-- A (REQUIRED), a valid point // TODO need to qualify this more?
+- A (REQUIRED), a valid point in the G1 subgroup, different than the point at infinity. // TODO need to qualify this more?
 - e (REQUIRED), a non-negative integer representing a valid scalar value
 - s (REQUIRED), a non-negative integer representing a valid scalar value
 
