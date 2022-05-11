@@ -590,11 +590,9 @@ Procedure:
 
 13. A = B * (1 / (SK + e))
 
-14. if A == Identity_G1, go back to step 10
+14. signature = (point_to_octets_min(A), e, s)
 
-15. signature = (point_to_octets_min(A), e, s)
-
-16. return signature
+15. return signature
 
 3.3.5.  Verify
 
