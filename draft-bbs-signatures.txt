@@ -60,6 +60,8 @@ Table of Contents
        3.3.8.  CreateGenerators
        3.3.9.  MapMessageToScalar
        3.3.10. Hash to scalar
+       3.3.11. OctetsToSignature
+       3.3.12. SignatureToOctets
    4.  Security Considerations
      4.1.  Validating public keys
      4.2.  Skipping membership checks
@@ -213,6 +215,11 @@ Table of Contents
    I \ J  For sets I and J, denotes the difference of the two sets i.e.,
       all the elements of I that do not appear in J, in the same order
       as they were in I.
+
+   X[a..b]  Denotes a slice of the array X containing all elements from
+      and including the value at index a until and including the value
+      at index b.  Note when this syntax is applied to an octet string,
+      each element in the array X is assumed to be a single byte.
 
    Terms specific to pairing-friendly elliptic curves that are relevant
    to this document are restated below, originally defined in
@@ -586,9 +593,9 @@ Procedure:
 
 11. A = B * (1 / (SK + e))
 
-12. signature = (point_to_octets_min(A), e, s)
+12. signature_octets = signature_to_octets(A, e, s)
 
-13. return signature
+13. return signature_octets
 
 3.3.5.  Verify
 
@@ -621,11 +628,11 @@ Outputs:
 
 Procedure:
 
-1. (A, e, s) = (octets_to_point(signature.A), OS2IP(signature.e), OS2IP(signature.s))
+1. signature_result = octets_to_signature(signature)
 
-2. if A is INVALID return INVALID
+2. if signature_result is INVALID, return INVALID
 
-3. if subgroup_check(A) is INVALID, return INVALID
+3. (A, e, s) = signature_result
 
 4. if KeyValidate(PK) is INVALID, return INVALID
 
@@ -684,57 +691,59 @@ Outputs:
 
 Procedure:
 
-1. (A, e, s) = (octets_to_point(signature.A), OS2IP(signature.e), OS2IP(signature.s))
+1. signature_result = octets_to_signature(signature)
 
 2. (i1, i2,..., iR) = RevealedIndexes
 
 3. (j1, j2,..., jU) = [L] \ RevealedIndexes
 
-4. if subgroup_check(A) is INVALID, return INVALID
+4. if signature_result is INVALID, return INVALID
 
-5. if KeyValidate(PK) is INVALID, return INVALID
+5. (A, e, s) = signature_result
 
-6. generators =  (H_s || H_d || H_1 || ... || H_L)
+6. if KeyValidate(PK) is INVALID, return INVALID
 
-7. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+7. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-8. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
+8. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
 
-9.      element = hash(PRF(8*ceil(log2(q)))) mod q
+9. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
 
-10.      if element = 0, go back to step 7
+10.      element = hash(PRF(8*ceil(log2(q)))) mod q
 
-11. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
+11.      if element = 0, go back to step 7
 
-12. r3 = r1 ^ -1 mod q
+12. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-13. A' = A * r1
+13. r3 = r1 ^ -1 mod q
 
-14. Abar = A' * (-e) + B * r1
+14. A' = A * r1
 
-15. D = B * r1 + H_s * r2
+15. Abar = A' * (-e) + B * r1
 
-16. s' = s + r2 * r3
+16. D = B * r1 + H_s * r2
 
-17. C1 = A' * e~ + H_s * r2~
+17. s' = s + r2 * r3
 
-18. C2 = D * (-r3~) + H_s * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
+18. C1 = A' * e~ + H_s * r2~
 
-19. c = hash(PK || Abar || A' || D || C1 || C2 || ph)
+19. C2 = D * (-r3~) + H_s * s~ + H_j1 * m~_j1 + ... + H_jU * m~_jU
 
-20. e^ = e~ + c * e
+20. c = hash(PK || Abar || A' || D || C1 || C2 || ph)
 
-21. r2^ = r2~ + c * r2
+21. e^ = e~ + c * e
 
-22. r3^ = r3~ + c * r3
+22. r2^ = r2~ + c * r2
 
-23. s^ = s~ + c * s'
+23. r3^ = r3~ + c * r3
 
-24. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
+24. s^ = s~ + c * s'
 
-25. proof = ( A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+25. for j in (j1, j2,..., jU): m^_j = m~_j + c * msg_j
 
-26. return proof
+26. proof = (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1, ..., m^_jU))
+
+27. return proof
 
 3.3.7.  ProofVerify
 
@@ -920,6 +929,80 @@ Procedure:
 
 5. return (scalar_1, ..., scalar_n)
 
+3.3.11.  OctetsToSignature
+
+   This operation describes how to decode an octet string, validate it
+   and return the underlying components that make up the signature.
+
+(A, e, s) = octets_to_signature(signature_octets)
+
+Inputs:
+
+- signature_octets (REQUIRED), octet string of the form output from signature_to_octets operation.
+
+Outputs:
+
+- A, a valid point in the G1 subgroup which is not equal to the identity point.
+- e, an integer representing a valid scalar value within the range of 0 < e < q.
+- s, an integer representing a valid scalar value within the range of 0 < e < q.
+
+Procedure:
+
+1. if len(signature_octets) != (octet_point_length + 2 * octet_scalar_length), return INVALID
+
+2. a_octets = signature_octets[0..(octet_point_length - 1)]
+
+3. A = octets_to_point(a_octets)
+
+4. if A is INVALID, return INVALID
+
+5. if A == Identity_G1, return INVALID
+
+5. index = octet_point_length
+
+6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
+
+7. if e = 0 OR e >= q, return INVALID
+
+8. index += octet_scalar_length
+
+9. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
+
+10. if s = 0 OR s >= q, return INVALID
+
+11. return (A, e, s)
+
+3.3.12.  SignatureToOctets
+
+   This operation describes how to encode a signature to an octet
+   string.
+
+   _Note_ this operation deliberately does not perform the relevant
+   checks on the inputs A e and s because its assumed these are done
+   prior to its invocation, e.g as is the case with the Sign operation.
+
+signature_octets = signature_to_octets(A, e, s)
+
+Inputs:
+
+- A (REQUIRED), a valid point in the G1 subgroup which is not equal to the identity point.
+- e (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < q.
+- s (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < q.
+
+Outputs:
+
+- signature_octets, octet string.
+
+Procedure:
+
+1. A_octets = point_to_octets(A)
+
+2. e_octets = I2OSP(e, octet_scalar_length)
+
+3. s_octets = I2OSP(s, octet_scalar_length)
+
+4. return (a_octets || e_octets || s_octets)
+
 4.  Security Considerations
 
 4.1.  Validating public keys
@@ -1047,13 +1130,14 @@ Procedure:
       in [I-D.irtf-cfrg-hash-to-curve].
 
    *  hash_to_curve_g1_dst: Domain separation tag used in the
-      hash_to_curve_g1 operation
+      hash_to_curve_g1 operation.
 
    *  hash_to_field: A cryptographic hash function that follows the
-      procedure outlined in section 5.3 of [I-D.irtf-cfrg-hash-to-curve]
+      procedure outlined in section 5.3 of
+      [I-D.irtf-cfrg-hash-to-curve].
 
    *  hash_to_field_dst: Domain separation tag used in the hash_to_field
-      operation
+      operation.
 
    *  hashing_elements_to_scalars: either hash_to_scalar using hash (in
       this case hash MUST be an xof), or hash_to_field with the
@@ -1093,9 +1177,17 @@ Procedure:
       the ciphersuite, where r and k are parameters from the underlying
       pairing friendly curve being used.
 
+   *  octet_scalar_length: Number of bytes to represent a scalar value,
+      in the multiplicative group of integers mod q, encoded as an octet
+      string.  It is RECOMMENDED this value be set to ceil(log2(q)/8).
+
+   *  octet_point_length: Number of bytes to represent a point encoded
+      as an octet string outputted by the point_to_octets function.  It
+      is RECOMMENDED that this value is set to ceil(log2(p)/8).
+
 5.2.  BLS12-381 Ciphersuite
 
-   hash  SHAKE-256 as defined in [SHA3]
+   hash  SHAKE-256 as defined in [SHA3].
 
    point_to_octets  follows the format documented in Appendix C section
       1 of [I-D.irtf-cfrg-pairing-friendly-curves].
@@ -1104,15 +1196,15 @@ Procedure:
       2 of [I-D.irtf-cfrg-pairing-friendly-curves].
 
    hash_to_curve_g1  follows the suite defined in Appendix A.1 for the
-      G1 subgroup
+      G1 subgroup.
 
-   hash_to_curve_g1_dst  "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO"
+   hash_to_curve_g1_dst  "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO".
 
    hash_to_field  adopts the required parameters from the suites defined
       in Appendix A.1 to satisfy those described in section 5.3
-      [I-D.irtf-cfrg-hash-to-curve] along with the defined dst
+      [I-D.irtf-cfrg-hash-to-curve] along with the defined dst.
 
-   hash_to_field_dst  "BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO"
+   hash_to_field_dst  "BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO".
 
    message_generator_seed  A global seed value of
       "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED"
@@ -1131,9 +1223,15 @@ Procedure:
       CreateGenerators (#creategenerators) operation to compute the
       generator used to sign the signature domain separation tag (H_d).
 
-   hashing_elements_to_scalars  hash_to_scalar
+   hashing_elements_to_scalars  hash_to_scalar.
 
-   xof_no_of_bytes  64
+   xof_no_of_bytes  64.
+
+   octet_scalar_length  32, based on the RECOMMENDED approach of
+      ceil(log2(q)/8).
+
+   octet_point_length  48, based on the RECOMMENDED approach of
+      ceil(log2(p)/8).
 
 5.2.1.  Test Vectors
 
