@@ -876,8 +876,8 @@ Procedure:
    procedure acts as a helper function, and it is used internally in
    various places within the operations described in the spec.  To map a
    message to a scalar that would be passed as input to the Sign
-   (#sign), Verify (#verify), spkGen (#spkgen) and spkVerify
-   (#spkverify) functions, one must use MapMessageToScalarAsHash
+   (#sign), Verify (#verify), ProofGen (#proofgen) and ProofVerify
+   (#proofgen) functions, one must use MapMessageToScalarAsHash
    (#mapmessagetoscalar) instead.
 
    The hash_to_scalar procedure hashes elements using an extendable-
