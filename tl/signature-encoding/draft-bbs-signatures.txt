@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                             11 May 2022
+                                                             12 May 2022
 
 
                         The BBS Signature Scheme
@@ -217,9 +217,9 @@ Table of Contents
       as they were in I.
 
    X[a..b]  Denotes a slice of the array X containing all elements from
-      index a until b.  Note when this syntax is applied to an octet
-      string, each element in the array X is assumed to be a single
-      byte.
+      and including the value at index a until and including the value
+      at index b.  Note when this syntax is applied to an octet string,
+      each element in the array X is assumed to be a single byte.
 
    Terms specific to pairing-friendly elliptic curves that are relevant
    to this document are restated below, originally defined in
