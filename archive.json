@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-10T00:08:22.769786+00:00",
+  "timestamp": "2022-05-12T00:10:07.174382+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3852,7 +3852,7 @@
       ],
       "body": "As raised by @mikelodder7 in #115 there are numerous cases within existing operations that require validating points, therefore having a single operation that documents these steps rather than repeating them will improve readability.",
       "createdAt": "2022-05-05T22:49:38Z",
-      "updatedAt": "2022-05-05T22:55:11Z",
+      "updatedAt": "2022-05-11T23:15:13Z",
       "closedAt": null,
       "comments": [
         {
@@ -3861,6 +3861,13 @@
           "body": "Additional context [here](https://github.com/decentralized-identity/bbs-signature/pull/115#discussion_r863084747)",
           "createdAt": "2022-05-05T22:55:11Z",
           "updatedAt": "2022-05-05T22:55:11Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "The signature related checks for this in the verify function are being captured in #133 ",
+          "createdAt": "2022-05-11T23:15:13Z",
+          "updatedAt": "2022-05-11T23:15:13Z"
         }
       ]
     },
@@ -3879,9 +3886,17 @@
       ],
       "body": "Raised by @mikelodder7 [here](https://github.com/decentralized-identity/bbs-signature/pull/115/files#r862931354)",
       "createdAt": "2022-05-05T22:51:31Z",
-      "updatedAt": "2022-05-05T22:52:24Z",
+      "updatedAt": "2022-05-11T09:03:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Addressed in #133 ",
+          "createdAt": "2022-05-11T09:03:43Z",
+          "updatedAt": "2022-05-11T09:03:43Z"
+        }
+      ]
     },
     {
       "number": 131,
@@ -3900,6 +3915,32 @@
       "updatedAt": "2022-05-08T22:36:16Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 134,
+      "id": "I_kwDOF8lax85JceAN",
+      "title": "Fix Blind Messages Proof",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/134",
+      "state": "OPEN",
+      "author": "alessandroguggino",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "blind-sign-extension"
+      ],
+      "body": "I found something new from the Blind signature extension. I know that you are now focused on the core draft but I leave it here :)\r\n\r\nIn `BlindMessagesProofGen`:\r\nhttps://github.com/decentralized-identity/bbs-signature/blob/5fba426d415b85b6156a0c001e605482bdf3b770/draft-blind-bbs-signatures.md?plain=1#L249\r\nIn `BlindMessagesProofVerify`:\r\nhttps://github.com/decentralized-identity/bbs-signature/blob/5fba426d415b85b6156a0c001e605482bdf3b770/draft-blind-bbs-signatures.md?plain=1#L284\r\n\r\nThe values in `c` and `cv` are inconsistent: we should decide which one to follow.\r\n1) `c = hash(U || U~ || nonce)` and `cv = hash(U || U^ || nonce)` + add `U` (known messages) as input parameter in _BlindMessagesProofVerify_\r\n**or**\r\n2) `c = hash(commitment || U~ || nonce)` and `cv = hash(commitment || U^ || nonce)`\r\n\r\nP.S. I'm going to open a pull request to remove the unuseful escape chars and, if you want, update the draft to snake_case notation",
+      "createdAt": "2022-05-11T08:25:05Z",
+      "updatedAt": "2022-05-11T09:02:36Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Hey @alessandroguggino good catch, yes there are some inconsistencies, however you are right that our focus as a WG is primarily on the core draft right now. Feel free to open a PR to address any syntax inconsistencies anything broader we will address once the core draft is complete/stable.",
+          "createdAt": "2022-05-11T09:02:36Z",
+          "updatedAt": "2022-05-11T09:02:36Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -13654,7 +13695,7 @@
       "labels": [],
       "body": "Closes #74 \r\n\r\nAdding the revealed messages as well as the signature domain value to the challenge hash in ProofGen and ProofVerify.",
       "createdAt": "2022-05-05T23:08:43Z",
-      "updatedAt": "2022-05-09T18:20:03Z",
+      "updatedAt": "2022-05-11T12:46:09Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
@@ -13820,6 +13861,46 @@
           "createdAt": "2022-05-09T18:20:03Z",
           "updatedAt": "2022-05-09T18:20:03Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax845xO1p",
+          "commit": {
+            "abbreviatedOid": "ab604a0"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T11:57:53Z",
+          "updatedAt": "2022-05-11T11:57:53Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "We should add the messages too and not just the indices. We need them both. If that\u2019s already the case it\u2019s not clear to me how that is so given revealed_msgs appears to just include indices",
+              "createdAt": "2022-05-11T11:57:53Z",
+              "updatedAt": "2022-05-11T11:57:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xiys",
+          "commit": {
+            "abbreviatedOid": "ab604a0"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T12:46:09Z",
+          "updatedAt": "2022-05-11T12:46:09Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Thank you! Currently the PR only includes the revealed messages (note that `revealed_msgs =  (msg_i1 || msg_i2 || ... || msg_iR)` where `msg_i1, ..., msg_iR` the revealed messages in the current notation). Including the revealed indices also makes sense to me but there are proposals to remove the indices notion altogether (see for example issue #117 for some context). For that reason, I made the PR a draft for now, until a proper notation is decided.",
+              "createdAt": "2022-05-11T12:46:09Z",
+              "updatedAt": "2022-05-11T12:46:09Z"
+            }
+          ]
         }
       ]
     },
@@ -14465,15 +14546,15 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "A draft PR to document the encoding decoding rules for a signature, very early stage, keen for feedback",
+      "body": "~~A draft PR to document the encoding decoding rules for a signature, very early stage, keen for feedback~~\r\n\r\nAdds an encoding and decoding function for signatures, fixes #127 ",
       "createdAt": "2022-05-09T00:03:09Z",
-      "updatedAt": "2022-05-09T23:28:04Z",
+      "updatedAt": "2022-05-11T23:20:00Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "5fba426d415b85b6156a0c001e605482bdf3b770",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/signature-encoding",
-      "headRefOid": "686e1e2da105e81e1269550bea3e9fb82e141f70",
+      "headRefOid": "1595e50d48ae3437e1261373c86dd76943db950f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -14671,8 +14752,376 @@
               "updatedAt": "2022-05-09T18:51:23Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845uRha",
+          "commit": {
+            "abbreviatedOid": "6481ca1"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-10T21:29:51Z",
+          "updatedAt": "2022-05-10T22:41:23Z",
+          "comments": [
+            {
+              "originalPosition": 168,
+              "body": "```suggestion\r\n- octet_point_length, the length in bytes of the octet string output by the point_to_octets function\r\n- scalar_length, the length in bytes of the scalar encoded octet string output by the IP2OSP function\r\n```\r\nI think the scalar length may also need to be defined in the parameter (not necessarily with the above syntax)",
+              "createdAt": "2022-05-10T21:29:51Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 216,
+              "body": "```suggestion\r\n- octet\\_scalar\\_length: Number of bytes required to represent a scalar value as an octet string. It is RECOMMENDED this value be set to `ceil(log2(q)/8)`.\r\n- octet\\_point\\_length, the length in bytes of the octet string output by the point_to_octets function. It is RECOMMENDED that this value is set to `ceil(log(p)/8)`.\r\n```\r\nTwo things:\r\n1. It seems that the operation also uses the octet_point_length constant. For consistency we may want to also define that constant in the ciphersuite\r\n2. If we do define octet_point_length in the suites then the naming must be consistent so i suggest scalar_length -> octet_scalar_length (or octet_point_length -> point_length)",
+              "createdAt": "2022-05-10T21:35:48Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 188,
+              "body": "```suggestion\r\n1. A_octets = point_to_octets(A)\r\n```\r\nMaybe use capital A to be more clear what that is??",
+              "createdAt": "2022-05-10T21:40:38Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\n12. signature_octets = signature_to_octets(A, e, s)\r\n```\r\nJust to through an idea. Maybe use signature_octets?? That way in Verify we will have `signature = octets_to_signature(signature_octets)` which i thing is better?? This means that we will need to pass signature_octets as an input to Verify though. So both have tradeoffs.",
+              "createdAt": "2022-05-10T22:23:16Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 178,
+              "body": "```suggestion\r\n- e (REQUIRED), a non-negative, non-zero, and less than q integer representing a valid scalar value (0 < e < q).\r\n```",
+              "createdAt": "2022-05-10T22:32:28Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 179,
+              "body": "```suggestion\r\n- s (REQUIRED), a non-negative, non-zero, and less than q integer representing a valid scalar value (0 < s < q).\r\n```",
+              "createdAt": "2022-05-10T22:32:48Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 177,
+              "body": "```suggestion\r\n- A (REQUIRED), a valid point in the G1 subgroup, different than the point at infinity. // TODO need to qualify this more?\r\n```\r\nI think that the above suggestion covers everything we need to specify for A.",
+              "createdAt": "2022-05-10T22:36:55Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            },
+            {
+              "originalPosition": 134,
+              "body": "```suggestion\r\n- signature_octets (REQUIRED), octet string, output from signature_to_octets on input a valid BBS+ signature (one created by the Sign operation)\r\n```\r\nMaybe make it more explicit here??",
+              "createdAt": "2022-05-10T22:39:25Z",
+              "updatedAt": "2022-05-10T22:41:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845urDO",
+          "commit": {
+            "abbreviatedOid": "3ba94fd"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T00:11:42Z",
+          "updatedAt": "2022-05-11T00:11:43Z",
+          "comments": [
+            {
+              "originalPosition": 168,
+              "body": "Do we need to redefine it when its available at the cipher suite definition level? I think we need to figure out the scoping otherwise there would be loads of parameters in every definition?",
+              "createdAt": "2022-05-11T00:11:42Z",
+              "updatedAt": "2022-05-11T00:11:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845uube",
+          "commit": {
+            "abbreviatedOid": "16378a8"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T00:43:24Z",
+          "updatedAt": "2022-05-11T00:43:24Z",
+          "comments": [
+            {
+              "originalPosition": 134,
+              "body": "```suggestion\r\n- signature_octets (REQUIRED), octet string of the form output from signature_to_octets operation\r\n```",
+              "createdAt": "2022-05-11T00:43:24Z",
+              "updatedAt": "2022-05-11T00:43:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845u5oj",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T02:20:56Z",
+          "updatedAt": "2022-05-11T02:20:57Z",
+          "comments": [
+            {
+              "originalPosition": 188,
+              "body": "I've inlined the check for now, however happy to add a seperate operation to encapsulate this instead.",
+              "createdAt": "2022-05-11T02:20:57Z",
+              "updatedAt": "2022-05-11T02:20:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845u5tA",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T02:21:36Z",
+          "updatedAt": "2022-05-11T02:21:36Z",
+          "comments": [
+            {
+              "originalPosition": 150,
+              "body": "Whats the best syntax for checking whether A is infinity or not?",
+              "createdAt": "2022-05-11T02:21:36Z",
+              "updatedAt": "2022-05-11T02:21:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845u5yD",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T02:22:23Z",
+          "updatedAt": "2022-05-11T02:22:23Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "Isn't this actually specific to the sub-group?",
+              "createdAt": "2022-05-11T02:22:23Z",
+              "updatedAt": "2022-05-11T02:22:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845u502",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T02:22:43Z",
+          "updatedAt": "2022-05-11T02:22:43Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "if so we should just update the definition",
+              "createdAt": "2022-05-11T02:22:43Z",
+              "updatedAt": "2022-05-11T02:22:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xMac",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T11:52:12Z",
+          "updatedAt": "2022-05-11T11:52:12Z",
+          "comments": [
+            {
+              "originalPosition": 150,
+              "body": "We usually denote it as `A != 1_G1`",
+              "createdAt": "2022-05-11T11:52:12Z",
+              "updatedAt": "2022-05-11T11:52:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xNW5",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T11:54:28Z",
+          "updatedAt": "2022-05-11T11:54:29Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "It\u2019s not that it\u2019s recommended it\u2019s the actual field size. This is curve dependent so we should specify as a system parameter with the curve",
+              "createdAt": "2022-05-11T11:54:29Z",
+              "updatedAt": "2022-05-11T11:54:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xNvX",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T11:55:26Z",
+          "updatedAt": "2022-05-11T11:55:27Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "I think we\u2019re fixing what goes into the hash in another PR right? If not I\u2019ll create one that does",
+              "createdAt": "2022-05-11T11:55:27Z",
+              "updatedAt": "2022-05-11T11:55:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xklW",
+          "commit": {
+            "abbreviatedOid": "3ba94fd"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T12:50:54Z",
+          "updatedAt": "2022-05-11T12:50:54Z",
+          "comments": [
+            {
+              "originalPosition": 168,
+              "body": "We could include anything used in an operation and defined in a ciphersuite as a parameter (this is the route that the h2c spec has taken). However, if we don\u2019t want to define a lot of parameters, I would suggest to either remove both (i.e., the  octet_point_length and the scalar_length) or add them both for now (until we decide on what should be a parameter).",
+              "createdAt": "2022-05-11T12:50:54Z",
+              "updatedAt": "2022-05-11T12:50:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845xn9o",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T12:58:58Z",
+          "updatedAt": "2022-05-11T12:58:58Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "We may want to leave it as a recommendation for applications that may want to apply some custom optimization?? Although i do agree that most cases will use that method. It is also true that the number itself is only base field depended so IMO the definition is fine as it is.",
+              "createdAt": "2022-05-11T12:58:58Z",
+              "updatedAt": "2022-05-11T12:58:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8450PgW",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T21:00:13Z",
+          "updatedAt": "2022-05-11T21:00:13Z",
+          "comments": [
+            {
+              "originalPosition": 150,
+              "body": "So define `1_G1` as the point at infinity for the G1 subgroup?",
+              "createdAt": "2022-05-11T21:00:13Z",
+              "updatedAt": "2022-05-11T21:00:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8450Pr9",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T21:00:56Z",
+          "updatedAt": "2022-05-11T21:00:56Z",
+          "comments": [
+            {
+              "originalPosition": 97,
+              "body": "Yeap we are",
+              "createdAt": "2022-05-11T21:00:56Z",
+              "updatedAt": "2022-05-11T21:00:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8450nNI",
+          "commit": {
+            "abbreviatedOid": "5a81e18"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-11T23:17:48Z",
+          "updatedAt": "2022-05-11T23:17:48Z",
+          "comments": [
+            {
+              "originalPosition": 150,
+              "body": "Using `Identity_G1` instead here as it already exists",
+              "createdAt": "2022-05-11T23:17:48Z",
+              "updatedAt": "2022-05-11T23:17:48Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 135,
+      "id": "PR_kwDOF8lax843rwK0",
+      "title": "Updates the sign procedure",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/135",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR updates the sign procedure to account for the case when `(SK + e) = 0 mod q` which is invalid and therefore requires us to re-compute a new `e` value if it were to occur.\r\n\r\nNote @BasileiosKal and I also discussed whether we need to check for `A != Identity_G1` however we believe it is impossible for this case to exist based on how the procedure is documented therefore the additional check is not required.",
+      "createdAt": "2022-05-11T23:05:37Z",
+      "updatedAt": "2022-05-11T23:07:50Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "e871c69645d6031d615bc53b570fce9edecb38fb",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/sign-procedure",
+      "headRefOid": "e48395cf94848fc927e11ed1621b8bcc35e8b8a9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
