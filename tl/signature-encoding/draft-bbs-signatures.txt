@@ -943,8 +943,8 @@ Inputs:
 Outputs:
 
 - A, a valid point in the G1 subgroup which is not equal to the identity point.
-- e, a non-negative integer representing a valid scalar value with the range of 0 < e < q.
-- s, a non-negative integer representing a valid scalar value with the range of 0 < e < q.
+- e, an integer representing a valid scalar value with the range of 0 < e < q.
+- s, an integer representing a valid scalar value with the range of 0 < e < q.
 
 Procedure:
 
@@ -962,13 +962,13 @@ Procedure:
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-7. if e >= q, return INVALID
+7. if e = 0 OR e >= q, return INVALID
 
 8. index += octet_scalar_length
 
 9. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-10. if s >= q, return INVALID
+10. if s = 0 OR s >= q, return INVALID
 
 11. return (A, e, s)
 
@@ -1177,9 +1177,9 @@ Procedure:
       the ciphersuite, where r and k are parameters from the underlying
       pairing friendly curve being used.
 
-   *  octet_scalar_length: Number of bytes to represent a scalar value
-      encoded as an octet string.  It is RECOMMENDED this value be set
-      to ceil(log2(q)/8).
+   *  octet_scalar_length: Number of bytes to represent a scalar value,
+      in the multiplicative group of integers mod q, encoded as an octet
+      string.  It is RECOMMENDED this value be set to ceil(log2(q)/8).
 
    *  octet_point_length: Number of bytes to represent a point encoded
       as an octet string outputted by the point_to_octets function.  It

@@ -2107,8 +2107,8 @@ Inputs:
 Outputs:
 
 - A, a valid point in the G1 subgroup which is not equal to the identity point.
-- e, a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
-- s, a non-negative integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
+- e, an integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
+- s, an integer representing a valid scalar value with the range of 0 &lt; e &lt; q.
 
 Procedure:
 
@@ -2126,13 +2126,13 @@ Procedure:
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-7. if e &gt;= q, return INVALID
+7. if e = 0 OR e &gt;= q, return INVALID
 
 8. index += octet_scalar_length
 
 9. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-10. if s &gt;= q, return INVALID
+10. if s = 0 OR s &gt;= q, return INVALID
 
 11. return (A, e, s)
 </pre><a href="#section-3.3.11-2" class="pilcrow">¶</a>
@@ -2313,7 +2313,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.12.1">xof_no_of_bytes: Number of bytes to draw from the xof when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.13">
-            <p id="section-5.1-1.13.1">octet_scalar_length: Number of bytes to represent a scalar value encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(q)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.13.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod q, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(q)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.14">
             <p id="section-5.1-1.14.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the point<em>to</em>octets function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1-1.14.1" class="pilcrow">¶</a></p>
