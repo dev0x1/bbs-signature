@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-12T00:10:07.174382+00:00",
+  "timestamp": "2022-05-15T00:11:55.121913+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -402,7 +402,7 @@
       "id": "I_kwDOF8lax8480yF_",
       "title": "Proof of knowledge revealed message structure",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -411,8 +411,8 @@
       ],
       "body": "Related to #2 \r\n\r\nCurrently the implementations of a BBS proof of knowledge signature includes the encoding of a binary structure at the start of the proof which captures which of the messages being verified and how they correspond to the original ordering of the message set signed. Currently this structure takes the form of a bit array.\r\n\r\nFor example assume the following set of messages were originally signed\r\n\r\n```\r\n[\r\n  \"message1\"\r\n  \"message2\",\r\n  \"message3\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nAnd a proof revealing only the 1st 4th and 5th message was generated, meaning the revealed messages supplied during the verify proof operation would appear in the following order\r\n\r\n```\r\n[\r\n  \"message1\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nThe resulting bit array in the proof would take the following form\r\n\r\n```\r\n+-----------------------------+-----------------------------+---------------------------------+\r\n| Total messages length (16bit)| Revealed messages bit array |..... remaining proof structure |\r\n+-----------------------------+-----------------------------+---------------------------------+\r\n\r\n+-----------+--------------+-----------------------------------+\r\n| 5 (integer) | 1 | 0 | 0 | 1 | 1  | ..... remaining proof structure |\r\n+-----------+--------------+-----------------------------------+\r\n```\r\n\r\nHowever, this mechanism of expression does limit options around the data canonicalisation algorithm that is used on top of the cryptographic scheme. Namely it does not support a re-ordering of the revealed messages away from the order in which they were originally signed. To accomodate this we could instead elect to change the expression of this aspect of the proof from a bit array to a byte/multi-byte array, where instead the array contents is a set of un-signer integers (16bit each) where each integer corresponds to the index the message occupied in the original ordering of the signed message set\r\n\r\nFor example assume the following set of messages were originally signed\r\n\r\n```\r\n[\r\n  \"message1\",\r\n  \"message2\",\r\n  \"message3\",\r\n  \"message4\",\r\n  \"message5\"\r\n]\r\n```\r\n\r\nAnd a proof revealing only the 1st 4th and 5th message was generated, **BUT** the messages in the resulting proof are re-ordered so that they present as 4, 5, 1 \r\n\r\n```\r\n[\r\n  \"message4\",\r\n  \"message5\",\r\n  \"message1\"\r\n]\r\n```\r\n\r\nThe resulting bit array in the proof would take the following form\r\n\r\n```\r\n+-----------------------------+----------------------------------------+-------------------------------+----------------+\r\n| Total messages length (16bit)| Revealed messages array length (16bit) | Revealed messages byte array | remaining proof |\r\n+-----------------------------+----------------------------------------+-------------------------------+----------------+\r\n\r\n+--+--+--------+------------------------------+\r\n| 5  | 3 | 4 | 5 | 1 | ..... remaining proof structure |\r\n+--+--+--------+------------------------------+\r\n```\r\n\r\nThe tradeoff here is that the overhead of this structure is more than in the simpler case with the bit array.\r\n\r\n**NOTE** It is probably also worth considering a more standard structured binary format like CBOR rather than a custom structure ",
       "createdAt": "2021-10-07T21:15:45Z",
-      "updatedAt": "2022-04-21T23:35:25Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-13T21:56:25Z",
+      "closedAt": "2022-05-13T21:56:25Z",
       "comments": [
         {
           "author": "quartzjer",
@@ -1248,7 +1248,7 @@
       "id": "I_kwDOF8lax85CbLrn",
       "title": "Remove KeyGen definition",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/31",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "andrewwhitehead",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -1257,8 +1257,8 @@
       ],
       "body": "This may be defined as a property of the profile along with details of the pairing-friendly curve in use. For BLS curves it probably makes sense to reference the BLS Signatures IETF draft (hopefully that is getting an update?).",
       "createdAt": "2022-01-25T22:23:33Z",
-      "updatedAt": "2022-04-22T16:52:28Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-13T21:55:19Z",
+      "closedAt": "2022-05-13T21:55:19Z",
       "comments": [
         {
           "author": "tplooker",
@@ -1322,6 +1322,13 @@
           "body": "Yes, I think that's fine. We probably ought to reference the BLS signature draft since it's a straight copy.",
           "createdAt": "2022-04-22T16:52:28Z",
           "updatedAt": "2022-04-22T16:52:28Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Closing this issue based on the consensus above, we can round back to appropriate referencing of prior art one these operation definitions have settled a little more",
+          "createdAt": "2022-05-13T21:55:19Z",
+          "updatedAt": "2022-05-13T21:55:19Z"
         }
       ]
     },
@@ -3675,7 +3682,7 @@
       ],
       "body": "Now we have introduced the concept of an optional header in #95 I want to consider whether we allow for constructions of BBS signatures which do not make use of the \"selective disclosure\" feature, instead just use BBS as an ordinary group signature. I believe there are several interesting usecases such as privacy preserving access tokens or hardware attestations that would likely use BBS in this form.\r\n\r\nIn short my proposal is for both the header and messages (along with message generators) to be optional. Meaning a signer could create a signature that has neither, either or both a header and array of messages.",
       "createdAt": "2022-05-02T04:18:15Z",
-      "updatedAt": "2022-05-06T12:28:48Z",
+      "updatedAt": "2022-05-13T16:16:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -3740,6 +3747,13 @@
           "body": "So to recap it seems that there are three options,\r\n\r\n1. The current approach i.e., a messages list and a generator list as input.  This will look like the following\r\n     ```\r\n    signature = Sign(SK, PK, (msg_1, ..., msg_L), (H_1, ..., H_L), header)\r\n     ```\r\n2. @tplooker's proposal to pass the generators as parameters. This will look like,\r\n    ````\r\n    signature = Sign(SK, PK, (msg_1, ..., msg_L), header)\r\n   \r\n    Parameters: \r\n    - (H_1, ..., H_L): The generators used for the signature\r\n    ````\r\n3. @andrewwhitehead's proposal of passing one list with (generator, message) pairs. This will look like,\r\n    ```\r\n    signature = Sign(SK, PK, [(H_1, msg_1), ..., (H_L, msg_L)], header)\r\n    ```\r\n\r\nMy thoughts (see also the discussion above for more context): \r\n- Option 2 does give the clearer API. I'm only worried that we may break the separation between what constitutes as input and what as parameter.\r\n- Option 3 does remove the need to have to check if the messages and the generators lists have the same length. It may create the need to also pass an additional list of generators to ProofVerify though because that operation requires all the generators, not just the ones corresponding to the revealed messages. This may create some inconsistency between the ProofGen and ProofVerify api?? (not really sure about that)\r\n\r\nCurrently im leaning more towards option 2, if we can sufficiently justify the choice to the cfrg (see #125 also)",
           "createdAt": "2022-05-06T11:39:38Z",
           "updatedAt": "2022-05-06T12:28:48Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Just for completion, another alternative is to pass the lists of messages and generators, not in a de-structured form, but using \"named lists\", i.e., something like the following,\r\n\r\n```\r\nproof = ProofGen(PK, signature, header, messages, generators, revealedIndexes, ph)\r\n\r\nProcedure:\r\n            .\r\n            .\r\n            .\r\n7. (i1, i2, ..., iU) = revealedIndexes\r\n8. (j1, j2, ..., jR) = [L] \\ revealedIndexes\r\n9. msg_1, ..., msg_L = messages[1], ..., messages[L]\r\n10. msg_i1, ..., msg_iU = messages[i1], ..., messages[iU]\r\n11. H_1, ..., H_L = generators[1], ..., generators[L]\r\n12. H_j1, ..., H_jR = generators[j1], ..., generators[jR]\r\n            .\r\n            .\r\n            .\r\n```\r\nAs you can see, there will be a lot of steps needed to de-structure the input lists. There will be even more steps necessary to check the lengths of the input lists potentially. That said we will be totally explicit on how we get the necessary elements (the revealed messages, the corresponding generators etc.) from the inputs.",
+          "createdAt": "2022-05-13T16:16:00Z",
+          "updatedAt": "2022-05-13T16:16:00Z"
         }
       ]
     },
@@ -3876,7 +3890,7 @@
       "id": "I_kwDOF8lax85JJlGw",
       "title": "Validate e and s signature components non-zero",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/127",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3886,8 +3900,8 @@
       ],
       "body": "Raised by @mikelodder7 [here](https://github.com/decentralized-identity/bbs-signature/pull/115/files#r862931354)",
       "createdAt": "2022-05-05T22:51:31Z",
-      "updatedAt": "2022-05-11T09:03:44Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-12T23:13:10Z",
+      "closedAt": "2022-05-12T23:13:10Z",
       "comments": [
         {
           "author": "tplooker",
@@ -3941,6 +3955,49 @@
           "updatedAt": "2022-05-11T09:02:36Z"
         }
       ]
+    },
+    {
+      "number": 139,
+      "id": "I_kwDOF8lax85Jp5_6",
+      "title": "H_s and H_d not defined in BLS ciphersuite",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/139",
+      "state": "OPEN",
+      "author": "christianpaquin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "The terminology section says that the `H_s` and `H_d` generators are defined by each ciphersuite, but they are not defined in the BLS12-381 Ciphersuite section.",
+      "createdAt": "2022-05-13T21:16:47Z",
+      "updatedAt": "2022-05-13T22:02:29Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Agree this is confusing, currently we have `blind_value_generator_seed` and `signature_dst_generator_seed` which are intended to be used with the [CreateGenerators](https://identity.foundation/bbs-signature/draft-bbs-signatures.html#name-creategenerators) operation to derive H_s and H_d, but this needs to be clarified further",
+          "createdAt": "2022-05-13T21:47:44Z",
+          "updatedAt": "2022-05-13T21:47:44Z"
+        }
+      ]
+    },
+    {
+      "number": 141,
+      "id": "I_kwDOF8lax85Jqyb9",
+      "title": "Generators ordering",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/141",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It would be very useful to have a clear way to define the order of the generators in the draft. This would allow us to naturally also define the order of the signed messages that it is also needed.\r\n\r\nTwo options as far as I know are:\r\n1. Based on their index (i.e., the order of which they are created). So, H_1 will be the first generator created, H_2 the second etc.\r\n2. Based on their value (using some metric, maybe Euclidian distance??, or alphabetically using their octet representation??).\r\n\r\nIMO 2 seems to be a fair amount more complicated. \r\n\r\nOn the other hand, using 1, to validate that some generators have the correct \"order\" one will have to re-create them. \r\n\r\nFor that reason, I tent more in the second option, but I do recognize that both have trade-offs.",
+      "createdAt": "2022-05-14T11:46:24Z",
+      "updatedAt": "2022-05-14T11:46:24Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -14541,25 +14598,42 @@
       "id": "PR_kwDOF8lax843d5Ox",
       "title": "Signature encoding/decoding rules",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/133",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "~~A draft PR to document the encoding decoding rules for a signature, very early stage, keen for feedback~~\r\n\r\nAdds an encoding and decoding function for signatures, fixes #127 ",
       "createdAt": "2022-05-09T00:03:09Z",
-      "updatedAt": "2022-05-11T23:20:00Z",
+      "updatedAt": "2022-05-13T21:53:36Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "5fba426d415b85b6156a0c001e605482bdf3b770",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/signature-encoding",
-      "headRefOid": "1595e50d48ae3437e1261373c86dd76943db950f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "c5fc59d71f512868ed9505001b4aaee2e71bec23",
+      "closedAt": "2022-05-12T23:13:10Z",
+      "mergedAt": "2022-05-12T23:13:10Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "c3c65347050125751165dd627e7d52f029d143f5"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple reviews, discussed on last WG call, multiple approvals, merging.",
+          "createdAt": "2022-05-12T23:13:05Z",
+          "updatedAt": "2022-05-12T23:13:05Z"
+        },
+        {
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ha, glad this was merged! I had an older HTML spec version opened in my browser, and was about to ask how to serialize the signature :)",
+          "createdAt": "2022-05-13T21:53:35Z",
+          "updatedAt": "2022-05-13T21:53:35Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax845kIo9",
@@ -15094,6 +15168,405 @@
               "updatedAt": "2022-05-11T23:17:48Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845065y",
+          "commit": {
+            "abbreviatedOid": "e549a9f"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T02:07:55Z",
+          "updatedAt": "2022-05-12T02:07:55Z",
+          "comments": [
+            {
+              "originalPosition": 150,
+              "body": "\ud83d\udc4d\ud83c\udffb ",
+              "createdAt": "2022-05-12T02:07:55Z",
+              "updatedAt": "2022-05-12T02:07:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8455Ec9",
+          "commit": {
+            "abbreviatedOid": "1595e50"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM ",
+          "createdAt": "2022-05-12T18:02:43Z",
+          "updatedAt": "2022-05-12T18:02:43Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8455G21",
+          "commit": {
+            "abbreviatedOid": "1595e50"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T18:11:15Z",
+          "updatedAt": "2022-05-12T18:11:16Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Should probably clarify if the range is inclusive or exclusive",
+              "createdAt": "2022-05-12T18:11:15Z",
+              "updatedAt": "2022-05-12T18:11:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8455HN-",
+          "commit": {
+            "abbreviatedOid": "1595e50"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T18:12:39Z",
+          "updatedAt": "2022-05-12T18:12:40Z",
+          "comments": [
+            {
+              "originalPosition": 224,
+              "body": "log or log2?",
+              "createdAt": "2022-05-12T18:12:39Z",
+              "updatedAt": "2022-05-12T18:12:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8455Heu",
+          "commit": {
+            "abbreviatedOid": "1595e50"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T18:13:41Z",
+          "updatedAt": "2022-05-12T18:13:41Z",
+          "comments": [
+            {
+              "originalPosition": 270,
+              "body": "`ceil(log2(p)/8)` I think",
+              "createdAt": "2022-05-12T18:13:41Z",
+              "updatedAt": "2022-05-12T18:13:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456CmI",
+          "commit": {
+            "abbreviatedOid": "1595e50"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:22:38Z",
+          "updatedAt": "2022-05-12T22:22:38Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "@andrewwhitehead good point, please check the updated text",
+              "createdAt": "2022-05-12T22:22:38Z",
+              "updatedAt": "2022-05-12T22:22:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456Duz",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:30:28Z",
+          "updatedAt": "2022-05-12T22:30:29Z",
+          "comments": [
+            {
+              "originalPosition": 156,
+              "body": "Oops, bracket mismatch",
+              "createdAt": "2022-05-12T22:30:28Z",
+              "updatedAt": "2022-05-12T22:30:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456D4K",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:31:32Z",
+          "updatedAt": "2022-05-12T22:31:32Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "I believe OS2IP always returns a non-negative integer?",
+              "createdAt": "2022-05-12T22:31:32Z",
+              "updatedAt": "2022-05-12T22:31:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456EAo",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:32:26Z",
+          "updatedAt": "2022-05-12T22:32:26Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "Seems a bit redundant?",
+              "createdAt": "2022-05-12T22:32:26Z",
+              "updatedAt": "2022-05-12T22:32:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456Ecr",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:35:45Z",
+          "updatedAt": "2022-05-12T22:35:45Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "Yea that's correct. Maybe it should be e != 0 then?",
+              "createdAt": "2022-05-12T22:35:45Z",
+              "updatedAt": "2022-05-12T22:35:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456EjD",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:36:30Z",
+          "updatedAt": "2022-05-12T22:36:30Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "Not sure I understand what you mean here, the description is redundant?",
+              "createdAt": "2022-05-12T22:36:30Z",
+              "updatedAt": "2022-05-12T22:36:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456FDh",
+          "commit": {
+            "abbreviatedOid": "cf3b342"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:40:28Z",
+          "updatedAt": "2022-05-12T22:40:28Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "IMO although the non-negative part is not really needed i would like to keep it to highlight the fact that e can be un signed integer. But removing it and leaving it as \r\n\r\n```\r\n- e, an integer representing a valid scalar value with the range of 0 < e < q.\r\n```\r\nIs also correct.",
+              "createdAt": "2022-05-12T22:40:28Z",
+              "updatedAt": "2022-05-12T22:40:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456Fhr",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:44:10Z",
+          "updatedAt": "2022-05-12T22:44:14Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "```suggestion\r\n7. if e = 0 OR e >= q, return INVALID\r\n```\r\nI think we do need to check if e and s are zero right?? @andrewwhitehead??",
+              "createdAt": "2022-05-12T22:44:10Z",
+              "updatedAt": "2022-05-12T22:44:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456F7u",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:47:22Z",
+          "updatedAt": "2022-05-12T22:48:21Z",
+          "comments": [
+            {
+              "originalPosition": 222,
+              "body": "```suggestion\r\n- octet\\_scalar\\_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod q, encoded as an octet string. It is RECOMMENDED this value be set to `ceil(log2(q)/8)`.\r\n```\r\nMaybe we need to make it a little more explicit here so that the ceil(log2(q)/8) recommendation makes more sense",
+              "createdAt": "2022-05-12T22:47:22Z",
+              "updatedAt": "2022-05-12T22:48:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456GUM",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:50:13Z",
+          "updatedAt": "2022-05-12T22:50:14Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "`s` could potentially be zero for an unblinded signature if `s' + s'' = 0`. If an issuer wants to use `s = 0` or `e = 0` then they could, but I don't think it's great from a security perspective",
+              "createdAt": "2022-05-12T22:50:13Z",
+              "updatedAt": "2022-05-12T22:50:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456G54",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:54:50Z",
+          "updatedAt": "2022-05-12T22:54:50Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "Addressed for e and s",
+              "createdAt": "2022-05-12T22:54:50Z",
+              "updatedAt": "2022-05-12T22:54:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456G9B",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:55:14Z",
+          "updatedAt": "2022-05-12T22:55:15Z",
+          "comments": [
+            {
+              "originalPosition": 222,
+              "body": "Thanks, addressed",
+              "createdAt": "2022-05-12T22:55:15Z",
+              "updatedAt": "2022-05-12T22:55:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456HFH",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T22:56:18Z",
+          "updatedAt": "2022-05-12T22:56:18Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "That's true. Although i don't really see any security problems with having either e or s be 0 on the top of my head the paper does define them in the multiplicative group mod q so i would prefer if they where non 0 just for that. ",
+              "createdAt": "2022-05-12T22:56:18Z",
+              "updatedAt": "2022-05-12T22:57:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456Hi4",
+          "commit": {
+            "abbreviatedOid": "30ed5a9"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-12T23:00:01Z",
+          "updatedAt": "2022-05-12T23:00:02Z",
+          "comments": [
+            {
+              "originalPosition": 158,
+              "body": "The point about blind signatures is also very interesting. If we decide to disallow 0 `s` we may have a problem there (not really saying to change it in the core draft, just that it is something we will have to consider when updating the blind signatures spec).",
+              "createdAt": "2022-05-12T23:00:01Z",
+              "updatedAt": "2022-05-12T23:00:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8456Hko",
+          "commit": {
+            "abbreviatedOid": "c5fc59d"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-12T23:00:14Z",
+          "updatedAt": "2022-05-12T23:00:14Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8456H7y",
+          "commit": {
+            "abbreviatedOid": "c5fc59d"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-12T23:03:03Z",
+          "updatedAt": "2022-05-12T23:03:03Z",
+          "comments": []
         }
       ]
     },
@@ -15106,10 +15579,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "dont-merge-yet"
+      ],
       "body": "This PR updates the sign procedure to account for the case when `(SK + e) = 0 mod q` which is invalid and therefore requires us to re-compute a new `e` value if it were to occur.\r\n\r\nNote @BasileiosKal and I also discussed whether we need to check for `A != Identity_G1` however we believe it is impossible for this case to exist based on how the procedure is documented therefore the additional check is not required.",
       "createdAt": "2022-05-11T23:05:37Z",
-      "updatedAt": "2022-05-11T23:07:50Z",
+      "updatedAt": "2022-05-12T21:58:49Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "e871c69645d6031d615bc53b570fce9edecb38fb",
@@ -15120,8 +15595,431 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "While this is incredibly unlikely to happen, it also doesn't seem like a good solution to just abort the program if it does occur. However I worry a little about the possibility of a side-channel attack in comparing e to the SK.",
+          "createdAt": "2022-05-12T00:29:53Z",
+          "updatedAt": "2022-05-12T00:29:53Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@andrewwhitehead is right. We shouldn\u2019t abort or return to step 10 we should do something else like e - 1 as a conditional move to avoid leaking sk via timing attacks. ",
+          "createdAt": "2022-05-12T00:56:20Z",
+          "updatedAt": "2022-05-12T00:56:20Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "To tease this out further I think we agree the following\r\n\r\n1) The risk of `(SK + e) = 0 mod q` condition being meet is very low\r\n2) The risk however does exist therefore we do need to account for it by providing some guidance in the procedure to implementers on what to do if the case occurred\r\n3) the risk of a timing attack is not in the computation of `(SK + e) = 0 mod q` it self instead its due to the branch condition existing on the outcome of this computation e.g going back to step 10.\r\n\r\nIf we see risk in the computation of the `(SK + e) = 0 mod q` check itself (which I dont think we do?), we could instead just check `A != Identity_G1` after step 13 however the branch of going back and re-computing e would still exist therefore the remote possibility of some timing information leaking from a sign operation could still exist?",
+          "createdAt": "2022-05-12T01:43:54Z",
+          "updatedAt": "2022-05-12T01:43:54Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Another option to remove the branching logic is to pre-compute an alternative value for e and use that if the condition is met, removing the possibility of the timing attack @mikelodder7 I believe this was your suggestion in our conversation?",
+          "createdAt": "2022-05-12T01:44:59Z",
+          "updatedAt": "2022-05-12T01:44:59Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "if we do e - 1 or e + 1 shouldn't we then re-check if the new e is 0 again?? unless we specify SK > 1 it seems that we may end up with a similar problem??",
+          "createdAt": "2022-05-12T09:29:50Z",
+          "updatedAt": "2022-05-12T09:48:18Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Note also just aborting or not performing this check at all (current state of spec), also risks leaking information about the SK so we need to address it regardless, I think @mikelodder7 @BasileiosKal suggestion of pre-computing an alternative value for e we can use when this condition is meet, is the most appropriate solution",
+          "createdAt": "2022-05-12T19:52:29Z",
+          "updatedAt": "2022-05-12T19:52:55Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Note also just aborting or not performing this check at all (current state of spec), also risks leaking information about the SK so we need to address it regardless, I think @mikelodder7 @BasileiosKal suggestion of pre-computing an alternative value for e we can use when this condition is meet, is the most appropriate solution\r\n\r\nThat being said, current libraries for ECDSA do NOT check their nonce for secret key incompatibility because the likelihood is so low. The ECDSA spec as written in NIST doesn't even discuss it either. So perhaps we are over engineering this.",
+          "createdAt": "2022-05-12T20:03:57Z",
+          "updatedAt": "2022-05-12T20:03:57Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm happy to have a small note in the security considerations instead of producing a valid signature in this one unlikely case. I don't think we can just return (A=1, e, s) though because then SK can be easily calculated from e.",
+          "createdAt": "2022-05-12T20:10:03Z",
+          "updatedAt": "2022-05-12T20:10:03Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Agreed. Isn't the possibility of the attack even being effective the same as an attacker trying random secret keys and finding the correct one?? So even if the attack is feasible i don't thing that the overall security level of the scheme actually declines.",
+          "createdAt": "2022-05-12T20:12:16Z",
+          "updatedAt": "2022-05-12T20:12:16Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> That being said, current libraries for ECDSA do NOT check their nonce for secret key incompatibility because the likelihood is so low. The ECDSA spec as written in NIST doesn't even discuss it either. So perhaps we are over engineering this.\r\n\r\nInteresting does that mean in deterministic variations of ECDSA there is at least one combination of SK + payload that you could just never sign as it would always fail because the nonce is derived from the input deterministically?\r\n\r\nIf thats the case then one strategy is to just follow that precedent",
+          "createdAt": "2022-05-12T20:51:53Z",
+          "updatedAt": "2022-05-12T20:52:34Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes the standard is RFC6979 which makes ECDSA deterministic. ",
+          "createdAt": "2022-05-12T20:53:26Z",
+          "updatedAt": "2022-05-12T20:53:26Z"
+        }
+      ],
       "reviews": []
+    },
+    {
+      "number": 136,
+      "id": "PR_kwDOF8lax843vs3I",
+      "title": "Fix typo around ciphersuite",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/136",
+      "state": "MERGED",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses an inconsistency raised by @christianpaquin w.r.t the input data type of Ciphersuite_ID",
+      "createdAt": "2022-05-12T20:41:11Z",
+      "updatedAt": "2022-05-12T22:19:34Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "e871c69645d6031d615bc53b570fce9edecb38fb",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/cipher-suite-typo",
+      "headRefOid": "1c6953a240613f493d24f670115d3b7771ef6019",
+      "closedAt": "2022-05-12T22:19:27Z",
+      "mergedAt": "2022-05-12T22:19:27Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "1e463ea474eb0aaa14fa9eed721ba5b4b3fe8ac7"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Minor editorial tweak, multiple approvals, merging",
+          "createdAt": "2022-05-12T22:19:23Z",
+          "updatedAt": "2022-05-12T22:19:23Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax84553yn",
+          "commit": {
+            "abbreviatedOid": "1c6953a"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-12T21:22:04Z",
+          "updatedAt": "2022-05-12T21:22:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8455_XC",
+          "commit": {
+            "abbreviatedOid": "1c6953a"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-12T22:03:04Z",
+          "updatedAt": "2022-05-12T22:03:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 137,
+      "id": "PR_kwDOF8lax843xUCY",
+      "title": "Ciphersuite ID definition",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/137",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Defines the Ciphersuite ID format and supplies a value for the BLS12-381 suite, partially addresses #118 ",
+      "createdAt": "2022-05-13T09:13:25Z",
+      "updatedAt": "2022-05-13T09:39:38Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/ciphersuite_id",
+      "headRefOid": "2940cf73172d978280c53667e59d0b8431854d7e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax8457wTw",
+          "commit": {
+            "abbreviatedOid": "2940cf7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-13T09:39:27Z",
+          "updatedAt": "2022-05-13T09:39:38Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\n  BBS || \"_\" || H2C_SUITE_ID || \"_\" || ADD_INFO || \"_\"\r\n```\r\nIt may be better to define the ID to end with a `_` so we will not have to define that ADD_INFO MUST end with an `_`. Also there is an `_` that is needed after the h2c id i think.",
+              "createdAt": "2022-05-13T09:39:27Z",
+              "updatedAt": "2022-05-13T09:39:38Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 138,
+      "id": "PR_kwDOF8lax843y_lL",
+      "title": "API update",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/138",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
+      "createdAt": "2022-05-13T16:32:18Z",
+      "updatedAt": "2022-05-14T22:30:38Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "api_update",
+      "headRefOid": "c191a1888cb3c21109f580d6008450065c3d5629",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for that, it looks pretty readable to me although maybe we can find a better way to describe the ordering of the generators.",
+          "createdAt": "2022-05-13T16:51:57Z",
+          "updatedAt": "2022-05-13T16:51:57Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax84597II",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-13T16:47:16Z",
+          "updatedAt": "2022-05-13T16:47:17Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "The list MUST be ordered based on the index of the generators?",
+              "createdAt": "2022-05-13T16:47:17Z",
+              "updatedAt": "2022-05-13T16:47:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax84597Wq",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-13T16:48:14Z",
+          "updatedAt": "2022-05-13T16:48:14Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "Not sure why these two are required and can't default to [] as well",
+              "createdAt": "2022-05-13T16:48:14Z",
+              "updatedAt": "2022-05-13T16:48:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax84597ky",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-13T16:49:10Z",
+          "updatedAt": "2022-05-13T16:49:10Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "RevealedIndexes doesn't exist anymore",
+              "createdAt": "2022-05-13T16:49:10Z",
+              "updatedAt": "2022-05-13T16:49:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845_vAu",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-14T11:48:20Z",
+          "updatedAt": "2022-05-14T11:48:20Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "This does make sense considering how the generators are created but that order is harder to be \"verified\" unless the verifier re-creates all the generators (not really a security issue I think, it's just that the proof will not validate). \r\n\r\nUsed the suggestion for now and opened issue #141 to discuss more. ",
+              "createdAt": "2022-05-14T11:48:20Z",
+              "updatedAt": "2022-05-14T11:48:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845_vD5",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-14T11:51:12Z",
+          "updatedAt": "2022-05-14T11:51:13Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "My thinking was that if both lists are optional, it would allow both to be empty at the same time (which it should not if the original signed list is also non-empty). \r\n\r\nThat said, I added a note in the description of ProofGen to highlight this fact and made the lists optional. I agree that this way is better from having the lists be required.",
+              "createdAt": "2022-05-14T11:51:13Z",
+              "updatedAt": "2022-05-14T15:16:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax845_vEP",
+          "commit": {
+            "abbreviatedOid": "cc934f6"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-14T11:51:32Z",
+          "updatedAt": "2022-05-14T11:51:33Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "Thanks! Addressed.",
+              "createdAt": "2022-05-14T11:51:33Z",
+              "updatedAt": "2022-05-14T11:51:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846AGRB",
+          "commit": {
+            "abbreviatedOid": "c191a18"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-14T22:25:33Z",
+          "updatedAt": "2022-05-14T22:25:34Z",
+          "comments": [
+            {
+              "originalPosition": 245,
+              "body": "```suggestion\r\n- [H_h1, ..., H_hU] (OPTIONAL), a list of points in G1. Generators corresponding to \r\n     un-revealed messages. If not supplied, the list will default to the empty \r\n     array (\"[]\"). The list MUST be ordered based on the index of the generators.\r\n```\r\n\r\nI think reveal vs un-reveal is better language than adding in another term \"hidden\"?",
+              "createdAt": "2022-05-14T22:25:33Z",
+              "updatedAt": "2022-05-14T22:25:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846AGUp",
+          "commit": {
+            "abbreviatedOid": "c191a18"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-14T22:30:37Z",
+          "updatedAt": "2022-05-14T22:30:38Z",
+          "comments": [
+            {
+              "originalPosition": 258,
+              "body": "```suggestion\r\n- U, is the non-negative integer representing the number of un-revealed messages e.g.,\r\n```",
+              "createdAt": "2022-05-14T22:30:37Z",
+              "updatedAt": "2022-05-14T22:30:38Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 140,
+      "id": "PR_kwDOF8lax8430euF",
+      "title": "Change q to r",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/140",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Change the notation from `q` to `r` for the G1 and G2 order, for consistency with specs like bls-signatures, pfc etc.",
+      "createdAt": "2022-05-14T10:08:52Z",
+      "updatedAt": "2022-05-14T22:16:51Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "notation-update",
+      "headRefOid": "1fc045340442058bc266db2709e94f3bb0e8211d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846AGK2",
+          "commit": {
+            "abbreviatedOid": "1fc0453"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-14T22:16:51Z",
+          "updatedAt": "2022-05-14T22:16:51Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
