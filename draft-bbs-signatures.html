@@ -1414,7 +1414,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
           <dd style="margin-left: 1.5em" id="section-1.2-4.8">G1 x G2 -&gt; GT: a non-degenerate bilinear map.<a href="#section-1.2-4.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-4.9">q</dt>
+<dt id="section-1.2-4.9">r</dt>
           <dd style="margin-left: 1.5em" id="section-1.2-4.10">The prime order of the G1 and G2 subgroups.<a href="#section-1.2-4.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
@@ -1493,7 +1493,7 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
             <p id="section-3.1-2.1.1">A pairing-friendly elliptic curve, plus associated functionality given in Section 1.4.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1">hash, a hash function that MUST be a secure cryptographic hash function. For security, hash MUST output at least <code>ceil(log2(q))</code> bits, where q is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encoding-of-elements-to-be-hashed">encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.2.1">hash, a hash function that MUST be a secure cryptographic hash function. For security, hash MUST output at least <code>ceil(log2(r))</code> bits, where r is the order of the subgroups G1 and G2 defined by the pairing-friendly elliptic curve. See <a href="#encoding-of-elements-to-be-hashed">encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.3">
             <p id="section-3.1-2.3.1">xof, a cryptographically secure extendable-output function like SHAKE128 or SHAKE256. xof outputs any desirable amount of bytes using the <code>.read(int)</code> method. See <a href="#encoding-of-elements-to-be-hashed">Encoding of elements to be hashed</a> for details on how the inputs to the function must be encoded.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
@@ -1602,12 +1602,12 @@ Definitions:
 - HKDF-Extract is as defined in [@!RFC5869], instantiated with hash function hash.
 - HKDF-Expand is as defined in [@!RFC5869], instantiated with hash function hash.
 - I2OSP and OS2IP are as defined in [@!RFC8017], Section 4.
-- L is the integer given by ceil((3 * ceil(log2(q))) / 16).
+- L is the integer given by ceil((3 * ceil(log2(r))) / 16).
 - INITSALT is the ASCII string "BBS-SIG-KEYGEN-SALT-".
 
 Outputs:
 
-- SK, a uniformly random integer such that 0 &lt; SK &lt; q.
+- SK, a uniformly random integer such that 0 &lt; SK &lt; r.
 
 Procedure:
 
@@ -1623,7 +1623,7 @@ Procedure:
 
 6.     OKM = HKDF-Expand(PRK, key_info || I2OSP(L, 2), L)
 
-7.     SK = OS2IP(OKM) mod q
+7.     SK = OS2IP(OKM) mod r
 
 8. return SK
 </pre><a href="#section-3.3.1-7" class="pilcrow">¶</a>
@@ -1642,7 +1642,7 @@ Procedure:
 
 Inputs:
 
-- SK (REQUIRED), a secret integer such that 0 &lt; SK &lt; q.
+- SK (REQUIRED), a secret integer such that 0 &lt; SK &lt; r.
 
 Outputs:
 
@@ -1731,7 +1731,7 @@ Procedure:
 
 3. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-4. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+4. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 5. if domain is 0, abort
 
@@ -1739,7 +1739,7 @@ Procedure:
 
 7. for element in (e, s) do
 
-8.      element = OS2IP(h.read(xof_no_of_bytes)) mod q
+8.      element = OS2IP(h.read(xof_no_of_bytes)) mod r
 
 9.      if element = 0, go back to step 4
 
@@ -1799,7 +1799,7 @@ Procedure:
 
 6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+7. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 8. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
@@ -1863,17 +1863,17 @@ Procedure:
 
 7. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-8. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+8. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 9. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
 
-10.      element = hash(PRF(8*ceil(log2(q)))) mod q
+10.      element = hash(PRF(8*ceil(log2(r)))) mod r
 
 11.      if element = 0, go back to step 7
 
 12. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-13. r3 = r1 ^ -1 mod q
+13. r3 = r1 ^ -1 mod r
 
 14. A' = A * r1
 
@@ -1952,7 +1952,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+6. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
@@ -2057,7 +2057,7 @@ Procedure:
           <h4 id="name-hash-to-scalar">
 <a href="#section-3.3.10" class="section-number selfRef">3.3.10. </a><a href="#name-hash-to-scalar" class="section-name selfRef">Hash to scalar</a>
           </h4>
-<p id="section-3.3.10-1">This operation describes how to hash an arbitrary octet string to <code>n</code> scalar values in the multiplicative group of integers mod q. This procedure acts as a helper function, and it is used internally in various places within the operations described in the spec. To map a message to a scalar that would be passed as input to the <a href="#sign">Sign</a>, <a href="#verify">Verify</a>, <a href="#proofgen">ProofGen</a> and <a href="#proofgen">ProofVerify</a> functions, one must use <a href="#mapmessagetoscalar">MapMessageToScalarAsHash</a> instead.<a href="#section-3.3.10-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.10-1">This operation describes how to hash an arbitrary octet string to <code>n</code> scalar values in the multiplicative group of integers mod r. This procedure acts as a helper function, and it is used internally in various places within the operations described in the spec. To map a message to a scalar that would be passed as input to the <a href="#sign">Sign</a>, <a href="#verify">Verify</a>, <a href="#proofgen">ProofGen</a> and <a href="#proofgen">ProofVerify</a> functions, one must use <a href="#mapmessagetoscalar">MapMessageToScalarAsHash</a> instead.<a href="#section-3.3.10-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.10-2">The <code>hash_to_scalar</code> procedure hashes elements using an extendable-output function (xof). Applications not wishing to use an xof may use <code>hash_to_field</code> defined in Section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>, combined with <code>expand_message_xmd</code> defined in Section 5.4.1 of the same document, in place of <code>hash_to_scalar</code>. In that case, every element outputted by <code>hash_to_field</code> that is equal to 0 MUST be rejected. If that occurs, one should calculate more field elements (using <code>hash_to_field</code>), until they get <code>n</code> non-zero elements (for example, if there is only one 0 in the output of <code>hash_to_field(msg, 2)</code> one must try to calculate <code>hash_to_field(msg, 3)</code> etc.).<a href="#section-3.3.10-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3.10-3">
 <pre>result = hash_to_scalar(msg_octets, n)
@@ -2069,12 +2069,12 @@ Inputs:
 
 Parameters:
 
-- q (REQUIRED), non-negative integer. The prime order of the G_1 and G_2 groups,
+- r (REQUIRED), non-negative integer. The prime order of the G_1 and G_2 groups,
      defined by the ciphersuite.
 
 Outputs:
 
-- (scalar_1, ..., scalar_n), a list of non-zero scalars mod q.
+- (scalar_1, ..., scalar_n), a list of non-zero scalars mod r.
 
 Procedure:
 
@@ -2082,7 +2082,7 @@ Procedure:
 
 2. for i in (1, ..., n):
 
-3.     scalar_i = OS2IP(h.read(64)) mod q
+3.     scalar_i = OS2IP(h.read(64)) mod r
 
 4.     if scalar_i is 0, go back to step 3
 
@@ -2107,8 +2107,8 @@ Inputs:
 Outputs:
 
 - A, a valid point in the G1 subgroup which is not equal to the identity point.
-- e, an integer representing a valid scalar value within the range of 0 &lt; e &lt; q.
-- s, an integer representing a valid scalar value within the range of 0 &lt; e &lt; q.
+- e, an integer representing a valid scalar value within the range of 0 &lt; e &lt; r.
+- s, an integer representing a valid scalar value within the range of 0 &lt; e &lt; r.
 
 Procedure:
 
@@ -2126,13 +2126,13 @@ Procedure:
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-7. if e = 0 OR e &gt;= q, return INVALID
+7. if e = 0 OR e &gt;= r, return INVALID
 
 8. index += octet_scalar_length
 
 9. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-10. if s = 0 OR s &gt;= q, return INVALID
+10. if s = 0 OR s &gt;= r, return INVALID
 
 11. return (A, e, s)
 </pre><a href="#section-3.3.11-2" class="pilcrow">¶</a>
@@ -2153,8 +2153,8 @@ because its assumed these are done prior to its invocation, e.g as is the case w
 Inputs:
 
 - A (REQUIRED), a valid point in the G1 subgroup which is not equal to the identity point.
-- e (REQUIRED), an integer representing a valid scalar value within the range of 0 &lt; e &lt; q.
-- s (REQUIRED), an integer representing a valid scalar value within the range of 0 &lt; e &lt; q.
+- e (REQUIRED), an integer representing a valid scalar value within the range of 0 &lt; e &lt; r.
+- s (REQUIRED), an integer representing a valid scalar value within the range of 0 &lt; e &lt; r.
 
 Outputs:
 
@@ -2220,7 +2220,7 @@ Procedure:
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-randomness-considerations" class="section-name selfRef">Randomness considerations</a>
         </h3>
 <p id="section-4.4-1">The IKM input to KeyGen MUST be infeasible to guess and MUST be kept secret. One possibility is to generate IKM from a trusted source of randomness.  Guidelines on constructing such a source are outside the scope of this document.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<p id="section-4.4-2">Secret keys MAY be generated using other methods; in this case they MUST be infeasible to guess and MUST be indistinguishable from uniformly random modulo q.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Secret keys MAY be generated using other methods; in this case they MUST be infeasible to guess and MUST be indistinguishable from uniformly random modulo r.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 <p id="section-4.4-3">BBS proofs are nondeterministic, meaning care must be taken against attacks arising from using bad randomness, for example, the nonce reuse attack on ECDSA <span>[<a href="#HDWH12" class="xref">HDWH12</a>]</span>. It is RECOMMENDED that the presentation header used in this specification contain a nonce chosen at random from a trusted source of randomness, see the <a href="#presentation-header-selection" class="xref">Section 4.5</a> for additional considerations.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">BlindSign as discussed in 2.10 uses randomness from two parties so care MUST be taken that both sources of randomness are trusted. If one party uses weak randomness, it could compromise the signature.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 <p id="section-4.4-5">When a trusted source of randomness is used, signatures and proofs are much harder to forge or break due to the use of multiple nonces.<a href="#section-4.4-5" class="pilcrow">¶</a></p>
@@ -2313,7 +2313,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.12.1">xof_no_of_bytes: Number of bytes to draw from the xof when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.13">
-            <p id="section-5.1-1.13.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod q, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(q)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.13.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod r, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(r)/8)</code>.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.14">
             <p id="section-5.1-1.14.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the point<em>to</em>octets function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1-1.14.1" class="pilcrow">¶</a></p>
@@ -2376,7 +2376,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.25">octet_scalar_length</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.26">32, based on the RECOMMENDED approach of <code>ceil(log2(q)/8)</code>.<a href="#section-5.2-1.26" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.26">32, based on the RECOMMENDED approach of <code>ceil(log2(r)/8)</code>.<a href="#section-5.2-1.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.27">octet_point_length</dt>
@@ -2898,7 +2898,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
 <p id="appendix-A.4-4">(without loss of generality we assume that the messages and generators are indexed from 0 to L). Let <code>(i1,...,iR)</code> be the indexes of generators corresponding to messages the prover wants to disclose and <code>(j1,...,jU)</code> be the indexes corresponding to undisclosed messages (i.e., <code>(j1,...,jU) = [L] \ (i1,...,iR)</code>). To prove knowledge of a signature on the disclosed messages, work as follows,<a href="#appendix-A.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.4-5.1">
-            <p id="appendix-A.4-5.1.1">Randomize the signature <code>(A, e, s)</code>, by taking uniformly random <code>r1</code>, <code>r2</code> in [1, q-1], and calculate,<a href="#appendix-A.4-5.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-A.4-5.1.1">Randomize the signature <code>(A, e, s)</code>, by taking uniformly random <code>r1</code>, <code>r2</code> in [1, r-1], and calculate,<a href="#appendix-A.4-5.1.1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-A.4-5.1.2">
 <pre>1.  A' = A * r1,
 2.  Abar = A' * (-e) + B * r1
@@ -2909,7 +2909,7 @@ ab19bd40525e36bb4e132378e0596f21b32d7455de969862f3a48864eb9e2dd4c1e8bc903ceea686
         </ul>
 <p id="appendix-A.4-6">Also set,<a href="#appendix-A.4-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-A.4-7">
-<pre>    4.  r3 = r1 ^ -1 mod q
+<pre>    4.  r3 = r1 ^ -1 mod r
     5.  s' = s + r2 * r3.
 </pre><a href="#appendix-A.4-7" class="pilcrow">¶</a>
 </div>

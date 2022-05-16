@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                             12 May 2022
+                                                             16 May 2022
 
 
                         The BBS Signature Scheme
@@ -236,7 +236,7 @@ Table of Contents
 
    e  G1 x G2 -> GT: a non-degenerate bilinear map.
 
-   q  The prime order of the G1 and G2 subgroups.
+   r  The prime order of the G1 and G2 subgroups.
 
    P1, P2  points on G1 and G2 respectively.  For a pairing-friendly
       curve, this document denotes operations in E1 and E2 in additive
@@ -299,8 +299,8 @@ Table of Contents
       given in Section 1.4.
 
    *  hash, a hash function that MUST be a secure cryptographic hash
-      function.  For security, hash MUST output at least ceil(log2(q))
-      bits, where q is the order of the subgroups G1 and G2 defined by
+      function.  For security, hash MUST output at least ceil(log2(r))
+      bits, where r is the order of the subgroups G1 and G2 defined by
       the pairing-friendly elliptic curve.  See encoding of elements to
       be hashed (#encoding-of-elements-to-be-hashed) for details on how
       the inputs to the function must be encoded.
@@ -456,12 +456,12 @@ Definitions:
 - HKDF-Extract is as defined in [@!RFC5869], instantiated with hash function hash.
 - HKDF-Expand is as defined in [@!RFC5869], instantiated with hash function hash.
 - I2OSP and OS2IP are as defined in [@!RFC8017], Section 4.
-- L is the integer given by ceil((3 * ceil(log2(q))) / 16).
+- L is the integer given by ceil((3 * ceil(log2(r))) / 16).
 - INITSALT is the ASCII string "BBS-SIG-KEYGEN-SALT-".
 
 Outputs:
 
-- SK, a uniformly random integer such that 0 < SK < q.
+- SK, a uniformly random integer such that 0 < SK < r.
 
 Procedure:
 
@@ -477,7 +477,7 @@ Procedure:
 
 6.     OKM = HKDF-Expand(PRK, key_info || I2OSP(L, 2), L)
 
-7.     SK = OS2IP(OKM) mod q
+7.     SK = OS2IP(OKM) mod r
 
 8. return SK
 
@@ -496,7 +496,7 @@ Procedure:
 
    Inputs:
 
-   - SK (REQUIRED), a secret integer such that 0 < SK < q.
+   - SK (REQUIRED), a secret integer such that 0 < SK < r.
 
    Outputs:
 
@@ -577,7 +577,7 @@ Procedure:
 
 3. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-4. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+4. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 5. if domain is 0, abort
 
@@ -585,7 +585,7 @@ Procedure:
 
 7. for element in (e, s) do
 
-8.      element = OS2IP(h.read(xof_no_of_bytes)) mod q
+8.      element = OS2IP(h.read(xof_no_of_bytes)) mod r
 
 9.      if element = 0, go back to step 4
 
@@ -640,7 +640,7 @@ Procedure:
 
 6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-7. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+7. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 8. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
@@ -705,17 +705,17 @@ Procedure:
 
 7. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-8. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+8. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 9. for element in (r1, r2, e~, r2~, r3~, s~, m~_j1, ..., m~_jU):
 
-10.      element = hash(PRF(8*ceil(log2(q)))) mod q
+10.      element = hash(PRF(8*ceil(log2(r)))) mod r
 
 11.      if element = 0, go back to step 7
 
 12. B = P1 + H_s * s + H_d * domain + H_1 * msg_1 + ... + H_L * msg_L
 
-13. r3 = r1 ^ -1 mod q
+13. r3 = r1 ^ -1 mod r
 
 14. A' = A * r1
 
@@ -791,7 +791,7 @@ Procedure:
 
 5. generators =  (H_s || H_d || H_1 || ... || H_L)
 
-6. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod q
+6. domain = OS2IP(hash(PK || L || generators || Ciphersuite_ID || header)) mod r
 
 7. C1 = (Abar - D) * c + A' * e^ + H_s * r2^
 
@@ -881,7 +881,7 @@ Procedure:
 3.3.10.  Hash to scalar
 
    This operation describes how to hash an arbitrary octet string to n
-   scalar values in the multiplicative group of integers mod q.  This
+   scalar values in the multiplicative group of integers mod r.  This
    procedure acts as a helper function, and it is used internally in
    various places within the operations described in the spec.  To map a
    message to a scalar that would be passed as input to the Sign
@@ -910,12 +910,12 @@ Inputs:
 
 Parameters:
 
-- q (REQUIRED), non-negative integer. The prime order of the G_1 and G_2 groups,
+- r (REQUIRED), non-negative integer. The prime order of the G_1 and G_2 groups,
      defined by the ciphersuite.
 
 Outputs:
 
-- (scalar_1, ..., scalar_n), a list of non-zero scalars mod q.
+- (scalar_1, ..., scalar_n), a list of non-zero scalars mod r.
 
 Procedure:
 
@@ -923,7 +923,7 @@ Procedure:
 
 2. for i in (1, ..., n):
 
-3.     scalar_i = OS2IP(h.read(64)) mod q
+3.     scalar_i = OS2IP(h.read(64)) mod r
 
 4.     if scalar_i is 0, go back to step 3
 
@@ -943,8 +943,8 @@ Inputs:
 Outputs:
 
 - A, a valid point in the G1 subgroup which is not equal to the identity point.
-- e, an integer representing a valid scalar value within the range of 0 < e < q.
-- s, an integer representing a valid scalar value within the range of 0 < e < q.
+- e, an integer representing a valid scalar value within the range of 0 < e < r.
+- s, an integer representing a valid scalar value within the range of 0 < e < r.
 
 Procedure:
 
@@ -962,13 +962,13 @@ Procedure:
 
 6. e = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-7. if e = 0 OR e >= q, return INVALID
+7. if e = 0 OR e >= r, return INVALID
 
 8. index += octet_scalar_length
 
 9. s = OS2IP(signature_octets[index..(index + octet_scalar_length - 1)])
 
-10. if s = 0 OR s >= q, return INVALID
+10. if s = 0 OR s >= r, return INVALID
 
 11. return (A, e, s)
 
@@ -986,8 +986,8 @@ signature_octets = signature_to_octets(A, e, s)
 Inputs:
 
 - A (REQUIRED), a valid point in the G1 subgroup which is not equal to the identity point.
-- e (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < q.
-- s (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < q.
+- e (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < r.
+- s (REQUIRED), an integer representing a valid scalar value within the range of 0 < e < r.
 
 Outputs:
 
@@ -1051,7 +1051,7 @@ Procedure:
 
    Secret keys MAY be generated using other methods; in this case they
    MUST be infeasible to guess and MUST be indistinguishable from
-   uniformly random modulo q.
+   uniformly random modulo r.
 
    BBS proofs are nondeterministic, meaning care must be taken against
    attacks arising from using bad randomness, for example, the nonce
@@ -1178,8 +1178,8 @@ Procedure:
       pairing friendly curve being used.
 
    *  octet_scalar_length: Number of bytes to represent a scalar value,
-      in the multiplicative group of integers mod q, encoded as an octet
-      string.  It is RECOMMENDED this value be set to ceil(log2(q)/8).
+      in the multiplicative group of integers mod r, encoded as an octet
+      string.  It is RECOMMENDED this value be set to ceil(log2(r)/8).
 
    *  octet_point_length: Number of bytes to represent a point encoded
       as an octet string outputted by the point_to_octets function.  It
@@ -1228,7 +1228,7 @@ Procedure:
    xof_no_of_bytes  64.
 
    octet_scalar_length  32, based on the RECOMMENDED approach of
-      ceil(log2(q)/8).
+      ceil(log2(r)/8).
 
    octet_point_length  48, based on the RECOMMENDED approach of
       ceil(log2(p)/8).
@@ -1742,7 +1742,7 @@ A.4.  Proof Generation and Verification Algorithmic Explanation
    signature on the disclosed messages, work as follows,
 
    *  Randomize the signature (A, e, s), by taking uniformly random r1,
-      r2 in [1, q-1], and calculate,
+      r2 in [1, r-1], and calculate,
 
       1.  A' = A * r1,
       2.  Abar = A' * (-e) + B * r1
@@ -1750,7 +1750,7 @@ A.4.  Proof Generation and Verification Algorithmic Explanation
 
    Also set,
 
-       4.  r3 = r1 ^ -1 mod q
+       4.  r3 = r1 ^ -1 mod r
        5.  s' = s + r2 * r3.
 
    The values (A', Abar, d) will be part of the proof and are used to
