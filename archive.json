@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-15T00:11:55.121913+00:00",
+  "timestamp": "2022-05-17T00:09:50.698368+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -15751,7 +15751,7 @@
       "labels": [],
       "body": "Defines the Ciphersuite ID format and supplies a value for the BLS12-381 suite, partially addresses #118 ",
       "createdAt": "2022-05-13T09:13:25Z",
-      "updatedAt": "2022-05-13T09:39:38Z",
+      "updatedAt": "2022-05-16T19:46:04Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
@@ -15783,6 +15783,26 @@
               "updatedAt": "2022-05-13T09:39:38Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846FXLK",
+          "commit": {
+            "abbreviatedOid": "2940cf7"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-16T19:45:49Z",
+          "updatedAt": "2022-05-16T19:46:04Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "> between 0x21 and 0x7e (inclusive)\r\n\r\nWhy this range? Why not just alphanumeric?\r\n\r\n> other than ~as~ the last character the string MUST not contain any other underscores (0x5f).\r\n\r\nTypo: remove \"as\"",
+              "createdAt": "2022-05-16T19:45:49Z",
+              "updatedAt": "2022-05-16T19:46:04Z"
+            }
+          ]
         }
       ]
     },
@@ -15798,13 +15818,13 @@
       "labels": [],
       "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
       "createdAt": "2022-05-13T16:32:18Z",
-      "updatedAt": "2022-05-14T22:30:38Z",
+      "updatedAt": "2022-05-16T23:21:11Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "baseRefOid": "170c0463d8ed75c9d8ba5eab1f67f7391c8e820a",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "api_update",
-      "headRefOid": "c191a1888cb3c21109f580d6008450065c3d5629",
+      "headRefOid": "321476ebd410e7fce22ec02f639ecb3df7601b05",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -15816,6 +15836,13 @@
           "body": "Thanks for that, it looks pretty readable to me although maybe we can find a better way to describe the ordering of the generators.",
           "createdAt": "2022-05-13T16:51:57Z",
           "updatedAt": "2022-05-13T16:51:57Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Updated API based on the discussion on the  WG call of 16/5/2022.\r\n\r\nThe main change is the proposal of the `[(H_i, msg_i), for revealed_i = 1]` etc notation. It may not be 100% formally defined but IMO it is \u201cclear enough\u201d while avoiding some of the issues we discussed on the call. \r\n\r\nMy biggest concern here is that the order of the revealed messages supplied to ProofVerify is not clearly enough defined. But we \r\nmay be able to solve this with some additional text?\r\n\r\nInterested on the WG\u2019s thoughts. c.c. @tplooker, @andrewwhitehead ^\r\n",
+          "createdAt": "2022-05-16T23:21:11Z",
+          "updatedAt": "2022-05-16T23:21:11Z"
         }
       ],
       "reviews": [
@@ -15978,6 +16005,146 @@
               "updatedAt": "2022-05-14T22:30:38Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846E0bJ",
+          "commit": {
+            "abbreviatedOid": "c191a18"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T17:42:54Z",
+          "updatedAt": "2022-05-16T17:42:54Z",
+          "comments": [
+            {
+              "originalPosition": 245,
+              "body": "Thanks! Addressed",
+              "createdAt": "2022-05-16T17:42:54Z",
+              "updatedAt": "2022-05-16T17:42:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846E-wY",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:17:50Z",
+          "updatedAt": "2022-05-16T18:17:50Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "will need to be mod r if #140 is merged first",
+              "createdAt": "2022-05-16T18:17:50Z",
+              "updatedAt": "2022-05-16T18:17:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846E-wX",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:17:50Z",
+          "updatedAt": "2022-05-16T18:17:51Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "will need to be mod r if #140 is merged first",
+              "createdAt": "2022-05-16T18:17:50Z",
+              "updatedAt": "2022-05-16T18:17:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846FA9P",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:26:15Z",
+          "updatedAt": "2022-05-16T18:26:15Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "[(H_1, msg_1, reveal?) ... (H_L, msg_L, reveal?)] an alternative syntax suggestion",
+              "createdAt": "2022-05-16T18:26:15Z",
+              "updatedAt": "2022-05-16T18:26:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846FA9R",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:26:15Z",
+          "updatedAt": "2022-05-16T18:26:15Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "[(H_1, msg_1, reveal?) ... (H_L, msg_L, reveal?)] an alternative syntax suggestion",
+              "createdAt": "2022-05-16T18:26:15Z",
+              "updatedAt": "2022-05-16T18:26:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846FBak",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:28:01Z",
+          "updatedAt": "2022-05-16T18:28:02Z",
+          "comments": [
+            {
+              "originalPosition": 224,
+              "body": "```suggestion\r\nresult = ProofVerify(PK, proof, header, ph,          \r\n                 [H_1, ..., H_L], \r\n                 [(index, msg_x), ..., (index, msg_x)])\r\n```\r\n\r\nAlternative syntax suggestion\r\n```suggestion\r\nresult = ProofVerify(PK, proof, header, ph,          \r\n                 [(H_1, reveal?, msg_1 || NULL), ..., (H_L, reveal?, msg_L || NULL)]\r\n```\r\n\r\nAnother option is [(generator, false) || (generator, true, msg_x)] e.g Polymorphic array",
+              "createdAt": "2022-05-16T18:28:01Z",
+              "updatedAt": "2022-05-16T18:39:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846FBal",
+          "commit": {
+            "abbreviatedOid": "62dcc38"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-16T18:28:01Z",
+          "updatedAt": "2022-05-16T18:28:02Z",
+          "comments": [
+            {
+              "originalPosition": 224,
+              "body": "```suggestion\r\nresult = ProofVerify(PK, proof, header, ph,          \r\n                 [H_1, ..., H_L], \r\n                 [(index, msg_x), ..., (index, msg_x)])\r\n```\r\n\r\nAlternative syntax suggestion\r\n```suggestion\r\nresult = ProofVerify(PK, proof, header, ph,          \r\n                 [(H_i1, msg_i1), ..., (H_iR, msg_iR)], \r\n                 [H_h1, ..., H_hU])\r\n```",
+              "createdAt": "2022-05-16T18:28:01Z",
+              "updatedAt": "2022-05-16T18:28:03Z"
+            }
+          ]
         }
       ]
     },
@@ -15986,25 +16153,42 @@
       "id": "PR_kwDOF8lax8430euF",
       "title": "Change q to r",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/140",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Change the notation from `q` to `r` for the G1 and G2 order, for consistency with specs like bls-signatures, pfc etc.",
       "createdAt": "2022-05-14T10:08:52Z",
-      "updatedAt": "2022-05-14T22:16:51Z",
+      "updatedAt": "2022-05-16T19:37:54Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "notation-update",
       "headRefOid": "1fc045340442058bc266db2709e94f3bb0e8211d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2022-05-16T19:37:54Z",
+      "mergedAt": "2022-05-16T19:37:54Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "170c0463d8ed75c9d8ba5eab1f67f7391c8e820a"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "For context, academia often denotes modular arithmetic with `q` however the BLS signatures draft and and pairing friendly drafts use `r`, given this draft references those directly it is more important to be consistent with these rather than academia.",
+          "createdAt": "2022-05-16T19:37:17Z",
+          "updatedAt": "2022-05-16T19:37:17Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed on WG call, merging",
+          "createdAt": "2022-05-16T19:37:48Z",
+          "updatedAt": "2022-05-16T19:37:48Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax846AGK2",
@@ -16018,8 +16202,47 @@
           "createdAt": "2022-05-14T22:16:51Z",
           "updatedAt": "2022-05-14T22:16:51Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax846E-rn",
+          "commit": {
+            "abbreviatedOid": "1fc0453"
+          },
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I'm more used to seeing `q` for scalar arithmetic, but I'm ok to use `r` to be consistent with the BLS spec.",
+          "createdAt": "2022-05-16T18:17:34Z",
+          "updatedAt": "2022-05-16T18:17:34Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 142,
+      "id": "PR_kwDOF8lax8435a3k",
+      "title": "Use of hash_to_scalar",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/142",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Update the spec to use hash_to_scalar where needed.\r\n\r\n### Note:\r\nThe way that random elements are generated in ProofGen will change. Right now, each element is generated by calling a PRF for each one separately. The proposed alternative is to call the PRF once and use the result as a seed to an XOF (in hash_to_scalar). The reasons are two: \r\n1. We can replace the PRF with a seed that will be passed as an argument to the ProofGen function. This will help with test vectors, and we can make a requirement that this seed will be the output of a PRF in any other situation aside from testing. \r\n2. The proposed alternative is more efficient and since we already assume that the XOF is secure (otherwise the deterministic signatures will be insecure), we will not have to change our security model when it comes to the XOF. \r\n\r\nMy question is: Is there a reason to avoid this route?? Is there any security reason for which we would not want to use this alternative??\r\n\r\nAlso, e and s generation is not changed because PR #135 proposes an alternative.\r\n",
+      "createdAt": "2022-05-16T17:50:58Z",
+      "updatedAt": "2022-05-16T17:50:58Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "hash-to-scalar-usage",
+      "headRefOid": "4ebc70c19658f162a05be7a8e4e8812bff954bda",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
