@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                             13 May 2022
+                                                             17 May 2022
 
 
                         The BBS Signature Scheme
@@ -1052,7 +1052,7 @@ Procedure:
       information used to uniquely qualify the ciphersuite.  When
       present this value MUST only contain ASCII characters between 0x21
       and 0x7e (inclusive), and MUST end with an underscore (0x5f),
-      other than as the last character the string MUST not contain any
+      other than the last character the string MUST not contain any
       other underscores (0x5f).
 
 5.1.2.  Additional Parameters
