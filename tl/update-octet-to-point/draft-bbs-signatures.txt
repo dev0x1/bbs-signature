@@ -1206,7 +1206,7 @@ Procedure:
 
    point_to_octets_g2  follows the format documented in Appendix C
       section 1 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G2
-      subgroup, using compression (i.e., setting C_bit = 1).
+      subgroup.
 
    octets_to_point_g1  follows the format documented in Appendix C
       section 2 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G1
