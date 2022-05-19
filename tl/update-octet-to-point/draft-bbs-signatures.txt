@@ -259,7 +259,7 @@ Table of Contents
    octets_to_point_g1(ostr) -> P, octets_to_point_g2(ostr) -> P  returns
       the point P for the respective subgroup corresponding to the
       canonical representation ostr, or INVALID if ostr is not a valid
-      output of the respective point_to_octets_G* function.  This
+      output of the respective point_to_octets_g* function.  This
       operation is also known as deserialization.
 
    subgroup_check(P) -> VALID or INVALID  returns VALID when the point P
