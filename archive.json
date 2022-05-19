@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-17T00:09:50.698368+00:00",
+  "timestamp": "2022-05-19T00:08:58.241130+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3998,6 +3998,128 @@
       "updatedAt": "2022-05-14T11:46:24Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 143,
+      "id": "I_kwDOF8lax85J0ceJ",
+      "title": "H2C using SHA256",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/143",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently the spec creates generators using hash-to-curve implemented with `shake256` (for which we describe a h2c ciphersuite).\r\n\r\nLooking at implementations of pairing-friendly-curves though, most of them seem to natively support h2c with `sha256` (like blst). This means that,\r\n1. We may have to implement h2c with `shake256` our self's.\r\n2. Applications that elect to use the natively supported h2c implementation (and will be many of those most likely) will create generators that are not interoperable with the ones we describe in the spec.\r\n\r\nAt the very least we may be creating an implementation barrier by making it hard to use `sha256` for h2c.\r\n\r\nSince efficiency is not an issue when creating generators, and taking into account the wider spread of `sha256`, should we update h2c to use `sha` instead of `shake`?? We can leave the ciphersuite definition for h2c using `shake256` as an alternative, while the bls12-381 ciphersuite will use h2c with `sha256`??",
+      "createdAt": "2022-05-17T11:18:01Z",
+      "updatedAt": "2022-05-18T22:32:00Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@christianpaquin was this your experience as well with the javascript libraries?? \r\n\r\nc.c. @tplooker, @andrewwhitehead, @mikelodder7 ^^",
+          "createdAt": "2022-05-17T11:18:22Z",
+          "updatedAt": "2022-05-17T11:18:22Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "JavaScript libraries have shake/SHA3 available to them but will have to implement h2c. I think h2c is more of a barrier than SHAKE.",
+          "createdAt": "2022-05-17T12:12:55Z",
+          "updatedAt": "2022-05-17T12:12:55Z"
+        },
+        {
+          "author": "christianpaquin",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> @christianpaquin was this your experience as well with the javascript libraries??\r\n\r\nI'm using the [noble-bls12-381](https://github.com/paulmillr/noble-bls12-381.git) library, which supports hash-to-the-BLS curve, but I haven't confirmed if it's the same as we specified. The hash-to-curve spec [BLS suites](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14#section-8.8) use SHA-256, so I'd prefer using that. I know we had a discussion of using SHA vs SHAKE in the past, but I'd advocate to using the simple hash function whenever possible, because it should always be available in libraries (or environments) providing shake. ",
+          "createdAt": "2022-05-17T15:37:47Z",
+          "updatedAt": "2022-05-17T15:37:47Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I\u2019ve had to implement h2c in multiple languages and each language already had shake: Go, Rust, Java to name a few. My point is Shake was already available and h2c was not. H2c is the more limiting factor I have found not the other way around",
+          "createdAt": "2022-05-17T15:40:55Z",
+          "updatedAt": "2022-05-17T15:40:55Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The other problem I have with SHA2 Is its vulnerable to extension attacks. Implementers don\u2019t even think about that. This is why we have HMac & HKDF. By staying with SHA3 algorithms, implementors do not have to worry about that",
+          "createdAt": "2022-05-17T15:47:40Z",
+          "updatedAt": "2022-05-17T15:47:40Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> I\u2019ve had to implement h2c in multiple languages and each language already had shake: Go, Rust, Java to name a few. My point is Shake was already available and h2c was not. H2c is the more limiting factor I have found not the other way around\r\n\r\nI think the point is, how many of these languages had H2C implementations but just not for XOFs? Because if H2C w SHA-256 exists in most languages then shifting to this variation would have a meaningful impact on implementation complexity",
+          "createdAt": "2022-05-17T18:58:33Z",
+          "updatedAt": "2022-05-17T18:58:33Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "I think its safe to assume that there are more H2C implementations w SHA-256 then there is XOF based purely on the fact that popular signature schemes like BLS signatures depends on it",
+          "createdAt": "2022-05-17T19:00:10Z",
+          "updatedAt": "2022-05-17T19:00:10Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "> I'm using the [noble-bls12-381](https://github.com/paulmillr/noble-bls12-381.git) library, which supports hash-to-the-BLS curve, but I haven't confirmed if it's the same as we specified. The hash-to-curve spec [BLS suites](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14#section-8.8) use SHA-256, so I'd prefer using that. I know we had a discussion of using SHA vs SHAKE in the past, but I'd advocate to using the simple hash function whenever possible, because it should always be available in libraries (or environments) providing shake.\r\n\r\nAs an example [see here](https://github.com/paulmillr/noble-bls12-381/blob/main/math.ts#L1098) looks like this library only supports the ~~SWU~~ expand_msg variation of H2C rather than the XOF based one. [blst](https://github.com/supranational/blst) as a library is similar.",
+          "createdAt": "2022-05-17T19:07:04Z",
+          "updatedAt": "2022-05-17T19:25:20Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Swu has nothing to do with the hash function. To be clear it\u2019s the expand_msg vs expand_xof. That\u2019s the only difference ",
+          "createdAt": "2022-05-17T19:14:53Z",
+          "updatedAt": "2022-05-17T19:14:53Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What you want is here https://github.com/paulmillr/noble-bls12-381/blob/main/index.ts#L236",
+          "createdAt": "2022-05-17T19:21:12Z",
+          "updatedAt": "2022-05-17T19:21:12Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The difference is quite small. You use expand_xof vs expand_msg, expand_xof is less code and faster to compute. I don\u2019t think this as big of a barrier as you are thinking it will be",
+          "createdAt": "2022-05-17T19:22:50Z",
+          "updatedAt": "2022-05-17T19:22:50Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": ">  Swu has nothing to do with the hash function. To be clear it\u2019s the expand_msg vs expand_xof. That\u2019s the only difference\r\n\r\nQuite right, my apologies.\r\n",
+          "createdAt": "2022-05-17T19:23:21Z",
+          "updatedAt": "2022-05-17T19:23:21Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "In the end i think we are mostly in agreement here. I agree that a big barrier may be h2c but even in libs that have h2c implemented, a lot of times it will be with just a hash (like [noble-bls12-381](https://github.com/paulmillr/noble-bls12-381/blob/b55eca3ae0f2f1cb35d768cd432ca3f57d26a47a/index.ts#L278) and [blst](https://github.com/supranational/blst/blob/master/src/hash_to_field.c#L139)). This makes sense since most of them target bls-sigs. So IMO it's the combination of the two that makes things difficult and not just h2c.",
+          "createdAt": "2022-05-18T19:02:36Z",
+          "updatedAt": "2022-05-18T19:11:51Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If we have global message generators then libraries can just use cached values (up to a maximum message count) and might not have to implement H2C depending on the application.",
+          "createdAt": "2022-05-18T19:14:12Z",
+          "updatedAt": "2022-05-18T19:14:12Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That's true (although it may not always hold). I also agree with Mike in that it may not be a huge barrier, but IMO if we can make things a little bit easier for applications i don't see why not??",
+          "createdAt": "2022-05-18T22:32:00Z",
+          "updatedAt": "2022-05-18T22:32:00Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -15584,7 +15706,7 @@
       ],
       "body": "This PR updates the sign procedure to account for the case when `(SK + e) = 0 mod q` which is invalid and therefore requires us to re-compute a new `e` value if it were to occur.\r\n\r\nNote @BasileiosKal and I also discussed whether we need to check for `A != Identity_G1` however we believe it is impossible for this case to exist based on how the procedure is documented therefore the additional check is not required.",
       "createdAt": "2022-05-11T23:05:37Z",
-      "updatedAt": "2022-05-12T21:58:49Z",
+      "updatedAt": "2022-05-17T13:36:34Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "e871c69645d6031d615bc53b570fce9edecb38fb",
@@ -15672,6 +15794,41 @@
           "body": "Yes the standard is RFC6979 which makes ECDSA deterministic. ",
           "createdAt": "2022-05-12T20:53:26Z",
           "updatedAt": "2022-05-12T20:53:26Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed on WG call today, we have multiple options here I think we need to firm up more\r\n\r\nIn general we need to decide whether we want the strategy with sign to be:\r\n\r\n1. In all cases even when say `(SK + e) = 0 mod r` that the procedure should still produce a valid signature (e.g therefore compute an alternative value for e)\r\n2. OR abort the sign procedure\r\n\r\nWe also need to decide, what checks we need\r\n\r\n1. Is `(SK + e) = 0 mod r` all we need to check?\r\n2. OR is `A != Identity_G1` a substitute?\r\n3. OR do we need to perform both e.g `A != Identity_G1` AND `(SK + e) = 0 mod r`\r\n4. OR are either of these checks just over complicating the procedure because the likely-hood of this occuring is so statistically improbable and therefore we should just adopt what ECDSA has done and not mention it?\r\n5. OR should we discuss this case in the considerations and or text around the procedure instead of making it an explicit step in the procedure?",
+          "createdAt": "2022-05-17T01:29:48Z",
+          "updatedAt": "2022-05-17T01:29:48Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For the `(SK+e) = 0 mod r` vs `A = 1_G1` argument i think @andrewwhitehead's point (and please correct me if I'm wrong) was that\r\n```\r\nA = B*(1/(SK+e)) = inverse(B * (SK + e))\r\n```\r\nAs a result, `SK + e = 0 mod r => A = 1_G1`. \r\n\r\nI don't think it holds though?? (i.e., i think that `P * (1 / x) != inverse(P * x)`).\r\n\r\nWhat do you think @mikelodder7??? ^",
+          "createdAt": "2022-05-17T12:42:11Z",
+          "updatedAt": "2022-05-17T12:42:11Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It does hold though. B^-0 or T=inverse(sk+e) then B^T all produce zero. Especially in practice. All implementations I know if you call invert on 0 either abort or return 0. My preference is to call out the possibility (ever so small) that this could happen but the odds are so far out we don\u2019t implement it when signing",
+          "createdAt": "2022-05-17T12:48:29Z",
+          "updatedAt": "2022-05-17T12:48:29Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ok i understand better now. Thanks! So it is an implementation issue and not something that holds in general. So if we are to add the check i would still prefer to just check for `(SK+e) = 0`.\r\n\r\nThat said, i agree with @mikelodder7 in not having the check and just adding a sort security consideration. In any operation taking a signature as input we can specify that the signature must be valid then. IMO this is the most readable and at the same time \"correct\" approach. ",
+          "createdAt": "2022-05-17T12:56:25Z",
+          "updatedAt": "2022-05-17T12:58:10Z"
+        },
+        {
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "In verify we should perform checks that the signature values are not zero and the public key is not zero either. Anywhere these are used we should be checking them. Always validate inputs. We can assume values generated during the function from hash methods or PRFs are valid",
+          "createdAt": "2022-05-17T13:36:34Z",
+          "updatedAt": "2022-05-17T13:36:34Z"
         }
       ],
       "reviews": []
@@ -15751,13 +15908,13 @@
       "labels": [],
       "body": "Defines the Ciphersuite ID format and supplies a value for the BLS12-381 suite, partially addresses #118 ",
       "createdAt": "2022-05-13T09:13:25Z",
-      "updatedAt": "2022-05-16T19:46:04Z",
+      "updatedAt": "2022-05-17T00:23:10Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/ciphersuite_id",
-      "headRefOid": "2940cf73172d978280c53667e59d0b8431854d7e",
+      "headRefOid": "ea8969c76ee3feb31f80ef5f29ba21914ed712d5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -15803,6 +15960,66 @@
               "updatedAt": "2022-05-16T19:46:04Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKkc",
+          "commit": {
+            "abbreviatedOid": "2940cf7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:22:22Z",
+          "updatedAt": "2022-05-17T00:22:23Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "I think most of the H2C_SUITE_ID's follow with an `_` already? hence I was just following the pattern established by the BLS spec?",
+              "createdAt": "2022-05-17T00:22:23Z",
+              "updatedAt": "2022-05-17T00:22:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKlZ",
+          "commit": {
+            "abbreviatedOid": "2940cf7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:22:29Z",
+          "updatedAt": "2022-05-17T00:22:30Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "See https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14#section-8.8",
+              "createdAt": "2022-05-17T00:22:29Z",
+              "updatedAt": "2022-05-17T00:22:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKpi",
+          "commit": {
+            "abbreviatedOid": "2940cf7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:23:06Z",
+          "updatedAt": "2022-05-17T00:23:06Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n  *  ADD\\_INFO is an optional string indicating any additional information used to uniquely qualify the ciphersuite. When present this value MUST only contain ASCII characters between 0x21 and 0x7e (inclusive), and MUST end with an underscore (0x5f), other than the last character the string MUST not contain any other underscores (0x5f).\r\n```",
+              "createdAt": "2022-05-17T00:23:06Z",
+              "updatedAt": "2022-05-17T00:23:06Z"
+            }
+          ]
         }
       ]
     },
@@ -15818,7 +16035,7 @@
       "labels": [],
       "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
       "createdAt": "2022-05-13T16:32:18Z",
-      "updatedAt": "2022-05-16T23:21:11Z",
+      "updatedAt": "2022-05-17T00:19:06Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "170c0463d8ed75c9d8ba5eab1f67f7391c8e820a",
@@ -16145,6 +16362,152 @@
               "updatedAt": "2022-05-16T18:28:03Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJ5i",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:16:06Z",
+          "updatedAt": "2022-05-17T00:16:07Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "```suggestion\r\n- [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)] (OPTIONAL), a list of tuples consisting of a generator, the message and a boolean value indicating if the message will be revealed or not. Generators must be G1 points, messages must be non-zero scalars mod r and the variable indicating if that message will be revealed must be boolean. If not supplied, the list will default to the empty array (\"[]\"). The list MUST be ordered based on the index of the generators.\r\n```\r\n```suggestion\r\n- [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)] (OPTIONAL), a list of tuples consisting by a generator, the message and a variable indicating if the message will be revealed or not. Generators must be G1 points, messages must be non-zero scalars mod r and the variable indicating if that message will be revealed must be boolean. If not supplied, the list will default to the empty array (\"[]\"). The list MUST be ordered based on the index of the generators.\r\n```",
+              "createdAt": "2022-05-17T00:16:06Z",
+              "updatedAt": "2022-05-17T00:16:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJ5j",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:16:06Z",
+          "updatedAt": "2022-05-17T00:16:07Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "```suggestion\r\n- [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)] (OPTIONAL), a list of tuples consisting of a generator, the message and a boolean value indicating if the message will be revealed or not. Generators must be G1 points, messages must be non-zero scalars mod r and the variable indicating if that message will be revealed must be boolean. If not supplied, the list will default to the empty array (\"[]\"). The list MUST be ordered based on the index of the generators.\r\n```\r\n```suggestion\r\n- [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)] (OPTIONAL), a list of tuples consisting by a generator, the message and a variable indicating if the message will be revealed or not. Generators must be G1 points, messages must be non-zero scalars mod r and the variable indicating if that message will be revealed must be boolean. If not supplied, the list will default to the empty array (\"[]\"). The list MUST be ordered based on the index of the generators.\r\n```",
+              "createdAt": "2022-05-17T00:16:06Z",
+              "updatedAt": "2022-05-17T00:16:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJ9i",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:16:45Z",
+          "updatedAt": "2022-05-17T00:16:45Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "The last statement here around the ordering I still dont think is 100% clear, but I think in general this PR is a great improvement.",
+              "createdAt": "2022-05-17T00:16:45Z",
+              "updatedAt": "2022-05-17T00:16:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJ9j",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:16:45Z",
+          "updatedAt": "2022-05-17T00:16:45Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "The last statement here around the ordering I still dont think is 100% clear, but I think in general this PR is a great improvement.",
+              "createdAt": "2022-05-17T00:16:45Z",
+              "updatedAt": "2022-05-17T00:16:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKFy",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:17:54Z",
+          "updatedAt": "2022-05-17T00:17:54Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "I think this syntax needs to be explained more, in general we could elect to do more of a filter or map style function?",
+              "createdAt": "2022-05-17T00:17:54Z",
+              "updatedAt": "2022-05-17T00:17:54Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "I think this syntax needs to be explained more, in general we could elect to do more of a filter or map style function?",
+              "createdAt": "2022-05-17T00:17:54Z",
+              "updatedAt": "2022-05-17T00:17:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKNL",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:19:05Z",
+          "updatedAt": "2022-05-17T00:19:05Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "```suggestion\r\n2. [(H_i1, msg_i1), ..., (H_iR, msg_iR)] = [(H_i, msg_i), if revealed_i = 1]\r\n```\r\n```suggestion\r\n2. [(H_i1, msg_i1), ..., (H_iR, msg_iR)] = [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)].filter(item => item.revealed_i == true)\r\n```",
+              "createdAt": "2022-05-17T00:19:05Z",
+              "updatedAt": "2022-05-17T00:19:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GKNK",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:19:05Z",
+          "updatedAt": "2022-05-17T00:19:06Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "```suggestion\r\n2. [(H_i1, msg_i1), ..., (H_iR, msg_iR)] = [(H_i, msg_i), if revealed_i = 1]\r\n```\r\n```suggestion\r\n2. [(H_i1, msg_i1), ..., (H_iR, msg_iR)] = [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)].filter(item => item.revealed_i == true)\r\n```",
+              "createdAt": "2022-05-17T00:19:05Z",
+              "updatedAt": "2022-05-17T00:19:06Z"
+            }
+          ]
         }
       ]
     },
@@ -16230,13 +16593,215 @@
       "labels": [],
       "body": "Update the spec to use hash_to_scalar where needed.\r\n\r\n### Note:\r\nThe way that random elements are generated in ProofGen will change. Right now, each element is generated by calling a PRF for each one separately. The proposed alternative is to call the PRF once and use the result as a seed to an XOF (in hash_to_scalar). The reasons are two: \r\n1. We can replace the PRF with a seed that will be passed as an argument to the ProofGen function. This will help with test vectors, and we can make a requirement that this seed will be the output of a PRF in any other situation aside from testing. \r\n2. The proposed alternative is more efficient and since we already assume that the XOF is secure (otherwise the deterministic signatures will be insecure), we will not have to change our security model when it comes to the XOF. \r\n\r\nMy question is: Is there a reason to avoid this route?? Is there any security reason for which we would not want to use this alternative??\r\n\r\nAlso, e and s generation is not changed because PR #135 proposes an alternative.\r\n",
       "createdAt": "2022-05-16T17:50:58Z",
-      "updatedAt": "2022-05-16T17:50:58Z",
+      "updatedAt": "2022-05-17T00:13:30Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-to-scalar-usage",
       "headRefOid": "4ebc70c19658f162a05be7a8e4e8812bff954bda",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Looking good to me as a direction, few tweaks based on the merging of #140, also looks like there are conflicts to resolve",
+          "createdAt": "2022-05-17T00:13:29Z",
+          "updatedAt": "2022-05-17T00:13:29Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Looking good to me as a direction, few tweaks based on the merging of #140, also looks like there are conflicts to resolve",
+          "createdAt": "2022-05-17T00:13:29Z",
+          "updatedAt": "2022-05-17T00:13:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846GJWp",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:10:59Z",
+          "updatedAt": "2022-05-17T00:10:59Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\n7.      element = OS2IP(h.read(xof_no_of_bytes)) mod r\r\n```\r\n```suggestion\r\n7.      element = OS2IP(h.read(xof_no_of_bytes)) mod q\r\n```",
+              "createdAt": "2022-05-17T00:10:59Z",
+              "updatedAt": "2022-05-17T00:10:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJWq",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:10:59Z",
+          "updatedAt": "2022-05-17T00:10:59Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\n7.      element = OS2IP(h.read(xof_no_of_bytes)) mod r\r\n```\r\n```suggestion\r\n7.      element = OS2IP(h.read(xof_no_of_bytes)) mod q\r\n```",
+              "createdAt": "2022-05-17T00:10:59Z",
+              "updatedAt": "2022-05-17T00:10:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJgz",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:22Z",
+          "updatedAt": "2022-05-17T00:12:23Z",
+          "comments": [
+            {
+              "originalPosition": 54,
+              "body": "```suggestion\r\n9. (r1, r2, e~, r2~, r3~, s~) = hash_to_scalar(PRF(8*ceil(log2(r))), 6)\r\n```\r\n```suggestion\r\n9. (r1, r2, e~, r2~, r3~, s~) = hash_to_scalar(PRF(8*ceil(log2(q))), 6)\r\n```",
+              "createdAt": "2022-05-17T00:12:22Z",
+              "updatedAt": "2022-05-17T00:12:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJg0",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:22Z",
+          "updatedAt": "2022-05-17T00:12:23Z",
+          "comments": [
+            {
+              "originalPosition": 54,
+              "body": "```suggestion\r\n9. (r1, r2, e~, r2~, r3~, s~) = hash_to_scalar(PRF(8*ceil(log2(r))), 6)\r\n```\r\n```suggestion\r\n9. (r1, r2, e~, r2~, r3~, s~) = hash_to_scalar(PRF(8*ceil(log2(q))), 6)\r\n```",
+              "createdAt": "2022-05-17T00:12:22Z",
+              "updatedAt": "2022-05-17T00:12:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJhw",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:29Z",
+          "updatedAt": "2022-05-17T00:12:30Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\r\n10. (m~_j1, ..., m~_jU) =  hash_to_scalar(PRF(8*ceil(log2(r))), U)\r\n```\r\n```suggestion\r\n10. (m~_j1, ..., m~_jU) =  hash_to_scalar(PRF(8*ceil(log2(q))), U)\r\n```",
+              "createdAt": "2022-05-17T00:12:29Z",
+              "updatedAt": "2022-05-17T00:12:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJhx",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:29Z",
+          "updatedAt": "2022-05-17T00:12:30Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\r\n10. (m~_j1, ..., m~_jU) =  hash_to_scalar(PRF(8*ceil(log2(r))), U)\r\n```\r\n```suggestion\r\n10. (m~_j1, ..., m~_jU) =  hash_to_scalar(PRF(8*ceil(log2(q))), U)\r\n```",
+              "createdAt": "2022-05-17T00:12:29Z",
+              "updatedAt": "2022-05-17T00:12:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJi6",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:39Z",
+          "updatedAt": "2022-05-17T00:12:40Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\n12. r3 = r1 ^ -1 mod r\r\n```\r\n```suggestion\r\n12. r3 = r1 ^ -1 mod q\r\n```",
+              "createdAt": "2022-05-17T00:12:39Z",
+              "updatedAt": "2022-05-17T00:12:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846GJi7",
+          "commit": {
+            "abbreviatedOid": "4ebc70c"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-17T00:12:39Z",
+          "updatedAt": "2022-05-17T00:12:40Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\n12. r3 = r1 ^ -1 mod r\r\n```\r\n```suggestion\r\n12. r3 = r1 ^ -1 mod q\r\n```",
+              "createdAt": "2022-05-17T00:12:39Z",
+              "updatedAt": "2022-05-17T00:12:40Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 144,
+      "id": "PR_kwDOF8lax844ES9B",
+      "title": "Rework Introduction",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/144",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Changes scoped proofs to proof of possession and generalizes some of the language around the core schemes properties",
+      "createdAt": "2022-05-18T23:47:51Z",
+      "updatedAt": "2022-05-18T23:47:52Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "85a1036b5a0ac8dbec42655798d61274937d21d7",
+      "headRepository": "decentralized-identity/bbs-signature",
+      "headRefName": "tl/pop",
+      "headRefOid": "2a9dc6179e227b446ce82bf9f234120544029bb5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
