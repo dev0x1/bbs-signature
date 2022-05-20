@@ -1181,6 +1181,14 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-ciphersuite-format" class="xref">Ciphersuite Format</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="xref">5.1.1</a>.  <a href="#name-ciphersuite-id" class="xref">Ciphersuite ID</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="xref">5.1.2</a>.  <a href="#name-additional-parameters" class="xref">Additional Parameters</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-bls12-381-ciphersuite" class="xref">BLS12-381 Ciphersuite</a></p>
@@ -2272,61 +2280,91 @@ Procedure:
         <h3 id="name-ciphersuite-format">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ciphersuite-format" class="section-name selfRef">Ciphersuite Format</a>
         </h3>
+<div id="ciphersuite-id">
+<section id="section-5.1.1">
+          <h4 id="name-ciphersuite-id">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-ciphersuite-id" class="section-name selfRef">Ciphersuite ID</a>
+          </h4>
+<p id="section-5.1.1-1">The following section defines the format of the unique identifier for the ciphersuite denoted <code>Ciphersuite_ID</code>. The REQUIRED format for this string is<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.1-2">
+<pre>  "BBS_" || H2C_SUITE_ID || ADD_INFO
+</pre><a href="#section-5.1.1-2" class="pilcrow">¶</a>
+</div>
 <ul class="normal">
-<li class="normal" id="section-5.1-1.1">
-            <p id="section-5.1-1.1.1">hash: a cryptographic hash function.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.1-3.1">
+              <p id="section-5.1.1-3.1.1">Strings in double quotes are ASCII-encoded literals.<a href="#section-5.1.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.2">
-            <p id="section-5.1-1.2.1">point_to_octets_g1:
-a function that returns the canonical representation of the point P for the G1 subgroup as an octet string.<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.1-3.2">
+              <p id="section-5.1.1-3.2.1">H2C_SUITE_ID is the suite ID of the hash-to-curve suite used to define the hash<em>to</em>curve function.<a href="#section-5.1.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.3">
-            <p id="section-5.1-1.3.1">point_to_octets_g2:
-a function that returns the canonical representation of the point P for the G2 subgroup as an octet string.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.1-3.3">
+              <p id="section-5.1.1-3.3.1">ADD_INFO is an optional string indicating any additional information used to uniquely qualify the ciphersuite. When present this value MUST only contain ASCII characters between 0x21 and 0x7e (inclusive), and MUST end with an underscore (0x5f), other than the last character the string MUST not contain any other underscores (0x5f).<a href="#section-5.1.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.4">
-            <p id="section-5.1-1.4.1">octets_to_point_g1:
-a function that returns the point P in the subgroup G1 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g1</code>.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
+          </ul>
+</section>
+</div>
+<div id="additional-parameters">
+<section id="section-5.1.2">
+          <h4 id="name-additional-parameters">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-additional-parameters" class="section-name selfRef">Additional Parameters</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-5.1.2-1.1">
+              <p id="section-5.1.2-1.1.1">hash: a cryptographic hash function.<a href="#section-5.1.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.5">
-            <p id="section-5.1-1.5.1">octets_to_point_g2:
-a function that returns the point P in the subgroup G2 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g2</code>.<a href="#section-5.1-1.5.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.2">
+              <p id="section-5.1.2-1.2.1">point_to_octets_g1:
+a function that returns the canonical representation of the point P for the G1 subgroup as an octet string.<a href="#section-5.1.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.6">
-            <p id="section-5.1-1.6.1">hash_to_curve_g1:
-A cryptographic hash function that takes as an arbitrary octet string input and returns a point in G1 as defined in <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1-1.6.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.3">
+              <p id="section-5.1.2-1.3.1">point_to_octets_g2:
+a function that returns the canonical representation of the point P for the G2 subgroup as an octet string.<a href="#section-5.1.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.7">
-            <p id="section-5.1-1.7.1">hash_to_curve_g1_dst: Domain separation tag used in the hash_to_curve_g1 operation.<a href="#section-5.1-1.7.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.4">
+              <p id="section-5.1.2-1.4.1">octets_to_point_g1:
+a function that returns the point P in the subgroup G1 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g1</code>.<a href="#section-5.1.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.8">
-            <p id="section-5.1-1.8.1">hash_to_field: A cryptographic hash function that follows the procedure outlined in section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1-1.8.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.5">
+              <p id="section-5.1.2-1.5.1">octets_to_point_g2:
+a function that returns the point P in the subgroup G2 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g2</code>.<a href="#section-5.1.2-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.9">
-            <p id="section-5.1-1.9.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation.<a href="#section-5.1-1.9.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.6">
+              <p id="section-5.1.2-1.6.1">hash_to_curve_g1:
+A cryptographic hash function that takes as an arbitrary octet string input and returns a point in G1 as defined in <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1.2-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.10">
-            <p id="section-5.1-1.10.1">hashing_elements_to_scalars: either hash<em>to</em>scalar using hash (in this case hash MUST be an xof), or hash<em>to</em>field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1-1.10.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.7">
+              <p id="section-5.1.2-1.7.1">hash_to_curve_g1_dst: Domain separation tag used in the hash_to_curve_g1 operation.<a href="#section-5.1.2-1.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.11">
-            <p id="section-5.1-1.11.1">message_generator_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.11.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.8">
+              <p id="section-5.1.2-1.8.1">hash_to_field: A cryptographic hash function that follows the procedure outlined in section 5.3 of <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>.<a href="#section-5.1.2-1.8.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.12">
-            <p id="section-5.1-1.12.1">blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1-1.12.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.9">
+              <p id="section-5.1.2-1.9.1">hash_to_field_dst: Domain separation tag used in the hash_to_field operation.<a href="#section-5.1.2-1.9.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.13">
-            <p id="section-5.1-1.13.1">signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.<a href="#section-5.1-1.13.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.10">
+              <p id="section-5.1.2-1.10.1">hashing_elements_to_scalars: either hash<em>to</em>scalar using hash (in this case hash MUST be an xof), or hash<em>to</em>field with the additional check and re-calculation of more elements until the desired number of non-zero field elements is returned (as described in <a href="#hash-to-scalar">Hash to scalar</a>).<a href="#section-5.1.2-1.10.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.14">
-            <p id="section-5.1-1.14.1">xof_no_of_bytes: Number of bytes to draw from the xof when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1-1.14.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.11">
+              <p id="section-5.1.2-1.11.1">message_generator_seed: The seed used to generate the message generators which form part of the public parameters used by the BBS signature scheme, Note there are multiple possible scopes for this seed including; a globally shared seed (where the resulting message generators are common across all BBS signatures); a signer specific seed (where the message generators are specific to a signer); signature specific seed (where the message generators are specific per signature). The ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1.2-1.11.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.15">
-            <p id="section-5.1-1.15.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod r, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(r)/8)</code>.<a href="#section-5.1-1.15.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.12">
+              <p id="section-5.1.2-1.12.1">blind_value_generator_seed: The seed used to calculate the signature blinding value generator (H_s). Similar to the message_generator_seed, there are multiple scopes for the blind_value_generator_seed, with the choices being a global seed, a signer specific seed or a signature specific seed. Also, the ciphersuite MUST define this seed OR how to compute it as a pre-cursor operations to any others.<a href="#section-5.1.2-1.12.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.1-1.16">
-            <p id="section-5.1-1.16.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the <code>point_to_octets_g*</code> function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1-1.16.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-1.13">
+              <p id="section-5.1.2-1.13.1">signature_dst_generator_seed: The seed for calculating the generator used to sign the signature domain separation tag. The scopes and requirements for this seed are the same as the scopes and requirements of the message_generator_seed and blind_value_generator_seed.<a href="#section-5.1.2-1.13.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+            <li class="normal" id="section-5.1.2-1.14">
+              <p id="section-5.1.2-1.14.1">xof_no_of_bytes: Number of bytes to draw from the xof when performing operations such as creating generators as per the operation documented in <a href="#creategenerators" class="xref">Section 3.3.8</a> or computing the e and s components of the signature generated in <a href="#sign" class="xref">Section 3.3.4</a>. It is RECOMMENDED this value be set to one greater than <code>ceil(r+k)/8</code> for the ciphersuite, where <code>r</code> and <code>k</code> are parameters from the underlying pairing friendly curve being used.<a href="#section-5.1.2-1.14.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-1.15">
+              <p id="section-5.1.2-1.15.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod r, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(r)/8)</code>.<a href="#section-5.1.2-1.15.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-1.16">
+              <p id="section-5.1.2-1.16.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the <code>point_to_octets_g*</code> function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1.2-1.16.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="bls12-381-ciphersuite">
@@ -2335,68 +2373,72 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-bls12-381-ciphersuite" class="section-name selfRef">BLS12-381 Ciphersuite</a>
         </h3>
 <span class="break"></span><dl class="dlParallel" id="section-5.2-1">
-          <dt id="section-5.2-1.1">hash</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.2">SHAKE-256 as defined in <span>[<a href="#SHA3" class="xref">SHA3</a>]</span>.<a href="#section-5.2-1.2" class="pilcrow">¶</a>
+          <dt id="section-5.2-1.1">Ciphersuite_ID</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.2">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_"<a href="#section-5.2-1.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.3">point_to_octets_g1</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.4">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G1 subgroup, using compression (i.e., setting C_bit = 1).<a href="#section-5.2-1.4" class="pilcrow">¶</a>
+<dt id="section-5.2-1.3">hash</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.4">SHAKE-256 as defined in <span>[<a href="#SHA3" class="xref">SHA3</a>]</span>.<a href="#section-5.2-1.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.5">point_to_octets_g2</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.6">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup, using compression (i.e., setting C_bit = 1).<a href="#section-5.2-1.6" class="pilcrow">¶</a>
+<dt id="section-5.2-1.5">point_to_octets_g1</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.6">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G1 subgroup, using compression (i.e., setting C_bit = 1).<a href="#section-5.2-1.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.7">octets_to_point_g1</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.8">follows the format documented in Appendix C section 2 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G1 subgroup.<a href="#section-5.2-1.8" class="pilcrow">¶</a>
+<dt id="section-5.2-1.7">point_to_octets_g2</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.8">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup, using compression (i.e., setting C_bit = 1).<a href="#section-5.2-1.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.9">octets_to_point_g2</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.10">follows the format documented in Appendix C section 2 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup.<a href="#section-5.2-1.10" class="pilcrow">¶</a>
+<dt id="section-5.2-1.9">octets_to_point_g1</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.10">follows the format documented in Appendix C section 2 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G1 subgroup.<a href="#section-5.2-1.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.11">hash_to_curve_g1</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.12">follows the suite defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> for the G1 subgroup.<a href="#section-5.2-1.12" class="pilcrow">¶</a>
+<dt id="section-5.2-1.11">octets_to_point_g2</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.12">follows the format documented in Appendix C section 2 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup.<a href="#section-5.2-1.12" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.13">hash_to_curve_g1_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.14">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.14" class="pilcrow">¶</a>
+<dt id="section-5.2-1.13">hash_to_curve_g1</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.14">follows the suite defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> for the G1 subgroup.<a href="#section-5.2-1.14" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.15">hash_to_field</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.16">adopts the required parameters from the suites defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> to satisfy those described in section 5.3 <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span> along with the defined dst.<a href="#section-5.2-1.16" class="pilcrow">¶</a>
+<dt id="section-5.2-1.15">hash_to_curve_g1_dst</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.16">"BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.16" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.17">hash_to_field_dst</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.18">"BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.18" class="pilcrow">¶</a>
+<dt id="section-5.2-1.17">hash_to_field</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.18">adopts the required parameters from the suites defined in <a href="#bls12-381-hash-to-curve-definition-using-shake-256" class="xref">Appendix A.1</a> to satisfy those described in section 5.3 <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span> along with the defined dst.<a href="#section-5.2-1.18" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.19">message_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.20">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.20" class="pilcrow">¶</a>
+<dt id="section-5.2-1.19">hash_to_field_dst</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.20">"BBS_BLS12381FQ_XOF:SHAKE-256_SSWU_RO".<a href="#section-5.2-1.20" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.21">blind_value_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.22">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_BLINDING_VALUE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H_s).<a href="#section-5.2-1.22" class="pilcrow">¶</a>
+<dt id="section-5.2-1.21">message_generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.22">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_MESSAGE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the required set of message generators.<a href="#section-5.2-1.22" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.23">signature_dst_generator_seed</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.24">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_DST_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.24" class="pilcrow">¶</a>
+<dt id="section-5.2-1.23">blind_value_generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.24">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_BLINDING_VALUE_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the signature blinding value generator (H_s).<a href="#section-5.2-1.24" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.25">hashing_elements_to_scalars</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.26">hash_to_scalar.<a href="#section-5.2-1.26" class="pilcrow">¶</a>
+<dt id="section-5.2-1.25">signature_dst_generator_seed</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.26">A global seed value of "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_SIGNATURE_DST_GENERATOR_SEED" which is used by the <a href="#creategenerators">CreateGenerators</a> operation to compute the generator used to sign the signature domain separation tag (H_d).<a href="#section-5.2-1.26" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.27">xof_no_of_bytes</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.28">64.<a href="#section-5.2-1.28" class="pilcrow">¶</a>
+<dt id="section-5.2-1.27">hashing_elements_to_scalars</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.28">hash_to_scalar.<a href="#section-5.2-1.28" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.29">octet_scalar_length</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.30">32, based on the RECOMMENDED approach of <code>ceil(log2(r)/8)</code>.<a href="#section-5.2-1.30" class="pilcrow">¶</a>
+<dt id="section-5.2-1.29">xof_no_of_bytes</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.30">64.<a href="#section-5.2-1.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-5.2-1.31">octet_point_length</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.32">48, based on the RECOMMENDED approach of <code>ceil(log2(p)/8)</code>.<a href="#section-5.2-1.32" class="pilcrow">¶</a>
+<dt id="section-5.2-1.31">octet_scalar_length</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.32">32, based on the RECOMMENDED approach of <code>ceil(log2(r)/8)</code>.<a href="#section-5.2-1.32" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.2-1.33">octet_point_length</dt>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.34">48, based on the RECOMMENDED approach of <code>ceil(log2(p)/8)</code>.<a href="#section-5.2-1.34" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
