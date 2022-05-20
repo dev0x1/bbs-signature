@@ -1533,7 +1533,7 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           </h4>
 <p id="section-3.2.3-1">To avoid ambiguity, each element passed to the hash or the xof function, including situations when multiple elements are supplied in a concatenated form, must first be encoded to an appropriate format, depending on its type. Specifically,<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2.3-2.1">Points in G1 or G2 must be encoded using the <code>point_to_octets</code> implementation for a particular ciphersuite.<a href="#section-3.2.3-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2.3-2.1">Points in G1 or G2 must be encoded using the <code>point_to_octets_g*</code> implementation for a particular ciphersuite.<a href="#section-3.2.3-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.2.3-2.2">Non-negative integers must be encoded using <code>I2OSP</code> with an output length of 8 bytes.<a href="#section-3.2.3-2.2" class="pilcrow">¶</a>
 </li>
@@ -1654,7 +1654,7 @@ Procedure:
 
 2. PK = W
 
-3. return point_to_octets(PK)
+3. return point_to_octets_g2(PK)
 </pre><a href="#section-3.3.2-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2162,7 +2162,7 @@ Outputs:
 
 Procedure:
 
-1. A_octets = point_to_octets(A)
+1. A_octets = point_to_octets_g1(A)
 
 2. e_octets = I2OSP(e, octet_scalar_length)
 
@@ -2285,12 +2285,12 @@ a function that returns the canonical representation of the point P for the G1 s
 a function that returns the canonical representation of the point P for the G2 subgroup as an octet string.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.4">
-            <p id="section-5.1-1.4.1">octets_to_point<em>g1:
-a function that returns the point P in the subgroup G1 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of point</em>to_octets.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.4.1">octets_to_point_g1:
+a function that returns the point P in the subgroup G1 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g1</code>.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.5">
-            <p id="section-5.1-1.5.1">octets_to_point<em>g2:
-a function that returns the point P in the subgroup G2 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of point</em>to_octets.<a href="#section-5.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.5.1">octets_to_point_g2:
+a function that returns the point P in the subgroup G2 corresponding to the canonical representation ostr, or INVALID if ostr is not a valid output of <code>point_to_octets_g2</code>.<a href="#section-5.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.6">
             <p id="section-5.1-1.6.1">hash_to_curve_g1:
@@ -2324,7 +2324,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
             <p id="section-5.1-1.15.1">octet_scalar_length: Number of bytes to represent a scalar value, in the multiplicative group of integers mod r, encoded as an octet string. It is RECOMMENDED this value be set to <code>ceil(log2(r)/8)</code>.<a href="#section-5.1-1.15.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-1.16">
-            <p id="section-5.1-1.16.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the point<em>to</em>octets function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1-1.16.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-1.16.1">octet_point_length: Number of bytes to represent a point encoded as an octet string outputted by the <code>point_to_octets_g*</code> function. It is RECOMMENDED that this value is set to <code>ceil(log2(p)/8)</code>.<a href="#section-5.1-1.16.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2344,7 +2344,7 @@ A cryptographic hash function that takes as an arbitrary octet string input and 
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.5">point_to_octets_g2</dt>
-          <dd style="margin-left: 1.5em" id="section-5.2-1.6">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup.<a href="#section-5.2-1.6" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-5.2-1.6">follows the format documented in Appendix C section 1 of <span>[<a href="#I-D.irtf-cfrg-pairing-friendly-curves" class="xref">I-D.irtf-cfrg-pairing-friendly-curves</a>]</span> for the G2 subgroup, using compression (i.e., setting C_bit = 1).<a href="#section-5.2-1.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.7">octets_to_point_g1</dt>
