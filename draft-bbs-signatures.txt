@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                             18 May 2022
+                                                             20 May 2022
 
 
                         The BBS Signature Scheme
@@ -251,14 +251,16 @@ Table of Contents
       as an arbitrary octet string input and returns a point in G1 as
       defined in [I-D.irtf-cfrg-hash-to-curve].
 
-   point_to_octets(P) -> ostr  returns the canonical representation of
-      the point P as an octet string.  This operation is also known as
+   point_to_octets_g1(P) -> ostr, point_to_octets_g2(P) -> ostr  returns
+      the canonical representation of the point P for the respective
+      subgroup as an octet string.  This operation is also known as
       serialization.
 
-   octets_to_point(ostr) -> P  returns the point P corresponding to the
+   octets_to_point_g1(ostr) -> P, octets_to_point_g2(ostr) -> P  returns
+      the point P for the respective subgroup corresponding to the
       canonical representation ostr, or INVALID if ostr is not a valid
-      output of point_to_octets.  This operation is also known as
-      deserialization.
+      output of the respective point_to_octets_g* function.  This
+      operation is also known as deserialization.
 
    subgroup_check(P) -> VALID or INVALID  returns VALID when the point P
       is an element of the subgroup of order p, and INVALID otherwise.
@@ -359,7 +361,7 @@ Table of Contents
    a concatenated form, must first be encoded to an appropriate format,
    depending on its type.  Specifically,
 
-   *  Points in G1 or G2 must be encoded using the point_to_octets
+   *  Points in G1 or G2 must be encoded using the point_to_octets_g*
       implementation for a particular ciphersuite.
 
    *  Non-negative integers must be encoded using I2OSP with an output
@@ -508,7 +510,7 @@ Procedure:
 
    2. PK = W
 
-   3. return point_to_octets(PK)
+   3. return point_to_octets_g2(PK)
 
 3.3.3.  KeyValidate
 
@@ -530,7 +532,7 @@ Outputs:
 
 Procedure:
 
-1. W = octets_to_point(PK)
+1. W = octets_to_point_g2(PK)
 
 2. if W is INVALID, return INVALID
 
@@ -571,7 +573,7 @@ Outputs:
 
 Procedure:
 
-1. W = octets_to_point(PK)
+1. W = octets_to_point_g2(PK)
 
 2. if W is INVALID, abort
 
@@ -636,7 +638,7 @@ Procedure:
 
 4. if KeyValidate(PK) is INVALID, return INVALID
 
-5. W = octets_to_point(PK)
+5. W = octets_to_point_g2(PK)
 
 6. generators =  (H_s || H_d || H_1 || ... || H_L)
 
@@ -952,7 +954,7 @@ Procedure:
 
 2. a_octets = signature_octets[0..(octet_point_length - 1)]
 
-3. A = octets_to_point(a_octets)
+3. A = octets_to_point_g1(a_octets)
 
 4. if A is INVALID, return INVALID
 
@@ -995,7 +997,7 @@ Outputs:
 
 Procedure:
 
-1. A_octets = point_to_octets(A)
+1. A_octets = point_to_octets_g1(A)
 
 2. e_octets = I2OSP(e, octet_scalar_length)
 
@@ -1118,12 +1120,21 @@ Procedure:
 
    *  hash: a cryptographic hash function.
 
-   *  point_to_octets: a function that returns the canonical
-      representation of the point P as an octet string.
+   *  point_to_octets_g1: a function that returns the canonical
+      representation of the point P for the G1 subgroup as an octet
+      string.
 
-   *  octets_to_point: a function that returns the point P corresponding
-      to the canonical representation ostr, or INVALID if ostr is not a
-      valid output of point_to_octets.
+   *  point_to_octets_g2: a function that returns the canonical
+      representation of the point P for the G2 subgroup as an octet
+      string.
+
+   *  octets_to_point_g1: a function that returns the point P in the
+      subgroup G1 corresponding to the canonical representation ostr, or
+      INVALID if ostr is not a valid output of point_to_octets_g1.
+
+   *  octets_to_point_g2: a function that returns the point P in the
+      subgroup G2 corresponding to the canonical representation ostr, or
+      INVALID if ostr is not a valid output of point_to_octets_g2.
 
    *  hash_to_curve_g1: A cryptographic hash function that takes as an
       arbitrary octet string input and returns a point in G1 as defined
@@ -1182,18 +1193,28 @@ Procedure:
       string.  It is RECOMMENDED this value be set to ceil(log2(r)/8).
 
    *  octet_point_length: Number of bytes to represent a point encoded
-      as an octet string outputted by the point_to_octets function.  It
-      is RECOMMENDED that this value is set to ceil(log2(p)/8).
+      as an octet string outputted by the point_to_octets_g* function.
+      It is RECOMMENDED that this value is set to ceil(log2(p)/8).
 
 5.2.  BLS12-381 Ciphersuite
 
    hash  SHAKE-256 as defined in [SHA3].
 
-   point_to_octets  follows the format documented in Appendix C section
-      1 of [I-D.irtf-cfrg-pairing-friendly-curves].
+   point_to_octets_g1  follows the format documented in Appendix C
+      section 1 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G1
+      subgroup, using compression (i.e., setting C_bit = 1).
 
-   octets_to_point  follows the format documented in Appendix C section
-      2 of [I-D.irtf-cfrg-pairing-friendly-curves].
+   point_to_octets_g2  follows the format documented in Appendix C
+      section 1 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G2
+      subgroup, using compression (i.e., setting C_bit = 1).
+
+   octets_to_point_g1  follows the format documented in Appendix C
+      section 2 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G1
+      subgroup.
+
+   octets_to_point_g2  follows the format documented in Appendix C
+      section 2 of [I-D.irtf-cfrg-pairing-friendly-curves] for the G2
+      subgroup.
 
    hash_to_curve_g1  follows the suite defined in Appendix A.1 for the
       G1 subgroup.
