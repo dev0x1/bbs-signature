@@ -13,7 +13,7 @@
        BBS is a digital signature scheme categorized as a form of short group signature that supports several unique properties. Notably, the scheme supports signing multiple messages whilst producing a single output digital signature. Through this capability, the possessor of a signature is able to derive proofs that selectively disclose subsets of the originally signed set of messages, whilst preserving the verifiable authenticity and integrity of the messages. Furthermore, these derived proofs are said to be zero-knowledge in nature as they do not reveal the underlying signature; instead, what they reveal is a proof of knowledge of the undisclosed signature. 
     " name="description">
 <meta content="xml2rfc 3.12.7" name="generator">
-<meta content="draft-bbs-signatures" name="ietf.draft">
+<meta content="draft-bbs-signatures-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.12.7
     Python 3.9.7
@@ -1690,7 +1690,7 @@ Procedure:
 
 2. if W is INVALID, return INVALID
 
-3. if subgroup_check(A) is INVALID, return INVALID
+3. if subgroup_check(W) is INVALID, return INVALID
 
 4. If W == Identity_G2, return INVALID
 

@@ -11,7 +11,7 @@ none                                                           M. Lodder
 
 
          Blind Signatures extension of the BBS Signature Scheme
-                       draft-blind-bbs-signatures
+                   draft-blind-bbs-signatures-latest
 
 Abstract
 
