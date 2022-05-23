@@ -1759,6 +1759,7 @@ Procedure:
 13. return signature_octets
 </pre><a href="#section-3.3.4-2" class="pilcrow">¶</a>
 </div>
+<p id="section-3.3.4-3"><strong>Note</strong> When computing step 11 of the above procedure there is an extremely small probability (around <code>2^(-r)</code>) that the condition <code>(SK + e) = 0 mod r</code> will be met. How implementations evaluate the inverse of the scalar value <code>0</code> may vary, with some returning an error and others returning <code>0</code> as a result. If the returned value from the inverse operation <code>1/(SK + e)</code> does evalute to <code>0</code> the value of <code>A</code> will equal <code>Identity_G1</code> thus an invalid signature. Implementations MAY elect to check <code>(SK + e) = 0 mod r</code> prior to step 11, and or <code>A != Identity_G1</code> after step 11 to prevent the production of invalid signatures.<a href="#section-3.3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="verify">
