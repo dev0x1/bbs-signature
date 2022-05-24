@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-22T00:09:21.497780+00:00",
+  "timestamp": "2022-05-24T00:10:21.920707+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -118,7 +118,7 @@
       "id": "MDU6SXNzdWU5OTUxOTM5OTg=",
       "title": "Document the binary formats for cryptographic structures defined by the specification",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -127,8 +127,8 @@
       ],
       "body": "Within the draft there are several new cryptographic structures that are encoded in binary, their format should be documented to support interoperable implementations, these include\r\n\r\n- ProofOfKnowledge (signature proof)\r\n- Commitment\r\n- Commitment ProofOfKnowledge\r\n- BBS Signature",
       "createdAt": "2021-09-13T18:24:25Z",
-      "updatedAt": "2022-04-21T23:36:07Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-23T19:56:23Z",
+      "closedAt": "2022-05-23T19:56:23Z",
       "comments": [
         {
           "author": "tplooker",
@@ -164,6 +164,13 @@
           "body": "#66 adds a preliminary serialisation format for the signature, however the proof representation is still un-documented",
           "createdAt": "2022-03-21T02:37:47Z",
           "updatedAt": "2022-03-21T02:37:47Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Signatures have been addressed in #66 only outstanding rules are for proofs therefore closing this issue in favour of #153",
+          "createdAt": "2022-05-23T19:56:23Z",
+          "updatedAt": "2022-05-23T19:56:23Z"
         }
       ]
     },
@@ -198,15 +205,15 @@
       "id": "MDU6SXNzdWU5OTUyMDYxNjM=",
       "title": "Elaborate on background around group signatures",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Because the concept of a \"group signature\" is a lesser known term in the wider community that uses digital signature technology it would provide a good opportunity for education around some of the novel features of these types of cryptographic schemes provide if the spec included some of this background",
       "createdAt": "2021-09-13T18:40:14Z",
-      "updatedAt": "2021-09-13T18:40:41Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-23T19:59:19Z",
+      "closedAt": "2022-05-23T19:59:18Z",
       "comments": [
         {
           "author": "tplooker",
@@ -214,6 +221,13 @@
           "body": "@mikelodder7",
           "createdAt": "2021-09-13T18:40:41Z",
           "updatedAt": "2021-09-13T18:40:41Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "There is now sufficient elaboration around the schemes unique properties in the [introduction](https://identity.foundation/bbs-signature/draft-bbs-signatures.html) therefore closing this issue.",
+          "createdAt": "2022-05-23T19:59:18Z",
+          "updatedAt": "2022-05-23T19:59:18Z"
         }
       ]
     },
@@ -274,10 +288,12 @@
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "core"
+      ],
       "body": "In order to facilitate interoperability this specification should contain a set of test vectors for the cryptographic structures defined",
       "createdAt": "2021-09-23T20:06:50Z",
-      "updatedAt": "2022-02-23T21:50:11Z",
+      "updatedAt": "2022-05-23T19:58:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -997,7 +1013,7 @@
       "id": "I_kwDOF8lax85BdmyZ",
       "title": "Terminology clarification",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/24",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1006,9 +1022,17 @@
       ],
       "body": "Clarify terminology for \r\n\r\nDomain Parameters\r\nGenerators (and their relationship to domain parameters)\r\nGenerators with specific purposes (e.g message generators and blinding factor generators)",
       "createdAt": "2022-01-10T19:20:10Z",
-      "updatedAt": "2022-04-21T23:32:44Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2022-05-23T19:57:43Z",
+      "closedAt": "2022-05-23T19:57:42Z",
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "There has been significant work on the terminology throughout this draft therefore closing this issue as it is no-longer relevant.",
+          "createdAt": "2022-05-23T19:57:42Z",
+          "updatedAt": "2022-05-23T19:57:42Z"
+        }
+      ]
     },
     {
       "number": 25,
@@ -1673,7 +1697,7 @@
       "id": "I_kwDOF8lax85CoEOy",
       "title": "Message Encoding",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/40",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mikelodder7",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -1683,8 +1707,8 @@
       ],
       "body": "Data can be encoded multiple ways depending on how it will be used with other ZKPs. For example, it will not be useful to hash an integer to a 32 byte value using SHA256 and expect it to work properly with Range Proofs. The following is a list of encodings and the use cases they can be used:\r\n\r\n1. **Hashed**: for aribitrary length data fields that will not fit in the base field e.g. images, strings, biometrics, blockchain transaction info. Use hash2field or some other method to hash the data into a 32 byte base field value.\r\n2. **Bytes**: a value that is already in the base field\r\n3. **Numbers**: for range proofs. The value is zero-centered by take computing the base field modulus `z`=`q` / 3 integer division as the zero center and adding the positive number or substracting the negative number. To support complex numbers like decimal, the number is converted to fixed point arithmetic. The [Q format](https://en.wikipedia.org/wiki/Q_(number_format)) is used for these numbers as Q64.160. This leaves two bytes to avoid numbers greater than `q`. While it does not represent the full breadth of IEEE754 numbers, it does give a considerable resolution -2<sup>63</sup> to 2<sup>63</sup>-2<sup>-160</sup> signed and 0 to 2<sup>64</sup>-2<sup>-160</sup> unsigned or about 48 decimal places of precision. If decimals are rounded to the nearest integer, then Q format is not necessary.\r\n4. **Null**: Hard coded as 5. Means the value is not included or not used.\r\n5. **Empty**: Hard coded as 11. Means the value is included but is an empty string or zero bytes. For example, a person does not have a middle name but a value is required to be entered.\r\n6. **Ignored**: Hard coded as 23. For data fields that were ignored or not answered by the person. This is different than empty where the person's answer is literally nothing vs they chose not to answer it at all.\r\n\r\nSmall safe primes were used for the last three but can really be any value that is not `0` or `1`.\r\n\r\n### Comparing numbers to Null, Empty, Ignored\r\n\r\nNo DLEQ proof is needed to check for this since the verifier gets to pick the bounds and in theory this could be done but isn't meaningful",
       "createdAt": "2022-01-28T19:57:31Z",
-      "updatedAt": "2022-04-21T23:31:27Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-23T19:54:46Z",
+      "closedAt": "2022-05-23T19:54:46Z",
       "comments": [
         {
           "author": "BasileiosKal",
@@ -1706,6 +1730,13 @@
           "body": "Being addressed in #61 ",
           "createdAt": "2022-03-06T23:17:21Z",
           "updatedAt": "2022-03-06T23:17:21Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Addressed in #61, closing",
+          "createdAt": "2022-05-23T19:54:46Z",
+          "updatedAt": "2022-05-23T19:54:46Z"
         }
       ]
     },
@@ -3109,7 +3140,7 @@
       "id": "I_kwDOF8lax85GGntF",
       "title": "Convert challenge hash to scalar value",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/89",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3119,8 +3150,8 @@
       ],
       "body": "Currently in the in spkgen and spkverify operations, the challenge is not appropriately being converted to its scalar representation, this needs to be rectified, issue originally raised during review of #84 [see here](https://github.com/decentralized-identity/bbs-signature/pull/84#pullrequestreview-911423521)",
       "createdAt": "2022-03-22T01:16:33Z",
-      "updatedAt": "2022-04-21T23:29:24Z",
-      "closedAt": null,
+      "updatedAt": "2022-05-23T18:11:21Z",
+      "closedAt": "2022-05-23T18:11:20Z",
       "comments": []
     },
     {
@@ -3322,7 +3353,7 @@
       "id": "I_kwDOF8lax85HqZQI",
       "title": "Add a security consideration for when the scalar representation of a message is zero",
       "url": "https://github.com/decentralized-identity/bbs-signature/issues/100",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -3332,9 +3363,17 @@
       ],
       "body": "If a mapped message value outputted by the MapMessageToScalarAsHash evaluates to zero then effectively this message wont be signed, therefore we should add a security consideration to the spec to handle this case.",
       "createdAt": "2022-04-12T19:26:51Z",
-      "updatedAt": "2022-04-21T23:28:26Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2022-05-23T22:43:14Z",
+      "closedAt": "2022-05-23T22:43:13Z",
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Addressed in #101, closing",
+          "createdAt": "2022-05-23T22:43:13Z",
+          "updatedAt": "2022-05-23T22:43:13Z"
+        }
+      ]
     },
     {
       "number": 102,
@@ -3630,7 +3669,7 @@
       ],
       "body": "Currently sign and verify function signatures look like the following\r\n\r\n```\r\nsignature = Sign(SK, PK, (msg_1,..., msg_L), (H_1,..., H_L))\r\n```\r\n\r\nand\r\n\r\n```\r\nresult = Verify(PK, (msg_1,..., msg_L), (H_1,..., H_L), signature)\r\n```\r\n\r\nWhereas the spkgen operations function signature looks like\r\n\r\n```\r\nspk = SpkGen(PK, (msg_1,..., msg_L), (H_1,..., H_L), RevealedIndexes, signature, pm)\r\n```\r\n\r\nwhere RevealedIndexes is a vector/array.\r\n\r\nWe need to either change the RevealedIndexes to be more like the the destructed syntax for messages and generators e.g `(msg_1,..., msg_L), (H_1,..., H_L)` or convert all array style arguments to inputs like the current definition for RevealedIndexes.",
       "createdAt": "2022-05-02T00:35:51Z",
-      "updatedAt": "2022-05-02T10:20:12Z",
+      "updatedAt": "2022-05-23T20:00:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -3639,6 +3678,13 @@
           "body": "My vote is for the second option, i.e., convert `RevealedIndexes` to something like `(i1, i2, ..., iR)`. My reasoning is that otherwise, we will have to add many steps in each algorithm to convert each input to its destructed form (i.e., `1.  (msg_1, ..., msg_L) = messages`, `2.  (H_1, ..., H_L) = generators` etc.) that may hurt readability.\r\n\r\nOn the other hand, i feel like the term RevealedIndexes is very easy to understand, so although not internally consistent, leaving the inputs as they are (and sacrificing consistency) may be the best tradeoff for readability. ",
           "createdAt": "2022-05-02T10:19:13Z",
           "updatedAt": "2022-05-02T10:20:12Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Being addressed by #138 ",
+          "createdAt": "2022-05-23T20:00:18Z",
+          "updatedAt": "2022-05-23T20:00:18Z"
         }
       ]
     },
@@ -4236,6 +4282,27 @@
           "updatedAt": "2022-05-20T21:23:24Z"
         }
       ]
+    },
+    {
+      "number": 153,
+      "id": "I_kwDOF8lax85KPsjt",
+      "title": "OctetsToProof and ProofToOctets",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/153",
+      "state": "OPEN",
+      "author": "tplooker",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "BasileiosKal"
+      ],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "With the merge of #147 defining the rules for the signature serialisation we now need to define how to do the corresponding for the proof value outputted by the ProofGen operation and consumed by the ProofVerify operation.",
+      "createdAt": "2022-05-23T19:54:04Z",
+      "updatedAt": "2022-05-23T22:43:58Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -13990,7 +14057,7 @@
       "labels": [],
       "body": "Closes #74 \r\n\r\nAdding the revealed messages as well as the signature domain value to the challenge hash in ProofGen and ProofVerify.",
       "createdAt": "2022-05-05T23:08:43Z",
-      "updatedAt": "2022-05-11T12:46:09Z",
+      "updatedAt": "2022-05-23T18:30:18Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "2abab63c75fb113468dfb33a5fd2395d99852c0e",
@@ -14008,6 +14075,13 @@
           "body": "Couple of updates, \r\n1. Per @tplooker suggestion the R value (number of revealed messages) is added to the challenge hash.\r\n2. Removed the PK from the challenge hash since it is already part of the domain value.",
           "createdAt": "2022-05-05T23:23:26Z",
           "updatedAt": "2022-05-05T23:23:26Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Will be addressed after merging of #138 ",
+          "createdAt": "2022-05-23T18:30:18Z",
+          "updatedAt": "2022-05-23T18:30:18Z"
         }
       ],
       "reviews": [
@@ -15813,7 +15887,7 @@
       "id": "PR_kwDOF8lax843rwK0",
       "title": "Updates the sign procedure",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/135",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tplooker",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -15822,17 +15896,19 @@
       ],
       "body": "This PR updates the sign procedure to account for the case when `(SK + e) = 0 mod q` which is invalid and therefore requires us to re-compute a new `e` value if it were to occur.\r\n\r\nNote @BasileiosKal and I also discussed whether we need to check for `A != Identity_G1` however we believe it is impossible for this case to exist based on how the procedure is documented therefore the additional check is not required.",
       "createdAt": "2022-05-11T23:05:37Z",
-      "updatedAt": "2022-05-21T22:03:53Z",
+      "updatedAt": "2022-05-23T18:09:09Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "49b0b3aeeeeabcb41331f1af107182e13d60513c",
       "headRepository": "decentralized-identity/bbs-signature",
       "headRefName": "tl/sign-procedure",
       "headRefOid": "111ab03128894951313549b570a51b290ab83ed6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-05-23T18:09:05Z",
+      "mergedAt": "2022-05-23T18:09:05Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "2c03f9309a34190c9d9881eabdcd83757044bd66"
+      },
       "comments": [
         {
           "author": "andrewwhitehead",
@@ -15952,6 +16028,20 @@
           "body": "I have revert the changes to sign procedure and added a note, ready for re-review.",
           "createdAt": "2022-05-21T01:49:25Z",
           "updatedAt": "2022-05-21T01:49:25Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple reviews and approvals, discussed on multiple WG calls, merging.",
+          "createdAt": "2022-05-23T18:08:39Z",
+          "updatedAt": "2022-05-23T18:08:39Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple reviews and approvals, discussed on multiple WG calls, merging.",
+          "createdAt": "2022-05-23T18:08:39Z",
+          "updatedAt": "2022-05-23T18:08:39Z"
         }
       ],
       "reviews": [
@@ -15974,6 +16064,19 @@
               "updatedAt": "2022-05-21T22:03:47Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846emAE",
+          "commit": {
+            "abbreviatedOid": "111ab03"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-23T03:16:20Z",
+          "updatedAt": "2022-05-23T03:16:20Z",
+          "comments": []
         }
       ]
     },
@@ -16282,13 +16385,13 @@
       "labels": [],
       "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
       "createdAt": "2022-05-13T16:32:18Z",
-      "updatedAt": "2022-05-17T00:19:06Z",
+      "updatedAt": "2022-05-23T19:48:31Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "170c0463d8ed75c9d8ba5eab1f67f7391c8e820a",
+      "baseRefOid": "7568d6a95044c12f75e5ef19077eb5a7f6046063",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "api_update",
-      "headRefOid": "321476ebd410e7fce22ec02f639ecb3df7601b05",
+      "headRefOid": "329c9b7cfdeb2c124ca2f85a16ca3408e9518f25",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16755,6 +16858,286 @@
               "updatedAt": "2022-05-17T00:19:06Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eVBs",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-22T23:18:45Z",
+          "updatedAt": "2022-05-22T23:18:45Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Changed the statement a bit (now the ordering needs to follow the ordering of the input to Sign) and provided some examples to make it more clear.",
+              "createdAt": "2022-05-22T23:18:45Z",
+              "updatedAt": "2022-05-22T23:18:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eVCE",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-22T23:18:59Z",
+          "updatedAt": "2022-05-22T23:18:59Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "I think that the complexity of having to define a filter function will outweigh the advantages of the current API??? In my last push I've described in \"clear text\" the operation of getting `(H_i1, msg_i1), ..., (H_iR, msg_iR)` etc., Thoughts on the alternative???",
+              "createdAt": "2022-05-22T23:18:59Z",
+              "updatedAt": "2022-05-22T23:18:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eVMt",
+          "commit": {
+            "abbreviatedOid": "321476e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-22T23:24:26Z",
+          "updatedAt": "2022-05-22T23:24:26Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Done! Thanks!",
+              "createdAt": "2022-05-22T23:24:26Z",
+              "updatedAt": "2022-05-22T23:24:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eyml",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T05:18:39Z",
+          "updatedAt": "2022-05-23T05:18:40Z",
+          "comments": [
+            {
+              "originalPosition": 95,
+              "body": "```suggestion\r\n- R, is the non-negative integer representing the number of revealed messages, R = revealed_1 + revealed_2 + ... + revealed_L. In the calculation of R its assumed that the boolean value of true evaluates to a non-negative integer value of 1 whereas the boolean value of false evaluates to a non-negative integer value of 0.  If no messages are supplied as an input to this operation, the value of R MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-23T05:18:40Z",
+              "updatedAt": "2022-05-23T05:20:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eysJ",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T05:19:19Z",
+          "updatedAt": "2022-05-23T05:19:19Z",
+          "comments": [
+            {
+              "originalPosition": 95,
+              "body": "Trying to clarify that effectively we are casting boolean values in the calculation of R to an integer?",
+              "createdAt": "2022-05-23T05:19:19Z",
+              "updatedAt": "2022-05-23T05:19:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846ey69",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T05:21:05Z",
+          "updatedAt": "2022-05-23T05:21:05Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "```suggestion\r\n- L, is the non-negative integer representing the number of signed messages, L = length([(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)]). Note if no messages are signed, the value of L MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-23T05:21:05Z",
+              "updatedAt": "2022-05-23T05:21:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846ezAJ",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T05:21:41Z",
+          "updatedAt": "2022-05-23T05:21:41Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "Its not an example IMO so we should drop the e.g",
+              "createdAt": "2022-05-23T05:21:41Z",
+              "updatedAt": "2022-05-23T05:21:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846ezBx",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T05:21:53Z",
+          "updatedAt": "2022-05-23T05:21:54Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "```suggestion\r\n- U, is the non-negative integer representing the number of un-revealed messages, U = L-R. If no non-revealed messages are supplied as an input to this operation (i.e., if R = L), the value of U MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-23T05:21:53Z",
+              "updatedAt": "2022-05-23T05:21:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846iP-R",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T16:22:31Z",
+          "updatedAt": "2022-05-23T16:22:32Z",
+          "comments": [
+            {
+              "originalPosition": 95,
+              "body": "Good point! Updated to a different wording that it is sorter but may not be as clear?? If yes i will update to the suggestion.",
+              "createdAt": "2022-05-23T16:22:31Z",
+              "updatedAt": "2022-05-23T16:22:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846iQAn",
+          "commit": {
+            "abbreviatedOid": "1b00ba4"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T16:22:38Z",
+          "updatedAt": "2022-05-23T16:22:38Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "Good catch! Updated to use i.e., I think this is more appropriate??",
+              "createdAt": "2022-05-23T16:22:38Z",
+              "updatedAt": "2022-05-23T16:22:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846jEIz",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T19:45:16Z",
+          "updatedAt": "2022-05-23T19:45:17Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\n- [(H_1, msg_1),..., (H_L, msg_L)] (OPTIONAL), a list of generator and message pairs corresponding to messages to be signed. Generators must be G1 points, and the messages must be non-zero scalars mod r. If not supplied, it will default to the empty array (\"[]\").\r\n```\r\n\r\nDo we need the last sentence here?",
+              "createdAt": "2022-05-23T19:45:17Z",
+              "updatedAt": "2022-05-23T19:47:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846jEcc",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T19:46:37Z",
+          "updatedAt": "2022-05-23T19:46:38Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\n- L, is the non-negative integer representing the number of messages to be signed i.e., length([(H_1, msg_1),..., (H_L, msg_L)]).  Note if the list of generator and message pairs are not supplied as an input to this operation, the value of L MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-23T19:46:38Z",
+              "updatedAt": "2022-05-23T19:47:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846jEvx",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T19:47:50Z",
+          "updatedAt": "2022-05-23T19:47:50Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\n- [(H_1, msg_1),..., (H_L, msg_L)] (OPTIONAL), a list of generator and message pairs corresponding to signed messages. Generators must be G1 points, and the messages must be non-zero scalars mod r. If not supplied, it will default to the empty array (\"[]\").\r\n```",
+              "createdAt": "2022-05-23T19:47:50Z",
+              "updatedAt": "2022-05-23T19:47:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846jE5Z",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T19:48:30Z",
+          "updatedAt": "2022-05-23T19:48:31Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "```suggestion\r\n- L, is the non-negative integer representing the number of messages to be signed i.e., length([(H_1, msg_1),..., (H_L, msg_L)]). Note if the list of generator and message pairs are not supplied as an input to this operation, the value of L MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-23T19:48:30Z",
+              "updatedAt": "2022-05-23T19:48:31Z"
+            }
+          ]
         }
       ]
     },
@@ -16833,24 +17216,26 @@
       "id": "PR_kwDOF8lax8435a3k",
       "title": "Use of hash_to_scalar",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/142",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Update the spec to use hash_to_scalar where needed. Fixes #89\r\n\r\n### Note:\r\nThe way that random elements are generated in ProofGen will change. Right now, each element is generated by calling a PRF for each one separately. The proposed alternative is to call the PRF once and use the result as a seed to an XOF (in hash_to_scalar). The reasons are two: \r\n1. We can replace the PRF with a seed that will be passed as an argument to the ProofGen function. This will help with test vectors, and we can make a requirement that this seed will be the output of a PRF in any other situation aside from testing. \r\n2. The proposed alternative is more efficient and since we already assume that the XOF is secure (otherwise the deterministic signatures will be insecure), we will not have to change our security model when it comes to the XOF. \r\n\r\nMy question is: Is there a reason to avoid this route?? Is there any security reason for which we would not want to use this alternative??\r\n\r\nAlso, e and s generation is not changed because PR #135 proposes an alternative.\r\n",
       "createdAt": "2022-05-16T17:50:58Z",
-      "updatedAt": "2022-05-20T01:54:58Z",
+      "updatedAt": "2022-05-23T18:11:21Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "c3c65347050125751165dd627e7d52f029d143f5",
+      "baseRefOid": "49b0b3aeeeeabcb41331f1af107182e13d60513c",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash-to-scalar-usage",
-      "headRefOid": "dbd8d4c312ef60be30112a3b572d0f348ce63d3c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6bedd7f136b0d9abbd193dd3f860221a3a2e00cd",
+      "closedAt": "2022-05-23T18:11:21Z",
+      "mergedAt": "2022-05-23T18:11:20Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "7568d6a95044c12f75e5ef19077eb5a7f6046063"
+      },
       "comments": [
         {
           "author": "tplooker",
@@ -16872,6 +17257,13 @@
           "body": "Conflicts also need to be resolved.",
           "createdAt": "2022-05-20T01:54:57Z",
           "updatedAt": "2022-05-20T01:54:57Z"
+        },
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple reviews and approvals, open 7 days, merging.",
+          "createdAt": "2022-05-23T18:11:16Z",
+          "updatedAt": "2022-05-23T18:11:16Z"
         }
       ],
       "reviews": [
@@ -17054,6 +17446,52 @@
               "updatedAt": "2022-05-19T23:47:16Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846eVzq",
+          "commit": {
+            "abbreviatedOid": "dbd8d4c"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-22T23:43:00Z",
+          "updatedAt": "2022-05-22T23:43:00Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Yeap! Done!",
+              "createdAt": "2022-05-22T23:43:00Z",
+              "updatedAt": "2022-05-22T23:43:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846emMB",
+          "commit": {
+            "abbreviatedOid": "6bedd7f"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Nice simplification across the board",
+          "createdAt": "2022-05-23T03:18:15Z",
+          "updatedAt": "2022-05-23T03:18:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax846itb3",
+          "commit": {
+            "abbreviatedOid": "6bedd7f"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-23T18:10:35Z",
+          "updatedAt": "2022-05-23T18:10:35Z",
+          "comments": []
         }
       ]
     },
@@ -17337,13 +17775,13 @@
       "labels": [],
       "body": "I found the same issue as @christianpaquin in #139, and I hope this helps a little bit to make it clearer.",
       "createdAt": "2022-05-19T09:28:22Z",
-      "updatedAt": "2022-05-20T08:09:34Z",
+      "updatedAt": "2022-05-23T15:57:29Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "85a1036b5a0ac8dbec42655798d61274937d21d7",
       "headRepository": "alessandroguggino/bbs-signature",
       "headRefName": "creategenerators",
-      "headRefOid": "a32e5f7e048c559340b6109af4358e71c90b44f6",
+      "headRefOid": "57a97b2091ca584d175424f9444bae730bbbcb13",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -17384,6 +17822,66 @@
           "createdAt": "2022-05-20T00:46:24Z",
           "updatedAt": "2022-05-20T00:46:24Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax846eLte",
+          "commit": {
+            "abbreviatedOid": "a32e5f7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Minor nit. LGTM otherwise! Thanks!",
+          "createdAt": "2022-05-22T15:53:19Z",
+          "updatedAt": "2022-05-22T15:54:01Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nIt is used to compute the set of message generators (`H_1`, `H_2`, etc.,), the signature blinding value generator (`H_s`), and the signature domain generator (`H_d`).\r\n```\r\nI think we don't use the generators as part of a list any more (for what i know of at least. In any place that we do is left over by older versions). I think this more is accurate in the current notation. Also, we ended up calling the \"domain separation tag\" just \"domain\" if I'm not mistaken.",
+              "createdAt": "2022-05-22T15:53:19Z",
+              "updatedAt": "2022-05-22T18:04:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846fTWv",
+          "commit": {
+            "abbreviatedOid": "a32e5f7"
+          },
+          "author": "alessandroguggino",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T07:51:25Z",
+          "updatedAt": "2022-05-23T07:51:25Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Thank you! Then should we also edit the seed named `signature_dst_generator_seed` in the Ciphersuite section?",
+              "createdAt": "2022-05-23T07:51:25Z",
+              "updatedAt": "2022-05-23T07:51:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846iCLu",
+          "commit": {
+            "abbreviatedOid": "a32e5f7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T15:46:02Z",
+          "updatedAt": "2022-05-23T15:46:02Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "That's a good point! Made the update in #152. Thanks!",
+              "createdAt": "2022-05-23T15:46:02Z",
+              "updatedAt": "2022-05-23T15:46:02Z"
+            }
+          ]
         }
       ]
     },
@@ -17579,13 +18077,13 @@
       "labels": [],
       "body": "First shot in a `hash_to_scalar_xmd` function to be used with regular hashes as an alternative to the one currently in the spec (that uses an xof). The proposed function essentially makes use of `expand_message_xmd` (not called directly, see below why), and will give a less efficient option for implementers not wishing to make use of shake256.\r\n\r\nComparison with `hash_to_field` and `expand_message_xmd`:\r\n1.\t**Memory efficiency**: `hash_to_field` will call `expand_message` once to output the total number of bytes needed for all the outputted elements. Since we may potentially need to create many scalars, this may not be the more efficient approach. For example, if one wants to create a proof with 1000 hidden messages, the output of `expand_message` will need to be at least 64 kb. In contrast, `hash_to_scalar_xmd` will only need to \u201chold\u201d 64 bytes at once. Note that the total number of hash invocations is the same in both cases, so the computational overhead will effectively be zero.\r\n2.\t**Efficiently checking if a scalar is 0**: Although there are discussions on not overengineering the spec, I feel here is the one place we may need to have the check. The reason is that many signed messages may result to the probability of returning a 0 been higher than what we anticipate (not really an issue for bls12-381 but may become an issue for \u201csmaller\u201d ECs).\r\n3.\tCalling `expand_message_xmd` directly instead of the xof would be wasteful (it would result to at least n-1 unnecessary hash computations for b_0)\r\n\r\nAnother option can be to use hkdf instead. The tradeoff here is double the hash computations vs spec simplicity + the wider availability of hkdf.\r\n",
       "createdAt": "2022-05-21T20:26:35Z",
-      "updatedAt": "2022-05-21T20:47:51Z",
+      "updatedAt": "2022-05-23T18:41:38Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "49b0b3aeeeeabcb41331f1af107182e13d60513c",
+      "baseRefOid": "7568d6a95044c12f75e5ef19077eb5a7f6046063",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash_to_scalar_xmd",
-      "headRefOid": "b55277b567f35ab7d13879dd7b93cdb31b9bce93",
+      "headRefOid": "1ce44a52bdc8232d2bc7992878f620e4f439f7a0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -17599,7 +18097,88 @@
           "updatedAt": "2022-05-21T20:32:42Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846iw4b",
+          "commit": {
+            "abbreviatedOid": "bd89bd2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T18:23:06Z",
+          "updatedAt": "2022-05-23T18:23:07Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "```suggestion\r\n### Hashing to scalars\r\n```",
+              "createdAt": "2022-05-23T18:23:07Z",
+              "updatedAt": "2022-05-23T18:23:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846ixjv",
+          "commit": {
+            "abbreviatedOid": "bd89bd2"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-23T18:25:58Z",
+          "updatedAt": "2022-05-23T18:25:58Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "```suggestion\r\n- r (REQUIRED), non-negative integer. The prime order of the G1 and G2 groups, defined by the ciphersuite.\r\n```",
+              "createdAt": "2022-05-23T18:25:58Z",
+              "updatedAt": "2022-05-23T18:25:59Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 152,
+      "id": "PR_kwDOF8lax844TcuZ",
+      "title": "Editorial updates",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/152",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Various editorial changes:\r\n1.\tUpdated the ascii art to be less than 72 chars (we will need to do that in other places on the spec as well that are inside code blocks etc).\r\n2.\tChanged signature_dst_generator_seed -> sig_domain_generator_seed as noted by @alessandroguggino in PR #145 ([comment](https://github.com/decentralized-identity/bbs-signature/pull/145#discussion_r879127346)) \r\n3.\tFixed wrong reference to the SHA3 specification.\r\n4.\tRemoved the `hash_to_field` definition from the ciphersuite because it is not used by any operation at the moment. It is only mentioned as an alternative and for that I don\u2019t believe is needed in the ciphersuite. If the proposal from [here](https://github.com/decentralized-identity/bbs-signature/pull/151#issuecomment-1133764513) is adopted will re-add it.\r\n5.\tCategorizing the parameters defined on the ciphersuites (there are a lot of parameters and I personally have found my self re-reading the whole section more than once to find the one I was looking for. Maybe this makes things more clear and easy to read??)",
+      "createdAt": "2022-05-23T15:42:52Z",
+      "updatedAt": "2022-05-23T18:21:57Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "49b0b3aeeeeabcb41331f1af107182e13d60513c",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "notation-update",
+      "headRefOid": "d99c5051e88353396389d633f37cdc9179448302",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846iwoL",
+          "commit": {
+            "abbreviatedOid": "d99c505"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM thanks!",
+          "createdAt": "2022-05-23T18:21:57Z",
+          "updatedAt": "2022-05-23T18:21:57Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
