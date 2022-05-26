@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-24T00:10:21.920707+00:00",
+  "timestamp": "2022-05-26T00:10:03.985102+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -16385,13 +16385,13 @@
       "labels": [],
       "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
       "createdAt": "2022-05-13T16:32:18Z",
-      "updatedAt": "2022-05-23T19:48:31Z",
+      "updatedAt": "2022-05-25T16:47:14Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "7568d6a95044c12f75e5ef19077eb5a7f6046063",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "api_update",
-      "headRefOid": "329c9b7cfdeb2c124ca2f85a16ca3408e9518f25",
+      "headRefOid": "417b55444298993e43810e9d1263d5fec3f878cf",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16410,6 +16410,13 @@
           "body": "Updated API based on the discussion on the  WG call of 16/5/2022.\r\n\r\nThe main change is the proposal of the `[(H_i, msg_i), for revealed_i = 1]` etc notation. It may not be 100% formally defined but IMO it is \u201cclear enough\u201d while avoiding some of the issues we discussed on the call. \r\n\r\nMy biggest concern here is that the order of the revealed messages supplied to ProofVerify is not clearly enough defined. But we \r\nmay be able to solve this with some additional text?\r\n\r\nInterested on the WG\u2019s thoughts. c.c. @tplooker, @andrewwhitehead ^\r\n",
           "createdAt": "2022-05-16T23:21:11Z",
           "updatedAt": "2022-05-16T23:21:11Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Couple of updates:\r\n1. Updates based on the reviews.\r\n2. Since the description for the list of (generator, message) pairs in the Input section for the ProofGen and ProofVerify operations was getting longer and longer, i changed the description to something more \"minimal\" and added a \"see above for requirements\" to point to the description above the each operation, where the input lists are explained clearly along with an example.",
+          "createdAt": "2022-05-25T15:39:12Z",
+          "updatedAt": "2022-05-25T15:39:12Z"
         }
       ],
       "reviews": [
@@ -17136,6 +17143,146 @@
               "body": "```suggestion\r\n- L, is the non-negative integer representing the number of messages to be signed i.e., length([(H_1, msg_1),..., (H_L, msg_L)]). Note if the list of generator and message pairs are not supplied as an input to this operation, the value of L MUST evaluate to zero (0).\r\n```",
               "createdAt": "2022-05-23T19:48:30Z",
               "updatedAt": "2022-05-23T19:48:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846tobn",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T15:33:54Z",
+          "updatedAt": "2022-05-25T15:33:55Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Indeed we don't. Thanks! Updated.",
+              "createdAt": "2022-05-25T15:33:54Z",
+              "updatedAt": "2022-05-25T15:33:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846tofq",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T15:34:06Z",
+          "updatedAt": "2022-05-25T15:34:06Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Done.",
+              "createdAt": "2022-05-25T15:34:06Z",
+              "updatedAt": "2022-05-25T15:34:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846tomh",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T15:34:23Z",
+          "updatedAt": "2022-05-25T15:34:23Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Thanks! Updated",
+              "createdAt": "2022-05-25T15:34:23Z",
+              "updatedAt": "2022-05-25T15:34:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846topa",
+          "commit": {
+            "abbreviatedOid": "329c9b7"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T15:34:30Z",
+          "updatedAt": "2022-05-25T15:34:30Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "Done!",
+              "createdAt": "2022-05-25T15:34:30Z",
+              "updatedAt": "2022-05-25T15:34:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846uGJ_",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:44:40Z",
+          "updatedAt": "2022-05-25T16:44:41Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nThroughout the operations of this signature scheme, each message that is signed is paired with a specific generator (point in G1). Specifically, if a generator `H_1` is multiplied with `msg_1` during signing, then `H_1` MUST be multiplied with `msg_1` in all other operations (signature verification, proof generation and proof verification).\r\n```",
+              "createdAt": "2022-05-25T16:44:40Z",
+              "updatedAt": "2022-05-25T16:44:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846uGc0",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:45:42Z",
+          "updatedAt": "2022-05-25T16:45:42Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "What\u2019s the reason for not supplying any messages?",
+              "createdAt": "2022-05-25T16:45:42Z",
+              "updatedAt": "2022-05-25T16:45:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846uG5G",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:47:13Z",
+          "updatedAt": "2022-05-25T16:47:14Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "```suggestion\r\n- U, is the non-negative integer representing the number of un-revealed messages i.e., U = L-R. If no un-revealed messages are supplied as an input to this operation (i.e., if R = L), the value of U MUST evaluate to zero (0).\r\n```",
+              "createdAt": "2022-05-25T16:47:14Z",
+              "updatedAt": "2022-05-25T16:47:14Z"
             }
           ]
         }
@@ -18077,13 +18224,13 @@
       "labels": [],
       "body": "First shot in a `hash_to_scalar_xmd` function to be used with regular hashes as an alternative to the one currently in the spec (that uses an xof). The proposed function essentially makes use of `expand_message_xmd` (not called directly, see below why), and will give a less efficient option for implementers not wishing to make use of shake256.\r\n\r\nComparison with `hash_to_field` and `expand_message_xmd`:\r\n1.\t**Memory efficiency**: `hash_to_field` will call `expand_message` once to output the total number of bytes needed for all the outputted elements. Since we may potentially need to create many scalars, this may not be the more efficient approach. For example, if one wants to create a proof with 1000 hidden messages, the output of `expand_message` will need to be at least 64 kb. In contrast, `hash_to_scalar_xmd` will only need to \u201chold\u201d 64 bytes at once. Note that the total number of hash invocations is the same in both cases, so the computational overhead will effectively be zero.\r\n2.\t**Efficiently checking if a scalar is 0**: Although there are discussions on not overengineering the spec, I feel here is the one place we may need to have the check. The reason is that many signed messages may result to the probability of returning a 0 been higher than what we anticipate (not really an issue for bls12-381 but may become an issue for \u201csmaller\u201d ECs).\r\n3.\tCalling `expand_message_xmd` directly instead of the xof would be wasteful (it would result to at least n-1 unnecessary hash computations for b_0)\r\n\r\nAnother option can be to use hkdf instead. The tradeoff here is double the hash computations vs spec simplicity + the wider availability of hkdf.\r\n",
       "createdAt": "2022-05-21T20:26:35Z",
-      "updatedAt": "2022-05-23T18:41:38Z",
+      "updatedAt": "2022-05-25T16:40:29Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
-      "baseRefOid": "7568d6a95044c12f75e5ef19077eb5a7f6046063",
+      "baseRefOid": "517868ceb34592c58e8b731c0e9d168d44821039",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash_to_scalar_xmd",
-      "headRefOid": "1ce44a52bdc8232d2bc7992878f620e4f439f7a0",
+      "headRefOid": "d425bdba7f249dc805416132c707f0bcbc77fa91",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -18137,6 +18284,26 @@
               "updatedAt": "2022-05-23T18:25:59Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846uE53",
+          "commit": {
+            "abbreviatedOid": "d425bdb"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:40:29Z",
+          "updatedAt": "2022-05-25T16:40:29Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "```suggestion\r\n2. `hash_to_scalar_xmd`, is less performant in comparison, requires a fixed length output function like SHA2 or SHA3.\r\n```",
+              "createdAt": "2022-05-25T16:40:29Z",
+              "updatedAt": "2022-05-25T16:40:30Z"
+            }
+          ]
         }
       ]
     },
@@ -18145,25 +18312,35 @@
       "id": "PR_kwDOF8lax844TcuZ",
       "title": "Editorial updates",
       "url": "https://github.com/decentralized-identity/bbs-signature/pull/152",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "BasileiosKal",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Various editorial changes:\r\n1.\tUpdated the ascii art to be less than 72 chars (we will need to do that in other places on the spec as well that are inside code blocks etc).\r\n2.\tChanged signature_dst_generator_seed -> sig_domain_generator_seed as noted by @alessandroguggino in PR #145 ([comment](https://github.com/decentralized-identity/bbs-signature/pull/145#discussion_r879127346)) \r\n3.\tFixed wrong reference to the SHA3 specification.\r\n4.\tRemoved the `hash_to_field` definition from the ciphersuite because it is not used by any operation at the moment. It is only mentioned as an alternative and for that I don\u2019t believe is needed in the ciphersuite. If the proposal from [here](https://github.com/decentralized-identity/bbs-signature/pull/151#issuecomment-1133764513) is adopted will re-add it.\r\n5.\tCategorizing the parameters defined on the ciphersuites (there are a lot of parameters and I personally have found my self re-reading the whole section more than once to find the one I was looking for. Maybe this makes things more clear and easy to read??)",
       "createdAt": "2022-05-23T15:42:52Z",
-      "updatedAt": "2022-05-23T18:21:57Z",
+      "updatedAt": "2022-05-24T23:20:44Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "49b0b3aeeeeabcb41331f1af107182e13d60513c",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "notation-update",
       "headRefOid": "d99c5051e88353396389d633f37cdc9179448302",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2022-05-24T23:20:44Z",
+      "mergedAt": "2022-05-24T23:20:43Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "517868ceb34592c58e8b731c0e9d168d44821039"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Multiple approvals, discussed on WG call, merging",
+          "createdAt": "2022-05-24T23:20:39Z",
+          "updatedAt": "2022-05-24T23:20:39Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOF8lax846iwoL",
@@ -18177,6 +18354,472 @@
           "createdAt": "2022-05-23T18:21:57Z",
           "updatedAt": "2022-05-23T18:21:57Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax846nFbH",
+          "commit": {
+            "abbreviatedOid": "d99c505"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-24T14:22:05Z",
+          "updatedAt": "2022-05-24T14:22:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 154,
+      "id": "PR_kwDOF8lax844bgab",
+      "title": "Re-organizing the sections",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/154",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Proposing the following structure for the document. The main change is that `Sign`, `Verify`, `ProofGen` and `ProofVerify` are moved to their own \"core operations\" section. This will allow us to more easily define \"higher level functions\" on top of the \"core operations\" if need be.\r\n\r\n```\r\n|--- Introduction\r\n|      |--- Terminology\r\n|      |--- Notation\r\n|      +--- Organization of this document\r\n|--- Conventions\r\n|--- Considerations\r\n|      |--- Subgroup Selection\r\n|      |--- Messages and Generators\r\n|      +--- Encoding of elements to be hashed\r\n|--- BBS Scheme Definition\r\n|      |--- Parameters\r\n|      |--- Key Generation\r\n|      |      |--- KeyGen\r\n|      |      |--- SkToPk\r\n|      |      +--- KeyValidate        \r\n|      +--- Core Operations\r\n|             |--- Sign\r\n|             |--- Verify\r\n|             |--- ProofGen\r\n|             +--- ProofVerify\r\n|--- Utility Functions\r\n|      |--- CreateGenerators\r\n|      |--- MapMessageToScalar\r\n|      |      +--- MapMessageToScalarAsHash\r\n|      +--- Hash to scalar\r\n|--- Serialization\r\n|      |--- OctetsToSignatures\r\n|      +--- SignatureToOctets\r\n|--- Security Considerations\r\n|--- Ciphersuites \r\n+--- Appendix\r\n```",
+      "createdAt": "2022-05-25T09:10:25Z",
+      "updatedAt": "2022-05-25T09:15:19Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "517868ceb34592c58e8b731c0e9d168d44821039",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "re-organizing-operations",
+      "headRefOid": "4b9790a9eb9e31ee993fafb3b28fda3ccc2686c6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 155,
+      "id": "PR_kwDOF8lax844cgoG",
+      "title": "Proof serialization/de-serialization ",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/155",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #153\r\n\r\nIntroduces a `proof_to_octets` and a `octets_to_proof` operation",
+      "createdAt": "2022-05-25T13:24:23Z",
+      "updatedAt": "2022-05-25T21:26:15Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "517868ceb34592c58e8b731c0e9d168d44821039",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "proof-serialization",
+      "headRefOid": "bef291e7b978c7391d844fad4f27488e1b6e07e2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846uDie",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:36:00Z",
+          "updatedAt": "2022-05-25T16:36:01Z",
+          "comments": [
+            {
+              "originalPosition": 137,
+              "body": "```suggestion\r\n1. Three (3) valid compressed points of the G1 subgroup, different from the identity point of G1 (i.e., `A', Abar, D`, in ProofGen)\r\n```",
+              "createdAt": "2022-05-25T16:36:00Z",
+              "updatedAt": "2022-05-25T16:36:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846uDzQ",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "mikelodder7",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T16:36:50Z",
+          "updatedAt": "2022-05-25T16:36:51Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "Little endian 32-bit? Can\u2019t remember if we have a description of serialized integers yet",
+              "createdAt": "2022-05-25T16:36:50Z",
+              "updatedAt": "2022-05-25T16:36:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQGE",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T20:59:58Z",
+          "updatedAt": "2022-05-25T20:59:59Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "```suggestion\r\nThis operation describes how to decode an octet string representing a proof, validate it and return the underlying components that make up the proof.\r\n```\r\n\r\nSuggestion to make this more consistent language with how we introduce each operation\r\n```suggestion\r\nThe `octets_to_proof` operations describes how to parse an octet string representation of a proof, validate it and return the underlying components.\r\n```",
+              "createdAt": "2022-05-25T20:59:58Z",
+              "updatedAt": "2022-05-25T20:59:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQGF",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T20:59:58Z",
+          "updatedAt": "2022-05-25T20:59:59Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "```suggestion\r\nThis operation describes how to decode an octet string representing a proof, validate it and return the underlying components that make up the proof.\r\n```\r\n\r\nSuggestion to make this more consistent language with how we introduce each operation\r\n```suggestion\r\nThe `octets_to_proof` operations describes how to parse an octet string representation of a proof, validate it and return the underlying components.\r\n```",
+              "createdAt": "2022-05-25T20:59:58Z",
+              "updatedAt": "2022-05-25T20:59:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQTb",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:00:52Z",
+          "updatedAt": "2022-05-25T21:00:52Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\r\n1. Three (3) valid points of the G1 subgroup, each of which must not equal the identity point.\r\n```",
+              "createdAt": "2022-05-25T21:00:52Z",
+              "updatedAt": "2022-05-25T21:00:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQTc",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:00:52Z",
+          "updatedAt": "2022-05-25T21:00:52Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\r\n1. Three (3) valid points of the G1 subgroup, each of which must not equal the identity point.\r\n```",
+              "createdAt": "2022-05-25T21:00:52Z",
+              "updatedAt": "2022-05-25T21:00:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQru",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:02:19Z",
+          "updatedAt": "2022-05-25T21:02:20Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "```suggestion\r\n3. A set of integers representing scalars in the range of 1 to r-1 inclusive, corresponding to the un-revealed from the proof message commitments.\r\n```\r\n\r\nAlso do we need to clarify the ordering expected here?\r\n```suggestion\r\n3. A number of integers representing scalars in the range of 1 to r-1 inclusive, corresponding to the un-revealed from the proof message commitments.\r\n```",
+              "createdAt": "2022-05-25T21:02:19Z",
+              "updatedAt": "2022-05-25T21:02:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQrv",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:02:19Z",
+          "updatedAt": "2022-05-25T21:02:20Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "```suggestion\r\n3. A set of integers representing scalars in the range of 1 to r-1 inclusive, corresponding to the un-revealed from the proof message commitments.\r\n```\r\n\r\nAlso do we need to clarify the ordering expected here?\r\n```suggestion\r\n3. A number of integers representing scalars in the range of 1 to r-1 inclusive, corresponding to the un-revealed from the proof message commitments.\r\n```",
+              "createdAt": "2022-05-25T21:02:19Z",
+              "updatedAt": "2022-05-25T21:02:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQzP",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:02:50Z",
+          "updatedAt": "2022-05-25T21:02:51Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "```suggestion\r\n- r (REQUIRED), non-negative integer. The prime order of the G1 and\r\n                G2 groups, defined by the ciphersuite.\r\n```",
+              "createdAt": "2022-05-25T21:02:50Z",
+              "updatedAt": "2022-05-25T21:03:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vQzR",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:02:50Z",
+          "updatedAt": "2022-05-25T21:02:51Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "```suggestion\r\n- r (REQUIRED), non-negative integer. The prime order of the G1 and\r\n                G2 groups, defined by the ciphersuite.\r\n```\r\n```suggestion\r\n- r (REQUIRED), non-negative integer. The prime order of the G_1 and\r\n                G_2 groups, defined by the ciphersuite.\r\n```",
+              "createdAt": "2022-05-25T21:02:50Z",
+              "updatedAt": "2022-05-25T21:02:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vR8x",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:06:58Z",
+          "updatedAt": "2022-05-25T21:06:58Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Just a note we should probably go back through the spec and make this consistent if we want to adopt a pattern of defining parameters that are set by the cipher suite? Shall I create an issue?",
+              "createdAt": "2022-05-25T21:06:58Z",
+              "updatedAt": "2022-05-25T21:06:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vR8y",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:06:58Z",
+          "updatedAt": "2022-05-25T21:06:58Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Just a note we should probably go back through the spec and make this consistent if we want to adopt a pattern of defining parameters that are set by the cipher suite? Shall I create an issue?",
+              "createdAt": "2022-05-25T21:06:58Z",
+              "updatedAt": "2022-05-25T21:06:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vVr9",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:23:32Z",
+          "updatedAt": "2022-05-25T21:23:32Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "Just checking this loop syntax is 0,1,2 wonder if we should do `(0,..,2)` and define the syntax in the terminology section?",
+              "createdAt": "2022-05-25T21:23:32Z",
+              "updatedAt": "2022-05-25T21:23:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vVr-",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:23:32Z",
+          "updatedAt": "2022-05-25T21:23:32Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "Just checking this loop syntax is 0,1,2 wonder if we should do `(0,..,2)` and define the syntax in the terminology section?",
+              "createdAt": "2022-05-25T21:23:32Z",
+              "updatedAt": "2022-05-25T21:23:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vV6-",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:24:36Z",
+          "updatedAt": "2022-05-25T21:24:37Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "Where is k defined?",
+              "createdAt": "2022-05-25T21:24:37Z",
+              "updatedAt": "2022-05-25T21:24:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vV6_",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:24:37Z",
+          "updatedAt": "2022-05-25T21:24:37Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "Where is k defined?",
+              "createdAt": "2022-05-25T21:24:37Z",
+              "updatedAt": "2022-05-25T21:24:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vWAy",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:25:05Z",
+          "updatedAt": "2022-05-25T21:25:06Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "```suggestion\r\n2. Let proof_octets be an empty octet string.\r\n```\r\n```suggestion\r\n2. Let proof_octets be the empty octet string.\r\n```",
+              "createdAt": "2022-05-25T21:25:05Z",
+              "updatedAt": "2022-05-25T21:25:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vWAz",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:25:05Z",
+          "updatedAt": "2022-05-25T21:25:06Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "```suggestion\r\n2. Let proof_octets be an empty octet string.\r\n```\r\n```suggestion\r\n2. Let proof_octets be the empty octet string.\r\n```",
+              "createdAt": "2022-05-25T21:25:05Z",
+              "updatedAt": "2022-05-25T21:25:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vWQv",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:26:15Z",
+          "updatedAt": "2022-05-25T21:26:15Z",
+          "comments": [
+            {
+              "originalPosition": 146,
+              "body": "Wonder if we actually need to supply the arguments destructed here like we do in signature to octets?",
+              "createdAt": "2022-05-25T21:26:15Z",
+              "updatedAt": "2022-05-25T21:26:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846vWQw",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-25T21:26:15Z",
+          "updatedAt": "2022-05-25T21:26:15Z",
+          "comments": [
+            {
+              "originalPosition": 146,
+              "body": "Wonder if we actually need to supply the arguments destructed here like we do in signature to octets?",
+              "createdAt": "2022-05-25T21:26:15Z",
+              "updatedAt": "2022-05-25T21:26:15Z"
+            }
+          ]
         }
       ]
     }
