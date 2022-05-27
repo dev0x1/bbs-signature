@@ -1265,7 +1265,7 @@ Procedure:
    specifically of SHAKE-256, as defined in Section 6.2 of [SHA3].  It
    also uses the hash-to-curve suite defined by this document in
    Appendix A.1 (#bls12-381-hashtocurve-definition-using-shake-256),
-   which also makes use of the SHKA-256 function.
+   which also makes use of the SHAKE-256 function.
 
    *Basic Parameters*:
 
