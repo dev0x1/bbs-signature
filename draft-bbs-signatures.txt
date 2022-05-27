@@ -10,7 +10,7 @@ none                                                           M. Lodder
                                                                         
                                                                 V. Kalos
                                                                    MATTR
-                                                             25 May 2022
+                                                             27 May 2022
 
 
                         The BBS Signature Scheme
@@ -80,23 +80,23 @@ Table of Contents
    6.  IANA Considerations
    7.  Normative References
    8.  Informative References
-   Appendix A.  Appendix
-     A.1.  BLS12-381 hash_to_curve definition using SHAKE-256
-       A.1.1.  BLS12-381 G1
-       A.1.2.  BLS12-381 G2
-     A.2.  Usecases
-       A.2.1.  Non-correlating Security Token
-       A.2.2.  Improved Bearer Security Token
-       A.2.3.  Hardware Attestations
-       A.2.4.  Selectively Disclosure Enabled Identity Assertions
-       A.2.5.  Privacy preserving bound signatures
-     A.3.  Additional BLS12-381 Ciphersuite Test Vectors
-       A.3.1.  Modified Message Signature
-       A.3.2.  Extra Unsigned Message Signature
-       A.3.3.  Missing Message Signature
-       A.3.4.  Reordered Message Signature
-       A.3.5.  Wrong Public Key Signature
-     A.4.  Proof Generation and Verification Algorithmic Explanation
+   Appendix A.  BLS12-381 hash_to_curve definition using SHAKE-256
+     A.1.  BLS12-381 G1
+     A.2.  BLS12-381 G2
+   Appendix B.  Usecases
+     B.1.  Non-correlating Security Token
+     B.2.  Improved Bearer Security Token
+     B.3.  Hardware Attestations
+     B.4.  Selectively Disclosure Enabled Identity Assertions
+     B.5.  Privacy preserving bound signatures
+   Appendix C.  Additional BLS12-381 Ciphersuite Test Vectors
+     C.1.  Modified Message Signature
+     C.2.  Extra Unsigned Message Signature
+     C.3.  Missing Message Signature
+     C.4.  Reordered Message Signature
+     C.5.  Wrong Public Key Signature
+   Appendix D.  Proof Generation and Verification Algorithmic
+           Explanation
    Authors' Addresses
 
 1.  Introduction
@@ -141,7 +141,7 @@ Table of Contents
    information a protocol may require to be cryptographically tied to a
    proof.
 
-   Refer to Appendix A.2 for an elaboration on where and when these
+   Refer to Appendix B for an elaboration on where and when these
    properties are useful
 
    Below is a basic diagram describing the main entities involved in
@@ -1337,7 +1337,7 @@ Procedure:
 
    *NOTE* These fixtures are a work in progress and subject to change
 
-   Further fixtures are available in Appendix A.3
+   Further fixtures are available in Appendix C
 
 5.2.1.1.  Message Generators
 
@@ -1510,9 +1510,7 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
               content/uploads/2020/07/
               NCC_Group_Zcash2018_Public_Report_2019-01-30_v1.3.pdf>.
 
-Appendix A.  Appendix
-
-A.1.  BLS12-381 hash_to_curve definition using SHAKE-256
+Appendix A.  BLS12-381 hash_to_curve definition using SHAKE-256
 
    The following defines a hash_to_curve suite
    [I-D.irtf-cfrg-hash-to-curve] for the BLS12-381 curve for both the G1
@@ -1523,7 +1521,7 @@ A.1.  BLS12-381 hash_to_curve definition using SHAKE-256
    Note the notation used in the below definitions is sourced from
    [I-D.irtf-cfrg-hash-to-curve].
 
-A.1.1.  BLS12-381 G1
+A.1.  BLS12-381 G1
 
    The suite of BLS12381G1_XOF:SHAKE-256_SSWU_R0_ is defined as follows:
 
@@ -1567,7 +1565,7 @@ A.1.1.  BLS12-381 G1
    the curve E' isogenous to BLS12-381 G1 is given in Appendix F.2
    [I-D.irtf-cfrg-hash-to-curve].
 
-A.1.2.  BLS12-381 G2
+A.2.  BLS12-381 G2
 
    The suite of BLS12381G2_XOF:SHAKE-256_SSWU_R0_ is defined as follows:
 
@@ -1616,9 +1614,9 @@ A.1.2.  BLS12-381 G2
    the curve E' isogenous to BLS12-381 G2 is given in Appendix F.2
    [I-D.irtf-cfrg-hash-to-curve].
 
-A.2.  Usecases
+Appendix B.  Usecases
 
-A.2.1.  Non-correlating Security Token
+B.1.  Non-correlating Security Token
 
    In the most general sense BBS signatures can be used in any
    application where a cryptographically secured token is required but
@@ -1649,7 +1647,7 @@ A.2.1.  Non-correlating Security Token
    unique proof from the original access token and include that in the
    request instead, thus removing this vector of correlation.
 
-A.2.2.  Improved Bearer Security Token
+B.2.  Improved Bearer Security Token
 
    Bearer based security tokens such as JWT based access tokens used in
    the OAuth2.0 protocol are a highly popular format for expressing
@@ -1692,23 +1690,23 @@ A.2.2.  Improved Bearer Security Token
    mitigated.  A resource server also obtains the ability to detect a
    replay attack by ensuring the proof presented is unique.
 
-A.2.3.  Hardware Attestations
+B.3.  Hardware Attestations
 
    TODO
 
-A.2.4.  Selectively Disclosure Enabled Identity Assertions
+B.4.  Selectively Disclosure Enabled Identity Assertions
 
    TODO
 
-A.2.5.  Privacy preserving bound signatures
+B.5.  Privacy preserving bound signatures
 
    TODO
 
-A.3.  Additional BLS12-381 Ciphersuite Test Vectors
+Appendix C.  Additional BLS12-381 Ciphersuite Test Vectors
 
    *NOTE* These fixtures are a work in progress and subject to change
 
-A.3.1.  Modified Message Signature
+C.1.  Modified Message Signature
 
    Using the following message
 
@@ -1722,7 +1720,7 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
    the Verify operation should fail signature validation due to the
    message value being different from what was signed
 
-A.3.2.  Extra Unsigned Message Signature
+C.2.  Extra Unsigned Message Signature
 
    Using the following messages
 
@@ -1738,7 +1736,7 @@ aacb0e0ccc477de9408ec18810b508abccb975e2c8099ea93ba28bf66c836ac31189097446c5c5b6
    the Verify operation should fail signature validation due to an
    additional message being supplied that was not signed
 
-A.3.3.  Missing Message Signature
+C.3.  Missing Message Signature
 
    Using the following messages
 
@@ -1754,7 +1752,7 @@ A.3.3.  Missing Message Signature
    the Verify operation should fail signature validation due to missing
    messages that were originally present during the signing
 
-A.3.4.  Reordered Message Signature
+C.4.  Reordered Message Signature
 
    Using the following messages
 
@@ -1786,7 +1784,7 @@ A.3.4.  Reordered Message Signature
    the Verify operation should fail signature validation due to messages
    being re-ordered from the order in which they were signed
 
-A.3.5.  Wrong Public Key Signature
+C.5.  Wrong Public Key Signature
 
    Using the following messages
 
@@ -1818,7 +1816,7 @@ A.3.5.  Wrong Public Key Signature
    the Verify operation should fail signature validation due to public
    key used to verify is in-correct
 
-A.4.  Proof Generation and Verification Algorithmic Explanation
+Appendix D.  Proof Generation and Verification Algorithmic Explanation
 
    The following section provides an explanation of how the ProofGen and
    ProofVerify operations work.
