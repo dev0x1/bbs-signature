@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-05-26T00:10:03.985102+00:00",
+  "timestamp": "2022-05-29T00:11:04.026989+00:00",
   "repo": "decentralized-identity/bbs-signature",
   "labels": [
     {
@@ -3993,9 +3993,17 @@
       ],
       "body": "As raised by @BasileiosKal previously, to improved readability around the defined operations we could elect to group the operations into core and non-core, for instance `Sign`, `Verify`, `ProofGen` and `ProofVerify` could become `CoreSign`, `CoreVerify`, `CoreProofGen` and `CoreProofVerify`. We could then define more application specific higher-level operations like `SingleSign` and `MultiSign` where the function signatures could be something like the following\r\n\r\n```\r\nsignature = SingleSign(SK, header)\r\n```\r\n\r\n```\r\nsignature = MultiSign(SK, header, (msg_1,..., msg_L))\r\n```\r\n\r\n**Note** these ^ are just ideas about how we could encapsulate common usage patterns.",
       "createdAt": "2022-05-08T01:25:22Z",
-      "updatedAt": "2022-05-08T22:36:16Z",
+      "updatedAt": "2022-05-27T21:59:19Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Some of this is being addressed by #154 ",
+          "createdAt": "2022-05-27T21:59:19Z",
+          "updatedAt": "2022-05-27T21:59:19Z"
+        }
+      ]
     },
     {
       "number": 134,
@@ -4254,10 +4262,13 @@
       "author": "andrewwhitehead",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
       "body": "At the moment we have separate generator seed values within each ciphersuite used to generate the 'H_s' and 'H_d' generators. This could be made a little more efficient by using a single seed value and defining these generators as the successive outputs.\r\n\r\nInstead of `blind_value_generator_seed` and `signature_dst_generator_seed` I would suggest a something like a `core_generator_seed`. Then `H_s` becomes the first output of `CreateGenerators(dst, core_generator_seed, 2)` and `H_d` the second.\r\n\r\nSyntax wise, we could use an alternative naming for these generators and refer to them by their number, consistent with the `H_i` generators. Perhaps `Q_i`?\r\n\r\nAdditionally, we could potentially solve the holder binding issue (#37) by replacing `P1` with `Q_1`, making `H_s` and `H_d` the subsequent generators (`Q_2` and `Q_3`) and freeing up `P1` for application usage.",
       "createdAt": "2022-05-20T19:56:16Z",
-      "updatedAt": "2022-05-20T22:27:57Z",
+      "updatedAt": "2022-05-27T21:58:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -4301,6 +4312,43 @@
       "body": "With the merge of #147 defining the rules for the signature serialisation we now need to define how to do the corresponding for the proof value outputted by the ProofGen operation and consumed by the ProofVerify operation.",
       "createdAt": "2022-05-23T19:54:04Z",
       "updatedAt": "2022-05-23T22:43:58Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 157,
+      "id": "I_kwDOF8lax85KgOBJ",
+      "title": "Integer endianness",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/157",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "core"
+      ],
+      "body": "As noted by @mikelodder7,  in the document we don't yet discuss the integers (i.e., scalars mod r) serialization. More specifically, since we have a description for the byte length of those integers (`octet_scalar_length`), what is missing is the byte order.\r\n\r\nIn general i thing little-endian is preferred (it is mostly used in bls libs like the rust crate and blst) but an issue is that I2OSP uses big-endian if im not mistaken.\r\n\r\nThere are 3 options i can think of;\r\n1. We describe them as 32 bytes (or `octet_scalar_length` in general) in little-endian, with a note for I2OSP.\r\n2. We describe them in a way similar to some libs (i.e., four 64 bit parts in little-endian order), but i don't think something like that is suitable. \r\n3. We leave it up for implementers with some notes for guidance.\r\n\r\nAt the moment I'm leaning more towards option 3. Implementations may elect to use any kind of optimization and this will allow for that. \r\n\r\nAlso for what i know of, other specs like ecdsa and eddsa elect to define the integer's endianness but specs like bls-sigs and h2c adopt option 3, so it does not seem to be any \"absolutely correct\" way to do that.",
+      "createdAt": "2022-05-26T19:28:52Z",
+      "updatedAt": "2022-05-27T21:57:27Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 159,
+      "id": "I_kwDOF8lax85Kj6wO",
+      "title": "API Update",
+      "url": "https://github.com/decentralized-identity/bbs-signature/issues/159",
+      "state": "OPEN",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "ready-for-pr",
+        "core"
+      ],
+      "body": "Trying to update the API has resulted in mainly two proposals from @andrewwhitehead and @tplooker. The first one using boolean variables to distinquish between revealed and un-revealed messages and the second one using indexes. You can compare the 2 APIs [here](https://github.com/BasileiosKal/dif-bbs-signature-api):\r\n- [API_1](https://github.com/BasileiosKal/dif-bbs-signature-api/tree/main/API_1_Boolean) (using Booleans): [Sign](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_1_Boolean/draft-bbs-signatures.md#sign), [Verify](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_1_Boolean/draft-bbs-signatures.md#verify), [ProofGen](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_1_Boolean/draft-bbs-signatures.md#proofgen), [ProofVerify](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_1_Boolean/draft-bbs-signatures.md#proofverify)\r\n- [API_2 ](https://github.com/BasileiosKal/dif-bbs-signature-api/tree/main/API_2_Indexes)(using Indexes): [Sign](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_2_Indexes/draft-bbs-signatures.md#sign), [Verify](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_2_Indexes/draft-bbs-signatures.md#verify), [ProofGen](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_2_Indexes/draft-bbs-signatures.md#proofgen), [ProofVerify](https://github.com/BasileiosKal/dif-bbs-signature-api/blob/main/API_2_Indexes/draft-bbs-signatures.md#proofverify)\r\n\r\nWe can somewhat compare the two APIs based on the total number of lines (i.e., everything inside each code block) and the total number of procedure steps,\r\n\r\n### API 1 (Booleans)\r\n\r\n|                  |  lines   | Procedure Steps | \r\n| ----------- | ------ | ----------------- | \r\n| Sign           |   54    |        9                   | \r\n| Verify         |  59     |       11                  | \r\n| ProofGen   |  109   |       26                  | \r\n| ProofVerify |   78    |       14                  | \r\n\r\n### API 2 (Indexes)\r\n\r\n|                   | lines | Procedure Steps |\r\n| ----------   | ---- | ----------------- |\r\n| Sign           |  55  |   10                     |\r\n| Verify         |  59  |   12                     |\r\n| ProofGen   | 101 |    29                    |\r\n| ProofVerify | 79   |   17                     |\r\n\r\nWe can see that there is not much difference between the two or a clear winner. Procedures in API 2 have more steps but the total lines are about the same. So, the choice should be made based on which one is more readable and more tolerant to implementation mistakes.\r\n\r\n### Note:\r\nWhen using API 2 there may be more checks to be done when it comes to the indexes i.e., that are truly between 1 and L. Right now this is only described above the operations. It is important though, especially in `ProofVerify`. \r\n\r\nFor example, if not checked, the prover could reveal an extra message with an \"invalid\" index (like `index = L+1`), and the proof may validate depending on the implementation. So more steps may be needed in `ProofVerify` to make this check explicit.\r\n\r\nCurrently PR #138 proposes the use of API 2. Personally i find that it is a little more clear overall especially when it comes to the ordering of the input lists (see also #117 for some context).",
+      "createdAt": "2022-05-27T16:07:02Z",
+      "updatedAt": "2022-05-27T21:57:43Z",
       "closedAt": null,
       "comments": []
     }
@@ -16385,13 +16433,13 @@
       "labels": [],
       "body": "Updating the way that the messages and generators are passed to the operations, using @andrewwhitehead's proposal of passing them in pairs. \r\n\r\nThe main purpose of the PR is to have a concrete base of discussion about what the best API will be. For alternatives see #117. For some more context see PR #128 (the motivation was \u201chow we get the revealed messages from the (msg_1, \u2026, msg_L) list and the revealed indexes).\r\n\r\nIMO all approaches have trade-offs. Although I like the proposal seen in this PR a lot and it makes things more explicit, I wonder if it is more error prone?? That said, it may provide the best balance between being explicit and easy to read. Interested on the WG feedback.\r\n",
       "createdAt": "2022-05-13T16:32:18Z",
-      "updatedAt": "2022-05-25T16:47:14Z",
+      "updatedAt": "2022-05-27T18:14:59Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "7568d6a95044c12f75e5ef19077eb5a7f6046063",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "api_update",
-      "headRefOid": "417b55444298993e43810e9d1263d5fec3f878cf",
+      "headRefOid": "813d4202a3de3373e8b136e721b043223e90ca10",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16417,6 +16465,41 @@
           "body": "Couple of updates:\r\n1. Updates based on the reviews.\r\n2. Since the description for the list of (generator, message) pairs in the Input section for the ProofGen and ProofVerify operations was getting longer and longer, i changed the description to something more \"minimal\" and added a \"see above for requirements\" to point to the description above the each operation, where the input lists are explained clearly along with an example.",
           "createdAt": "2022-05-25T15:39:12Z",
           "updatedAt": "2022-05-25T15:39:12Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think ProofGen turns out simpler if we don't try to combine the revealed message flags with the generators and message values. It means introducing more syntax plus the concept of boolean variables. For comparison...\r\n\r\n> - [(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)] (OPTIONAL), a list of tuples containing a generator (point on G1), a non-zero scalar mod r representing a message, and a boolean value indicating if the message will be revealed or not (see above for requirements)\r\n>\r\n> ...\r\n>\r\n> - L, is the non-negative integer representing the number of signed messages i.e., length([(H_1, msg_1, revealed_1), ..., (H_L, msg_L, revealed_L)]). Note if the list of (generator, message boolean) tuples is not supplied, the value of L MUST evaluate to zero (0).\r\n> - R, is the non-negative integer representing the number of revealed messages i.e., R is the number of the boolean values: revealed_1, ..., revealed_L, that are \"true\". If no revealed messages are supplied as an input to this operation, the value of R MUST evaluate to zero (0).\r\n> - U, is the non-negative integer representing the number of un-revealed messages i.e., U = L-R. If no un-revealed messages are supplied as an input to this operation (i.e., if R = L), the value of U MUST evaluate to zero (0).\r\n>\r\n> ...\r\n>\r\n> 1. Let (H_i1, msg_i1), ..., (H_iR, msg_iR), be the pairs containing the\r\n>    first 2 elements from the tuples (H_i, msg_i, revealed_i),\r\n>    i = 1, ..., L, for which it holds that revealed_i = true, in the same\r\n>    order (i.e., the (generator, message) pairs corresponding to the\r\n>    revealed messages).\r\n> 2. Let (H_j1, msg_j1), ..., (H_jU, msg_jU), be the pairs containing the\r\n>    first 2 elements from the tuples (H_i, msg_i, revealed_i),\r\n>    i = 1, ..., L, for which it holds that revealed_i = false, (i.e., the\r\n>    (generator, message) pairs corresponding to the\r\n>    un-revealed messages).\r\n\r\n- [(H_1, msg_1), ..., (H_L, msg_L)] (OPTIONAL), a list of tuples containing a generator (point on G1), a non-zero scalar mod r representing a message.\r\n- RevealedIndexes (OPTIONAL), an ordered list of distinct message indexes to be revealed. Each member of this list must be an integer such that 1 <= index <= L.\r\n\r\n- L, is the non-negative integer representing the number of signed messages i.e., length([(H_1, msg_1), ..., (H_L, msg_L)]). In the absence of a list of (generator, message) tuples, this value is zero (0).\r\n- R, is the non-negative integer representing the number of revealed messages i.e., length(RevealedIndexes). In the absence of a list of revealed message indexes, this value is zero (0).\r\n- U, is the non-negative integer representing the number of un-revealed messages i.e., U = L-R.\r\n\r\nEdit: This might also be clearer if we gave the 'list of (generator, message) tuples' input a name like 'AllMessages' and specified the format later.",
+          "createdAt": "2022-05-26T19:04:20Z",
+          "updatedAt": "2022-05-26T19:34:54Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As a follow-up to that suggestion, here it is with the variable alias:\r\n\r\nproof = ProofGen(PK, signature, header, ph, signed=[], revealed=[])\r\n\r\nInputs:\r\n...\r\n- signed (OPTIONAL), a list of 2-tuples containing a generator (point on G1) and a message scalar (non-zero integer mod r), taking the form [(H_1, msg_1), ..., (H_L, msg_L)]. When unspecified, defaults to an empty list ([]).\r\n- revealed (OPTIONAL), an ordered list of distinct message indexes to be revealed along with the proof. Each member of this list must be an integer such that 1 <= index <= L. When unspecified, defaults to an empty list ([]).\r\n\r\n...\r\n\r\n- L, a non-negative integer representing the number of signed messages, equal to length(signed).\r\n- R, a non-negative integer representing the number of revealed messages, equal to length(revealed).\r\n- U, a non-negative integer representing the number of un-revealed messages, equal to L-R.\r\n",
+          "createdAt": "2022-05-26T19:46:50Z",
+          "updatedAt": "2022-05-26T19:48:00Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you! I'm not opposed to this. Just couple of notes:\r\n1. The ordering of the \"signed\" generator/message pairs is still needed. The reason is that ProofGen must calculate the domain value so the generators must be in the correct order. ProofGen must also pass the revealed message to the challenge hash (i.e. PR #128) with the \"correct\" order as well (the last one is not necessary, we could just pass (generator, message) pairs to the challenge hash and solve issue #74, but it would be more work since the ordering of the generators is needed either way).\r\n2. The syntax is simpler but there will be more additional steps added in the operation (like step 7 and 8 from [this comment](https://github.com/decentralized-identity/bbs-signature/issues/117#issuecomment-1126227125)).\r\n3. It may be \"awkward\" to use L in the inputs (for describing `revealed`) before it is \"defined\".\r\n\r\nThat said the descriptions are indeed simpler. I will take a shot at this and update the PR so we can compare.",
+          "createdAt": "2022-05-26T20:08:53Z",
+          "updatedAt": "2022-05-26T20:08:53Z"
+        },
+        {
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "PR updated based on @andrewwhitehead's above proposal^ and ready for re-review. See #159 for considerations and comparisons between the two choices (boolean variables vs indexes).",
+          "createdAt": "2022-05-27T16:09:40Z",
+          "updatedAt": "2022-05-27T16:09:40Z"
+        },
+        {
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the update! In general I do find this more understandable, but I'd like to hear what others think.",
+          "createdAt": "2022-05-27T18:14:59Z",
+          "updatedAt": "2022-05-27T18:14:59Z"
         }
       ],
       "reviews": [
@@ -17283,6 +17366,166 @@
               "body": "```suggestion\r\n- U, is the non-negative integer representing the number of un-revealed messages i.e., U = L-R. If no un-revealed messages are supplied as an input to this operation (i.e., if R = L), the value of U MUST evaluate to zero (0).\r\n```",
               "createdAt": "2022-05-25T16:47:14Z",
               "updatedAt": "2022-05-25T16:47:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846zbaJ",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T17:30:25Z",
+          "updatedAt": "2022-05-26T17:30:26Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "Thanks! Updated!",
+              "createdAt": "2022-05-26T17:30:25Z",
+              "updatedAt": "2022-05-26T17:30:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846zdQu",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T17:37:05Z",
+          "updatedAt": "2022-05-26T17:37:05Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Done! Thanks!",
+              "createdAt": "2022-05-26T17:37:05Z",
+              "updatedAt": "2022-05-26T17:37:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846znI7",
+          "commit": {
+            "abbreviatedOid": "417b554"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T18:13:59Z",
+          "updatedAt": "2022-05-26T18:14:00Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "There is non! other than it is not \"technically required\", after the adoption of the signature domain.\r\n\r\nThat said, there may be use-cases where people want to use the un-linkable presentations part of bbs and not the selective showing one (like OAuth bearer tokens for example??)",
+              "createdAt": "2022-05-26T18:13:59Z",
+              "updatedAt": "2022-05-26T18:14:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464kru",
+          "commit": {
+            "abbreviatedOid": "813d420"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T18:03:14Z",
+          "updatedAt": "2022-05-27T18:03:15Z",
+          "comments": [
+            {
+              "originalPosition": 253,
+              "body": "Currently unused, but I guess it will be when the revealed messages and indexes are hashed",
+              "createdAt": "2022-05-27T18:03:14Z",
+              "updatedAt": "2022-05-27T18:03:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464lCb",
+          "commit": {
+            "abbreviatedOid": "813d420"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T18:04:46Z",
+          "updatedAt": "2022-05-27T18:04:47Z",
+          "comments": [
+            {
+              "originalPosition": 333,
+              "body": "*ProofVerify",
+              "createdAt": "2022-05-27T18:04:47Z",
+              "updatedAt": "2022-05-27T18:04:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464l_x",
+          "commit": {
+            "abbreviatedOid": "813d420"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T18:08:00Z",
+          "updatedAt": "2022-05-27T18:08:00Z",
+          "comments": [
+            {
+              "originalPosition": 335,
+              "body": "It seems a bit more natural to use (index, message) to me given that in many languages that makes the list naturally sortable, sorting by the first and then the second element",
+              "createdAt": "2022-05-27T18:08:00Z",
+              "updatedAt": "2022-05-27T18:08:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464mgL",
+          "commit": {
+            "abbreviatedOid": "813d420"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T18:10:21Z",
+          "updatedAt": "2022-05-27T18:10:21Z",
+          "comments": [
+            {
+              "originalPosition": 418,
+              "body": "Shadows the previous `generators` variable",
+              "createdAt": "2022-05-27T18:10:21Z",
+              "updatedAt": "2022-05-27T18:10:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464nBO",
+          "commit": {
+            "abbreviatedOid": "813d420"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T18:12:40Z",
+          "updatedAt": "2022-05-27T18:12:40Z",
+          "comments": [
+            {
+              "originalPosition": 412,
+              "body": "This should probably remain near the beginning?",
+              "createdAt": "2022-05-27T18:12:40Z",
+              "updatedAt": "2022-05-27T18:12:40Z"
             }
           ]
         }
@@ -18224,13 +18467,13 @@
       "labels": [],
       "body": "First shot in a `hash_to_scalar_xmd` function to be used with regular hashes as an alternative to the one currently in the spec (that uses an xof). The proposed function essentially makes use of `expand_message_xmd` (not called directly, see below why), and will give a less efficient option for implementers not wishing to make use of shake256.\r\n\r\nComparison with `hash_to_field` and `expand_message_xmd`:\r\n1.\t**Memory efficiency**: `hash_to_field` will call `expand_message` once to output the total number of bytes needed for all the outputted elements. Since we may potentially need to create many scalars, this may not be the more efficient approach. For example, if one wants to create a proof with 1000 hidden messages, the output of `expand_message` will need to be at least 64 kb. In contrast, `hash_to_scalar_xmd` will only need to \u201chold\u201d 64 bytes at once. Note that the total number of hash invocations is the same in both cases, so the computational overhead will effectively be zero.\r\n2.\t**Efficiently checking if a scalar is 0**: Although there are discussions on not overengineering the spec, I feel here is the one place we may need to have the check. The reason is that many signed messages may result to the probability of returning a 0 been higher than what we anticipate (not really an issue for bls12-381 but may become an issue for \u201csmaller\u201d ECs).\r\n3.\tCalling `expand_message_xmd` directly instead of the xof would be wasteful (it would result to at least n-1 unnecessary hash computations for b_0)\r\n\r\nAnother option can be to use hkdf instead. The tradeoff here is double the hash computations vs spec simplicity + the wider availability of hkdf.\r\n",
       "createdAt": "2022-05-21T20:26:35Z",
-      "updatedAt": "2022-05-25T16:40:29Z",
+      "updatedAt": "2022-05-27T17:45:00Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "517868ceb34592c58e8b731c0e9d168d44821039",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "hash_to_scalar_xmd",
-      "headRefOid": "d425bdba7f249dc805416132c707f0bcbc77fa91",
+      "headRefOid": "0ae69de57d1f9cdd3c9e649af5269b52ea44cc07",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -18302,6 +18545,226 @@
               "body": "```suggestion\r\n2. `hash_to_scalar_xmd`, is less performant in comparison, requires a fixed length output function like SHA2 or SHA3.\r\n```",
               "createdAt": "2022-05-25T16:40:29Z",
               "updatedAt": "2022-05-25T16:40:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846zXEK",
+          "commit": {
+            "abbreviatedOid": "d425bdb"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T17:16:38Z",
+          "updatedAt": "2022-05-26T17:16:39Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Thanks! Updated!",
+              "createdAt": "2022-05-26T17:16:38Z",
+              "updatedAt": "2022-05-26T17:16:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464NUO",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:24:02Z",
+          "updatedAt": "2022-05-27T17:24:02Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "hash_to_scalar needs escaping, or maybe say something like \"two different operations for hashing inputs into scalar values\"",
+              "createdAt": "2022-05-27T17:24:02Z",
+              "updatedAt": "2022-05-27T17:24:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464NpI",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:25:21Z",
+          "updatedAt": "2022-05-27T17:25:22Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "I think SHAKE-256 and SHAKE-128 (with the hyphen) for consistency",
+              "createdAt": "2022-05-27T17:25:22Z",
+              "updatedAt": "2022-05-27T17:25:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464Nz3",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:26:08Z",
+          "updatedAt": "2022-05-27T17:26:08Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "*indicating",
+              "createdAt": "2022-05-27T17:26:08Z",
+              "updatedAt": "2022-05-27T17:26:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464N7f",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:26:40Z",
+          "updatedAt": "2022-05-27T17:26:40Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "It seems odd to list cipher suite parameters as required, aren't they all?",
+              "createdAt": "2022-05-27T17:26:40Z",
+              "updatedAt": "2022-05-27T17:26:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464Onr",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:29:28Z",
+          "updatedAt": "2022-05-27T17:29:29Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "I think it should return to step 5?",
+              "createdAt": "2022-05-27T17:29:28Z",
+              "updatedAt": "2022-05-27T17:29:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464Qj6",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:31:08Z",
+          "updatedAt": "2022-05-27T17:31:08Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Maybe we should highlight that the real choice is between a modern extensible-output hash function and a more established fixed-output hash function like SHA-256.",
+              "createdAt": "2022-05-27T17:31:08Z",
+              "updatedAt": "2022-05-27T17:31:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464Sqh",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:33:12Z",
+          "updatedAt": "2022-05-27T17:33:12Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "I think `n` should be greater than 0",
+              "createdAt": "2022-05-27T17:33:12Z",
+              "updatedAt": "2022-05-27T17:33:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464X2u",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:36:49Z",
+          "updatedAt": "2022-05-27T17:36:49Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "For consistency maybe just say \"the output size of H measured in bytes, equal to b / 8\".\r\n\r\nShould we just define these during the procedure based on `b` and `s`?",
+              "createdAt": "2022-05-27T17:36:49Z",
+              "updatedAt": "2022-05-27T17:36:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464YN0",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:38:19Z",
+          "updatedAt": "2022-05-27T17:38:19Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "I think the DST length should be prepended for consistency",
+              "createdAt": "2022-05-27T17:38:19Z",
+              "updatedAt": "2022-05-27T17:38:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8464e-o",
+          "commit": {
+            "abbreviatedOid": "0ae69de"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-27T17:44:59Z",
+          "updatedAt": "2022-05-27T17:45:00Z",
+          "comments": [
+            {
+              "originalPosition": 144,
+              "body": "Also applies to the xmd method. Maybe we can escape `e` and `s` here.",
+              "createdAt": "2022-05-27T17:44:59Z",
+              "updatedAt": "2022-05-27T17:45:00Z"
             }
           ]
         }
@@ -18408,13 +18871,13 @@
       "labels": [],
       "body": "Fixes #153\r\n\r\nIntroduces a `proof_to_octets` and a `octets_to_proof` operation",
       "createdAt": "2022-05-25T13:24:23Z",
-      "updatedAt": "2022-05-25T21:26:15Z",
+      "updatedAt": "2022-05-26T22:16:25Z",
       "baseRepository": "decentralized-identity/bbs-signature",
       "baseRefName": "main",
       "baseRefOid": "517868ceb34592c58e8b731c0e9d168d44821039",
       "headRepository": "BasileiosKal/bbs-signature",
       "headRefName": "proof-serialization",
-      "headRefOid": "bef291e7b978c7391d844fad4f27488e1b6e07e2",
+      "headRefOid": "caca3db46bbea37c9bd17d27d3b18e582873eff8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -18820,6 +19283,405 @@
               "updatedAt": "2022-05-25T21:26:15Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846z0cj",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T19:03:56Z",
+          "updatedAt": "2022-05-26T19:03:56Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "Thank you! That's a good point! I don't think we discuss this on the document. Aren't there 256 bits necessary for scalars (for bls12-381)?? Also we use I2OSP/OS2IP which operates in big-endian order if I'm not mistaken, so we will need to add a note there if we decide to define integers to be little endian.",
+              "createdAt": "2022-05-26T19:03:56Z",
+              "updatedAt": "2022-05-26T20:11:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax846z7KO",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T19:30:16Z",
+          "updatedAt": "2022-05-26T19:30:16Z",
+          "comments": [
+            {
+              "originalPosition": 139,
+              "body": "Opened issue #157 to discuss more about this. Thanks for raising!",
+              "createdAt": "2022-05-26T19:30:16Z",
+              "updatedAt": "2022-05-26T19:30:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460N_P",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:34:33Z",
+          "updatedAt": "2022-05-26T20:34:34Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "Thanks! Updated!",
+              "createdAt": "2022-05-26T20:34:34Z",
+              "updatedAt": "2022-05-26T20:34:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460Pct",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:41:07Z",
+          "updatedAt": "2022-05-26T20:41:08Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "> Also do we need to clarify the ordering expected here?\r\n\r\nThere is no way that i know, for the ordering to be checked here, so there may be no point in adding such description?? The expected \"ordering\" is kinda \"defined\" in step 4 in `ProofVerify` i.e., \r\n\r\n```\r\n4. (A', Abar, D, c, e^, r2^, r3^, s^, (m^_j1,...,m^_jU)) = proof\r\n```\r\nSince the functions are just utilities to be used internally and there are no inconsistencies that can arise when used with those core operations, an extra definition of the ordering may not be necessary??",
+              "createdAt": "2022-05-26T20:41:07Z",
+              "updatedAt": "2022-05-26T20:57:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460Pfq",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:41:21Z",
+          "updatedAt": "2022-05-26T20:41:21Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "Thanks! Updated!",
+              "createdAt": "2022-05-26T20:41:21Z",
+              "updatedAt": "2022-05-26T20:41:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460Qki",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:45:40Z",
+          "updatedAt": "2022-05-26T20:45:40Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "Thanks! Done!",
+              "createdAt": "2022-05-26T20:45:40Z",
+              "updatedAt": "2022-05-26T20:45:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460S4Z",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:55:49Z",
+          "updatedAt": "2022-05-26T20:55:49Z",
+          "comments": [
+            {
+              "originalPosition": 146,
+              "body": "Since the input has no \"fixed\" length it may be more complicated to define it ''destructed\" (i.e., if we define it as `(A', Abar, D, c, e^, r2^, r3^, s^, (m^_1,...,m^_U))` we will need to define `U` which will be hard here or if we define it like `(A', Abar, D, c, e^, r2^, r3^, s^, msg_commitments`) we mix up structured and destructed forms which misses the point of consistency IMO.\r\n\r\nIn general, for consistency, I would prefer passing the signature in a structured way than passing the proof in a destructed one.",
+              "createdAt": "2022-05-26T20:55:49Z",
+              "updatedAt": "2022-05-26T22:16:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460Tw1",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T20:59:34Z",
+          "updatedAt": "2022-05-26T20:59:35Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Agreed! There is issue #125. We do need to focus more into closing it so the spec will be consistent.",
+              "createdAt": "2022-05-26T20:59:34Z",
+              "updatedAt": "2022-05-26T20:59:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460hQJ",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T22:12:53Z",
+          "updatedAt": "2022-05-26T22:12:53Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Done!",
+              "createdAt": "2022-05-26T22:12:53Z",
+              "updatedAt": "2022-05-26T22:12:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460hQi",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T22:12:56Z",
+          "updatedAt": "2022-05-26T22:12:56Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Thank you! Updated",
+              "createdAt": "2022-05-26T22:12:56Z",
+              "updatedAt": "2022-05-26T22:12:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460hf0",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T22:14:38Z",
+          "updatedAt": "2022-05-26T22:14:39Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "Yeap! Good catch! Updated this line and added the `(a, ..., b)` syntax in the Notation section.",
+              "createdAt": "2022-05-26T22:14:39Z",
+              "updatedAt": "2022-05-26T22:14:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460hiM",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T22:14:54Z",
+          "updatedAt": "2022-05-26T22:14:54Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "Yeap! Done!",
+              "createdAt": "2022-05-26T22:14:54Z",
+              "updatedAt": "2022-05-26T22:14:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOF8lax8460hon",
+          "commit": {
+            "abbreviatedOid": "bef291e"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-05-26T22:15:34Z",
+          "updatedAt": "2022-05-26T22:15:34Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "Apologies! This was a typo. It should be `j`. Updated.",
+              "createdAt": "2022-05-26T22:15:34Z",
+              "updatedAt": "2022-05-26T22:15:34Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 156,
+      "id": "PR_kwDOF8lax844idez",
+      "title": "Typo and markdown escape for proper HTML rendering",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/156",
+      "state": "MERGED",
+      "author": "christianpaquin",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- `SHKA-256` --> `SHAKE-256`\r\n- `hash_to_curve` --> `hash\\_to\\_curve`",
+      "createdAt": "2022-05-26T18:27:46Z",
+      "updatedAt": "2022-05-27T21:47:01Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "89de709a1235fe063d875ea0864e054d4f0e281f",
+      "headRepository": "christianpaquin/bbs-signature",
+      "headRefName": "fix-typos",
+      "headRefOid": "ec46490922b07f5362ea3571551a1c8ca892159e",
+      "closedAt": "2022-05-27T21:47:01Z",
+      "mergedAt": "2022-05-27T21:47:01Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "83059a30911c5fa19caf12dd1507f6870cd4d561"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Minor editorial change, multiple approvals, merging",
+          "createdAt": "2022-05-27T21:46:58Z",
+          "updatedAt": "2022-05-27T21:46:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax846z7im",
+          "commit": {
+            "abbreviatedOid": "ec46490"
+          },
+          "author": "BasileiosKal",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM! Thanks!",
+          "createdAt": "2022-05-26T19:31:49Z",
+          "updatedAt": "2022-05-26T19:31:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8460oDT",
+          "commit": {
+            "abbreviatedOid": "ec46490"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-26T23:04:13Z",
+          "updatedAt": "2022-05-26T23:04:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8465iIr",
+          "commit": {
+            "abbreviatedOid": "ec46490"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-27T21:46:33Z",
+          "updatedAt": "2022-05-27T21:46:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 158,
+      "id": "PR_kwDOF8lax844jUQM",
+      "title": "Appendices HTML formatting fix",
+      "url": "https://github.com/decentralized-identity/bbs-signature/pull/158",
+      "state": "MERGED",
+      "author": "BasileiosKal",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently, all the appendices are under one \"Appendix\" section in HTML. This PR solves this and separates each in its own Appendix.",
+      "createdAt": "2022-05-26T22:36:05Z",
+      "updatedAt": "2022-05-27T21:46:17Z",
+      "baseRepository": "decentralized-identity/bbs-signature",
+      "baseRefName": "main",
+      "baseRefOid": "89de709a1235fe063d875ea0864e054d4f0e281f",
+      "headRepository": "BasileiosKal/bbs-signature",
+      "headRefName": "editorial-updates",
+      "headRefOid": "09344c8e5b25c3c7ed7bb4a81ac6321d05c3d871",
+      "closedAt": "2022-05-27T21:46:16Z",
+      "mergedAt": "2022-05-27T21:46:16Z",
+      "mergedBy": "tplooker",
+      "mergeCommit": {
+        "oid": "7473dc3108966bed90aad21fc7fb9345542e0bba"
+      },
+      "comments": [
+        {
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "body": "Minor editorial change, multiple approvals, merging",
+          "createdAt": "2022-05-27T21:46:13Z",
+          "updatedAt": "2022-05-27T21:46:13Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOF8lax8460oRO",
+          "commit": {
+            "abbreviatedOid": "09344c8"
+          },
+          "author": "andrewwhitehead",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-26T23:06:06Z",
+          "updatedAt": "2022-05-26T23:06:06Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOF8lax8465iEJ",
+          "commit": {
+            "abbreviatedOid": "09344c8"
+          },
+          "author": "tplooker",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-05-27T21:45:55Z",
+          "updatedAt": "2022-05-27T21:45:55Z",
+          "comments": []
         }
       ]
     }
